@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/14 19:29:42 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/14 20:06:44 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,16 @@ void	changetokentypes(t_token *tokens)
 			tokens[i].type = redirectR;
 		else if (ft_strcmp(tokens[i].t, "<") == 0)
 			tokens[i].type = redirectL;
+		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, "<") == 0))
+			tokens[i].type = file;
+		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, ">") == 0))
+			tokens[i].type = file;
+		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, "<<") == 0))
+			tokens[i].type = file;
+		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, ">>") == 0))
+			tokens[i].type = file;
+		else
+			tokens[i].type = command;
 	}
 }
 
