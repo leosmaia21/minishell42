@@ -6,11 +6,13 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:01:06 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/14 19:04:56 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/14 19:39:36 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_ft_strcmp(const char *str1, const char *str2)
+#include "libft.h"
+
+int	ft_strcmp(const char *str1, const char *str2)
 {
 	while (*str1 && (*str1 == *str2)) 
 	{

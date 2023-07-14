@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/14 18:30:24 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/14 19:29:42 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,32 @@ char	*copyuntil(char *src, char c)
 	else
 		dst[i] = 0;
 	return (dst);
+}
+
+void	changetokentypes(t_token *tokens)
+{
+	int		i;
+
+	i = -1;
+	if (!tokens)
+		return ;
+	while (++i < tokens[0].total)
+	{
+		if (ft_strcmp(tokens[i].t, "|") == 0)
+			tokens[i].type = pipo;
+		else if (tokens[i].t[0] == '-')
+			tokens[i].type = flag;
+		else if (tokens[i].t[0] == '"')
+			tokens[i].type = text;
+		else if (ft_strcmp(tokens[i].t, ">>") == 0)
+			tokens[i].type = dredirectR;
+		else if (ft_strcmp(tokens[i].t, "<<") == 0)
+			tokens[i].type = dredirectL;
+		else if (ft_strcmp(tokens[i].t, ">") == 0)
+			tokens[i].type = redirectR;
+		else if (ft_strcmp(tokens[i].t, "<") == 0)
+			tokens[i].type = redirectL;
+	}
 }
 
 t_token	*dividetokens(char *str)
