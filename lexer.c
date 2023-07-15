@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/15 18:13:25 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/07/15 18:22:46 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ void	changetokentypes(t_token *tokens)
 			tokens[i].type = redirectR;
 		else if (strcmp(tokens[i].t, "<") == 0)
 			tokens[i].type = redirectL;
-		else if (i > 0 && (strcmp(tokens[i - 1].t, "<") == 0))
+		else if (i > 0 && (strcmp(tokens[i - 1].t, ">") == 0))
 			tokens[i].type = file;
-		else if (i > 0 && (strcmp(tokens[i + 1].t, ">") == 0))
+		else if (i > 0 && (strcmp(tokens[i + 1].t, "<") == 0))
 			tokens[i].type = file;
-		else if (i > 0 && (strcmp(tokens[i - 1].t, "<<") == 0))
+		else if (i > 0 && (strcmp(tokens[i - 1].t, ">>") == 0))
 			tokens[i].type = file;
-		else if (i > 0 && (strcmp(tokens[i + 1].t, ">>") == 0))
+		else if (i > 0 && (strcmp(tokens[i + 1].t, "<<") == 0))
 			tokens[i].type = file;
 		else
 			tokens[i].type = command;

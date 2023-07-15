@@ -3,13 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+         #
+#    By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/07 22:28:43 by ledos-sa          #+#    #+#              #
-#    Updated: 2023/07/14 19:03:19 by ledos-sa         ###   ########.fr        #
-#    Updated: 2022/12/04 18:44:15 by ledos-sa         ###   ########.fr        #
+#    Updated: 2023/07/15 14:57:20 by bde-sous         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -O2
