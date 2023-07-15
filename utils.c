@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:41:20 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/14 16:43:31 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/15 15:35:23 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "utils.h"
+#include "minishell.h"
 
 char	*ft_realloc(char *str, int n)
 {
@@ -34,6 +33,7 @@ char	*readfromstdin(void)
 	n = 0;
 	str = malloc(size);
 	ft_memset(str, 0, size);
+	ft_putstr_fd("susanashell # ", 1);
 	while (read(0, &c, 1) > 0)
 	{
 		if (n >= size)

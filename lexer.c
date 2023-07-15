@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/14 20:06:44 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/15 18:13:25 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "libft/libft.h"
-#include "utils.h"
+#include "minishell.h"
 
 char	*copyuntil(char *src, char c)
 {
@@ -52,27 +50,27 @@ void	changetokentypes(t_token *tokens)
 		return ;
 	while (++i < tokens[0].total)
 	{
-		if (ft_strcmp(tokens[i].t, "|") == 0)
+		if (strcmp(tokens[i].t, "|") == 0)
 			tokens[i].type = pipo;
 		else if (tokens[i].t[0] == '-')
 			tokens[i].type = flag;
 		else if (tokens[i].t[0] == '"')
 			tokens[i].type = text;
-		else if (ft_strcmp(tokens[i].t, ">>") == 0)
+		else if (strcmp(tokens[i].t, ">>") == 0)
 			tokens[i].type = dredirectR;
-		else if (ft_strcmp(tokens[i].t, "<<") == 0)
+		else if (strcmp(tokens[i].t, "<<") == 0)
 			tokens[i].type = dredirectL;
-		else if (ft_strcmp(tokens[i].t, ">") == 0)
+		else if (strcmp(tokens[i].t, ">") == 0)
 			tokens[i].type = redirectR;
-		else if (ft_strcmp(tokens[i].t, "<") == 0)
+		else if (strcmp(tokens[i].t, "<") == 0)
 			tokens[i].type = redirectL;
-		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, "<") == 0))
+		else if (i > 0 && (strcmp(tokens[i - 1].t, "<") == 0))
 			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, ">") == 0))
+		else if (i > 0 && (strcmp(tokens[i + 1].t, ">") == 0))
 			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, "<<") == 0))
+		else if (i > 0 && (strcmp(tokens[i - 1].t, "<<") == 0))
 			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, ">>") == 0))
+		else if (i > 0 && (strcmp(tokens[i + 1].t, ">>") == 0))
 			tokens[i].type = file;
 		else
 			tokens[i].type = command;
@@ -85,7 +83,7 @@ t_token	*dividetokens(char *str)
 	int			t_index;
 	t_token		*tokens;
 
-	tokens = ft_calloc(ft_strlen(str), sizeof(t_token));
+	tokens = ft_calloc(ft_strlen(str) + 1, sizeof(t_token));
 	i = 0;
 	t_index = 0;
 	while (i < ft_strlen(str))
@@ -94,7 +92,7 @@ t_token	*dividetokens(char *str)
 			i++;
 		if (str[i] == '"')
 			tokens[t_index++].t = copyuntil(&str[i], '"');
-		else 
+		else if (str[i] != '\0')
 			tokens[t_index++].t = copyuntil(&str[i], ' ');
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
@@ -103,6 +101,9 @@ t_token	*dividetokens(char *str)
 	{
 		tokens[i].total = t_index;
 		tokens[i].index = i;
+		tokens[i].end = 0;
 	}
+	tokens[i].end = 1;
+	tokens[i].t = "end";
 	return (tokens);
 }

@@ -3,24 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/14 19:30:27 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/15 17:04:00 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "utils.h"
-#include <stdio.h>
-#include "lexer.h"
 
-int	main(void)
+#include "minishell.h"
+
+char *get_type(t_tokentype type)
 {
-	char *str = readfromstdin();
-	t_token *tokens = dividetokens(str);
-	for (int i = 0; i < tokens[0].total; i++) {
-		printf("%s\n", tokens[i].t);
+	switch (type)
+	{
+	case command: return("command");
+	case flag: return("flag");
+	case redirectL: return("redirectL");
+	case dredirectL: return("dredirectL");
+	case dredirectR: return("dredirectR");
+	case pipo: return("pipo");
+	case text: return("text");
+	case file: return("file");
+	default: return(NULL);
 	}
+	return(NULL);
+}
 
+
+int	main(int argc, char **argv, char **envp)
+{
+	char *str;
+	t_token *tokens;
+
+	(void)argc;
+	(void)argv; 
+	while(1)
+	{
+		signals();
+		// str = readfromstdin();
+		str = readline("susanashell # ");
+		add_history(str);
+		if (ft_strlen(str) > 0)
+		{
+			tokens = dividetokens(str);
+			changetokentypes(tokens);
+			for (int i = 0; i < tokens[0].total; i++) 
+			{
+				printf("char *: %s ", tokens[i].t);
+				printf("total: %d ", tokens[i].total);
+				printf("index: %d ", tokens[i].index);
+				printf("type: %s \n", get_type(tokens[i].type));
+			}
+		}
+	}
 }

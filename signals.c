@@ -1,38 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 16:46:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/15 17:09:59 by bde-sous         ###   ########.fr       */
+/*   Created: 2023/07/15 12:54:24 by bde-sous          #+#    #+#             */
+/*   Updated: 2023/07/15 14:05:21 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#include "minishell.h"
 
-typedef enum s_token_type{
-	command,
-	flag,
-	redirectL,
-	dredirectL,
-	redirectR,
-	dredirectR,
-	pipo,
-	text,
-	file
-}	t_tokentype;
+void	signals(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
 
-typedef struct s_token{
-	char			*t;
-	t_tokentype		type;
-	int				total;
-	int				index;
-	int				end;
-}	t_token;
-
-t_token	*dividetokens(char *str);
-void	changetokentypes(t_token *tokens);
-#endif
+void	handle_sigint(int signum)
+{
+	(void)signum;
+	rl_replace_line("", 0);
+	printf("\n");
+	rl_on_new_line();
+	rl_redisplay();
+}
