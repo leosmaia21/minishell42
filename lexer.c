@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/16 20:36:54 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/16 21:25:17 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,10 @@ t_token	*dividetokens(char *str)
 			i++;
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
-		if (str[i] == '"')
+		else if (str[i] == '"')
 			tokens[t_index++].t = copyquotes(&str[i]);
 		else if (str[i] != '\0')
-			tokens[t_index++].t = copyuntil(&str[i], "\">| ");
+			tokens[t_index++].t = copyuntil(&str[i], "|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
 	i = -1;
