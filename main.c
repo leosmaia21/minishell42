@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/15 18:21:23 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/07/16 14:28:22 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv; 
+	(void)envp;
 	while(1)
 	{
 		signals();
