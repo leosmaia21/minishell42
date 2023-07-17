@@ -16,7 +16,8 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "libftprintf/ft_printf.h"
+# include "stdarg.h"
+# include <stddef.h>
 
 typedef struct s_list
 {
@@ -70,4 +71,11 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+int		printchar(char c);
+int		ft_printptr(unsigned long long p);
+void	ft_put_nbr(unsigned int value, int *l, int unsig);
+void	ft_put_hex(unsigned int value, int *l, int upper);
+int		ft_printf(const char *str, ...);
+int		ft_format(va_list args, char c);
+int		ft_printstr(char *s);
 #endif

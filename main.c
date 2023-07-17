@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/16 21:31:58 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/16 21:40:50 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char *get_type(t_tokentype type)
 	return(NULL);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	char *str;
@@ -40,10 +39,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv; 
 	(void)envp;
-	while(1)
+	while (1)
 	{
 		signals();
-		// str = readfromstdin();
 		str = readline("\033[1;95m susanashell # \033[0m");
 		add_history(str);
 		if (ft_strlen(str) > 0)
