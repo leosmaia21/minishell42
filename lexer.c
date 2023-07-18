@@ -6,13 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/17 22:00:30 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/18 12:48:14 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "minishell.h"
-#include <complex.h>
 #include <stdlib.h>
 
 char	*copyuntil(char *src, char *c)
@@ -98,6 +97,7 @@ char	*copywhileequal(char *src, char c)
 	}
 	return (dst);
 }
+
 void	changetokentypes(t_token *tokens)
 {
 	int		i;
