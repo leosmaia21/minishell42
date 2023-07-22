@@ -6,12 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/18 12:48:14 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/21 19:23:18 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "minishell.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 char	*copyuntil(char *src, char *c)

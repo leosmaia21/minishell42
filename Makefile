@@ -9,7 +9,7 @@ INCS	:= libft/libft.a
 
 RUN = ./$(NAME)
 ifdef DEBUG
-		CFLAGS += -ggdb
+		CFLAGS += -ggdb -O0
 		RUN = 
 endif
 %.o: %.c $(HEADERS)
