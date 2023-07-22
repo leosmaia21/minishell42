@@ -151,7 +151,7 @@ t_token	*dividetokens(char *str)
 		else if (str[i] == '"')
 			tokens[t_index++].t = copyquotes(&str[i]);
 		else if (str[i] != '\0')
-			tokens[t_index++].t = copyuntil(&str[i], "|>< ");
+			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
 	i = -1;

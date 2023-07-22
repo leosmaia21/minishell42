@@ -35,10 +35,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	char *str;
 	t_token *tokens;
+	t_envp *ev;
+	t_envp *temp;
 
 	(void)argc;
 	(void)argv; 
-	(void)envp;
+	ev = NULL;
 	while (1)
 	{
 		signals();
@@ -55,6 +57,11 @@ int	main(int argc, char **argv, char **envp)
 				printf("index: %d ", tokens[i].index);
 				printf("type: %s \n", get_type(tokens[i].type));
 			}
+			ev = ft_convert_envp(envp);
+			//ev = ft_new_var(ev,"batatinhas=teste");
+			printEnvpList(ev);
+			
 		}
+		free(str);
 	}
 }
