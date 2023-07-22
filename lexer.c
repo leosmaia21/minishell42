@@ -6,14 +6,36 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/21 19:23:18 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/22 17:15:58 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+char	**jointokens(t_token *tokens)
+{
+	int	 	i;
+	char	*str;
+
+	i = -1;
+	str = "";
+	while (tokens[++i].type != command)
+		continue ;
+	str = ft_strjoin(str, tokens[i].t);
+	i++;
+	while (tokens[i].type == flag)
+	{
+		str = ft_strjoin(str, " ");
+		str = ft_strjoin(str, tokens[i].t);
+		i++;
+	}
+	return (ft_split(str, ' '));
+}
 
 char	*copyuntil(char *src, char *c)
 {
