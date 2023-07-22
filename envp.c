@@ -97,3 +97,14 @@ void printEnvpList(t_envp *head)
         current = current->next;
     }
 }
+
+char *ft_find_value(t_envp *head, char *key)
+{
+    while(head != NULL)
+    {
+        if (!ft_strcmp(head->var, key))
+            break;
+        head = head->next;
+    }
+    return(head->key);
+}

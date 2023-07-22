@@ -1,4 +1,4 @@
-SRCS = main.c lexer.c utils.c signals.c envp.c
+SRCS = main.c lexer.c utils.c signals.c envp.c execs.c
 NAME = minishell
 CC = clang
 CFLAGS = -Wall -Wextra -lreadline -g

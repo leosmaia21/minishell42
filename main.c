@@ -12,8 +12,6 @@
 
 
 #include "minishell.h"
-#include <stdint.h>
-#include <stdio.h>
 
 char *get_type(t_tokentype type)
 {
@@ -38,7 +36,7 @@ int	main(int argc, char **argv, char **envp)
 	char *str;
 	t_token *tokens;
 	t_envp *ev;
-	t_envp *temp;
+	//t_envp *temp;
 
 	(void)argc;
 	(void)argv; 
@@ -52,19 +50,19 @@ int	main(int argc, char **argv, char **envp)
 		{
 			tokens = dividetokens(str);
 			changetokentypes(tokens);
-			for (int i = 0; i < tokens[0].total; i++) 
-			{
-				printf("char *: %s ", tokens[i].t);
-				printf("total: %d ", tokens[i].total);
-				printf("index: %d ", tokens[i].index);
-				printf("type: %s \n", get_type(tokens[i].type));
-			}
+			// for (int i = 0; i < tokens[0].total; i++) 
+			// {
+			// 	printf("char *: %s ", tokens[i].t);
+			// 	printf("total: %d ", tokens[i].total);
+			// 	printf("index: %d ", tokens[i].index);
+			// 	printf("type: %s \n", get_type(tokens[i].type));
+			// }
 			ev = ft_convert_envp(envp);
 			//ev = ft_new_var(ev,"batatinhas=teste");
-			printEnvpList(ev);
-			
+			//printEnvpList(ev);
+			ft_exec(ev,tokens,envp);
+			printf("%s\n", ft_find_value(ev,"PWD"));
 		}
 		free(str);
 	}
-	printf("ola");
 }

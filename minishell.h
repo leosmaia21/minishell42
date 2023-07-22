@@ -11,6 +11,7 @@
 # include "envp.h"
 # include "utils.h"
 # include "libft/libft.h"
+# include <errno.h>
 
 void	signals(void);
 void	handle_sigint(int signum);
@@ -19,5 +20,7 @@ void ft_add_node(t_envp **head, t_envp *node);
 t_envp *ft_create_node(char *var, char *key);
 void printEnvpList(t_envp *head);
 t_envp *ft_new_var(t_envp *head, char *str);
+char *ft_find_value(t_envp *head, char *key);
+void ft_exec(t_envp *head, t_token *tokens, char **envp);
 
 #endif
