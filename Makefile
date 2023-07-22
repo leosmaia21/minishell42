@@ -16,15 +16,18 @@ endif
 
 RUN = ./$(NAME)
 ifdef DEBUG
-		CFLAGS += -g
+		CFLAGS += -ggdb -O0
 		RUN = 
 endif
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) $<   -c   
 
 all: ${NAME}
 
 $(NAME):runlibft $(OBJS)
 		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${INCS}
 		$(RUN)
+
 
 ignore:
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${INCS}

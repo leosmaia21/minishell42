@@ -6,12 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/16 21:40:50 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/22 14:48:05 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
+#include <stdint.h>
+#include <stdio.h>
 
 char *get_type(t_tokentype type)
 {
@@ -64,4 +66,5 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(str);
 	}
+	printf("ola");
 }

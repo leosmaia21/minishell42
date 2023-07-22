@@ -6,12 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/16 21:25:17 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/21 19:23:18 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "minishell.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 char	*copyuntil(char *src, char *c)
@@ -54,7 +55,7 @@ char	*copyuntil(char *src, char *c)
 	return (dst);
 }
 
-char	*copyquotes(char *src)
+char	*copyquotes(char *src, char *c)
 {
 	long	i;
 	long	s;
@@ -64,7 +65,7 @@ char	*copyquotes(char *src)
 	s = 0;
 	while (s < ft_strlen(src))
 	{
-		s = (long)ft_strbrk(src + s + 1, "\"") - (long)src;
+		s = (long)ft_strbrk(src + s + 1, c) - (long)src;
 		if (s < 0)
 		{
 			s = ft_strlen(src + 1);
@@ -97,6 +98,7 @@ char	*copywhileequal(char *src, char c)
 	}
 	return (dst);
 }
+
 void	changetokentypes(t_token *tokens)
 {
 	int		i;
@@ -149,7 +151,9 @@ t_token	*dividetokens(char *str)
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
 		else if (str[i] == '"')
-			tokens[t_index++].t = copyquotes(&str[i]);
+			tokens[t_index++].t = copyquotes(&str[i], "\"");
+		else if (str[i] == '\'')
+			tokens[t_index++].t = copyquotes(&str[i], "\'");
 		else if (str[i] != '\0')
 			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
