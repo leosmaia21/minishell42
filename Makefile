@@ -1,11 +1,18 @@
-SRCS := main.c lexer.c utils.c signals.c
-HEADERS := utils.h minishell.h lexer.h
-NAME := minishell
-CC := clang
-CFLAGS := -Wall  -Wextra -lreadline 
-RM := rm -f
-OBJS:= $(SRCS:.c=.o)
-INCS	:= libft/libft.a
+SRCS = main.c lexer.c utils.c signals.c envp.c
+NAME = minishell
+CC = clang
+CFLAGS = -Wall -Wextra -lreadline -g
+RM = rm -f
+OBJS= $(SRCS:.c=.o)
+INCS	= libft/libft.a
+
+ifeq ($(shell uname), Linux)
+	CFLAGS = -Wall  -Wextra -lreadline
+	FSANITIZE = -fsanitize=leak
+else ifeq ($(shell uname), Darwin)
+	CFLAGS	+= -L/Users/$(shell whoami)/.brew/opt/readline/lib -lreadline
+	INCS	+= -I/Users/$(shell whoami)/.brew/opt/readline/include
+endif
 
 RUN = ./$(NAME)
 ifdef DEBUG
@@ -30,7 +37,7 @@ clean:
 
 fclean:clean 
 	${RM} ${NAME}
-	# make -C libft fclean
+	make -C libft fclean
 
 re:fclean all
 
