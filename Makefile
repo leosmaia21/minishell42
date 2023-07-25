@@ -1,6 +1,6 @@
 SRCS = main.c lexer.c utils.c signals.c
 NAME = minishell
-CC = clang
+CC = cc
 FLAGS = -Wall -g -Werror -Wextra -lreadline #-fsanitize=thread
 RM = rm -f
 OBJS= $(SRCS:.c=.o)
