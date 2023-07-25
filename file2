@@ -1,0 +1,32 @@
+total 2448
+drwxr-xr-x@ 30 bcamarinha  staff     960 Jul 22 15:55 .
+drwxr-xr-x@ 19 bcamarinha  staff     608 Jul 22 15:55 ..
+-rw-r--r--@  1 bcamarinha  staff    8196 Jul 18 19:35 .DS_Store
+drwxr-xr-x@ 15 bcamarinha  staff     480 Jul 22 15:38 .git
+-rw-r--r--   1 bcamarinha  staff       4 Jul 17 20:53 .gitignore
+-rw-r--r--   1 bcamarinha  staff    1070 Jul 17 20:53 LICENSE
+-rw-r--r--   1 bcamarinha  staff     837 Jul 22 15:35 Makefile
+-rw-r--r--   1 bcamarinha  staff     168 Jul 17 20:53 README.md
+-rw-r--r--   1 bcamarinha  staff    2173 Jul 21 00:05 envp.c
+-rw-r--r--   1 bcamarinha  staff     140 Jul 20 23:26 envp.h
+-rw-r--r--   1 bcamarinha  staff    2608 Jul 22 15:25 envp.o
+-rw-r--r--   1 bcamarinha  staff      15 Jul 22 15:42 file
+-rw-r--r--   1 bcamarinha  staff       0 Jul 22 15:58 file2
+-rw-r--r--   1 bcamarinha  staff    3953 Jul 22 15:35 lexer.c
+-rw-r--r--   1 bcamarinha  staff    1262 Jul 22 15:35 lexer.h
+-rw-r--r--   1 bcamarinha  staff  210068 Jul 22 15:35 lexer.h.gch
+-rw-r--r--   1 bcamarinha  staff    3928 Jul 20 23:21 lexer.o
+drwxr-xr-x@ 91 bcamarinha  staff    2912 Jul 20 23:21 libft
+-rw-r--r--   1 bcamarinha  staff    2067 Jul 22 15:36 main.c
+-rw-r--r--   1 bcamarinha  staff    2016 Jul 22 15:25 main.o
+-rw-r--r--   1 bcamarinha  staff     543 Jul 20 23:57 minishell.h
+-rw-r--r--   1 bcamarinha  staff  733536 Jul 22 15:35 minishell.h.gch
+-rw-r--r--   1 bcamarinha  staff    1125 Jul 17 20:53 signals.c
+-rw-r--r--   1 bcamarinha  staff    1120 Jul 20 23:21 signals.o
+-rw-r--r--   1 bcamarinha  staff       4 Jul 17 20:53 teste
+drwxr-xr-x@  3 bcamarinha  staff      96 Jul 17 20:54 utils
+-rw-r--r--   1 bcamarinha  staff    1443 Jul 17 20:53 utils.c
+-rw-r--r--   1 bcamarinha  staff     996 Jul 22 15:35 utils.h
+-rw-r--r--   1 bcamarinha  staff  208208 Jul 22 15:35 utils.h.gch
+-rw-r--r--   1 bcamarinha  staff    1560 Jul 20 23:21 utils.o
+asasas

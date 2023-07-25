@@ -48,3 +48,16 @@ char	*readfromstdin(void)
 	}
 	return (str);
 }
+
+void	ft_freedoublepointer(char **dptr)
+{
+	int	i;
+
+	i = 0;
+	while (dptr[i])
+	{
+		free(dptr[i]);
+		i++;
+	}
+	free(dptr);
+}

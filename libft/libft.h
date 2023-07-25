@@ -6,7 +6,7 @@
 /*   By: ledos-sa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 16:44:48 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/15 15:20:47 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/16 16:57:29 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "libftprintf/ft_printf.h"
+# include "stdarg.h"
+# include <stddef.h>
 
 typedef struct s_list
 {
@@ -55,6 +56,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+char	*ft_strbrk(char *str, char *search);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
@@ -69,4 +71,11 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+int		printchar(char c);
+int		ft_printptr(unsigned long long p);
+void	ft_put_nbr(unsigned int value, int *l, int unsig);
+void	ft_put_hex(unsigned int value, int *l, int upper);
+int		ft_printf(const char *str, ...);
+int		ft_format(va_list args, char c);
+int		ft_printstr(char *s);
 #endif

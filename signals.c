@@ -20,7 +20,7 @@ void	signals(void)
 
 void	handle_sigint(int signum)
 {
-	(void)signum;
+    (void)signum;
 	rl_replace_line("", 0);
 	printf("\n");
 	rl_on_new_line();
