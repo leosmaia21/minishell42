@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/22 17:15:58 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 00:53:18 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,33 @@ char	*copywhileequal(char *src, char c)
 	return (dst);
 }
 
+int	changetokentypes2(t_token *tokens, int *i)
+{
+	if (ft_strcmp(tokens[*i].t, ">") == 0)
+	{
+		if (*i > 0)
+			tokens[*i - 1].type = file;
+		tokens[*i].type = redirectR;
+		return (1);
+	}
+	else if (ft_strcmp(tokens[*i].t, "<") == 0)
+	{
+		if (*i < tokens[0].total - 1)
+			tokens[*i + 1].type = file;
+		tokens[*i].type = redirectL;
+		i++;
+		return (1);
+	}
+	else if (ft_strcmp(tokens[*i].t, ">>") == 0)
+	{
+		if (*i > 0)
+			tokens[*i - 1].type = file;
+		tokens[*i].type = dredirectR;
+		return (1);
+	}
+	return (0);
+}
+
 void	changetokentypes(t_token *tokens)
 {
 	int		i;
@@ -137,26 +164,19 @@ void	changetokentypes(t_token *tokens)
 	{
 		if (ft_strcmp(tokens[i].t, "|") == 0)
 			tokens[i].type = pipo;
-		else if (tokens[i].t[0] == '-')
+		else if (changetokentypes2(tokens, &i))
+			continue ;
+		else if (ft_strcmp(tokens[i].t, "<<") == 0)
+		{
+			if (i < tokens[0].total - 1)
+				tokens[i + 1].type = file;
+			tokens[i].type = dredirectL;
+			i++;
+		}
+		else if (tokens[i].t[0] == '-' || (i > 0 && (tokens[i - 1].type == flag ||tokens[i - 1].type == command)))
 			tokens[i].type = flag;
 		else if (tokens[i].t[0] == '"')
 			tokens[i].type = text;
-		else if (ft_strcmp(tokens[i].t, ">>") == 0)
-			tokens[i].type = dredirectR;
-		else if (ft_strcmp(tokens[i].t, "<<") == 0)
-			tokens[i].type = dredirectL;
-		else if (ft_strcmp(tokens[i].t, ">") == 0)
-			tokens[i].type = redirectR;
-		else if (ft_strcmp(tokens[i].t, "<") == 0)
-			tokens[i].type = redirectL;
-		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, ">") == 0))
-			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, "<") == 0))
-			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, ">>") == 0))
-			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, "<<") == 0))
-			tokens[i].type = file;
 		else
 			tokens[i].type = command;
 	}
@@ -178,9 +198,9 @@ t_token	*dividetokens(char *str)
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
 		else if (str[i] == '"')
-			tokens[t_index++].t = copyquotes(&str[i], "\"");
+			tokens[t_index++].t = (copyquotes(&str[i], "\""));
 		else if (str[i] == '\'')
-			tokens[t_index++].t = copyquotes(&str[i], "\'");
+			tokens[t_index++].t = (copyquotes(&str[i], "\'"));
 		else if (str[i] != '\0')
 			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
