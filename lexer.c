@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 00:53:18 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 00:56:16 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,7 @@ t_token	*dividetokens(char *str)
 	int			i;
 	int			t_index;
 	t_token		*tokens;
+	char		*leak;
 
 	tokens = ft_calloc(ft_strlen(str) + 1, sizeof(t_token));
 	i = 0;
@@ -211,6 +212,9 @@ t_token	*dividetokens(char *str)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
+		leak = tokens[i].t;
+		tokens[i].t = ft_strtrim(tokens[i].t, "\"\'");
+		free(leak);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
