@@ -26,15 +26,81 @@ char *ft_findpath(t_envp *head, char **envp, char **flags)
 
 void	ft_single_exec(char **flags, char **envp, char *path)
 {
-	int		pid;
-	int		status;
+    if (path)
+    {
+        if (execve(path, flags, envp) == -1)
+        perror("Error executing command");
+    }
+}
 
-	status = 0;
-	pid = fork();
-	if (pid == -1)
-		perror(strerror(errno));
-	if (pid == 0)
-	    execve(path, flags, envp);
-	waitpid(-1, &status, 0);
-	ft_freedoublepointer(flags);
+int ft_count_command(t_token *tokens)
+{
+    int count;
+    int i;
+
+    i=-1;
+    count = 0;
+    while (++i < tokens[0].total)
+    {
+        if (tokens[i].type == command)
+            count++;
+    }
+    return(count);
+}
+
+void setup_pipe(int input_fd, int output_fd)
+{
+    if (input_fd != STDIN_FILENO)
+    {
+        if (dup2(input_fd, STDIN_FILENO) == -1)
+        {
+            perror(strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+        close(input_fd);
+    }
+
+    if (output_fd != STDOUT_FILENO)
+    {
+        if (dup2(output_fd, STDOUT_FILENO) == -1)
+        {
+            perror(strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+        close(output_fd);
+    }
+}
+
+void ft_main_exec(t_info *info)
+{
+    int pipes;
+    int input_fd = STDIN_FILENO;
+    int fd[2];
+    int pid;
+    char **flags;
+    int i;
+
+    i = -1;
+    pipes = ft_count_command(info->tokens);
+    if (pipe(fd) == -1)
+        perror(strerror(errno));
+    while (++i < pipes) {
+        flags = jointokens(info->tokens, i);
+        pid = fork();
+        if (pid == -1)
+            perror(strerror(errno));
+        else if (pid == 0)
+        {
+            setup_pipe(input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
+            ft_single_exec(flags, info->envp, ft_findpath(info->tenv, info->envp, flags));
+        }
+        else
+        {
+            if (i < pipes - 1)
+                close(fd[1]);
+            waitpid(-1, &info->exit_code, 0);
+            if (i < pipes - 1)
+                input_fd = fd[0];
+        }
+    }
 }

@@ -29,30 +29,26 @@ char *get_type(t_tokentype type)
 	default: return(NULL);
 	}
 	return(NULL);
+	return(NULL);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char *str;
-	t_token *tokens;
-	t_envp *ev;
-	//t_envp *temp;
-	//int		fd_pipe[2];
+    t_info info;
 	char *path = NULL;
 	char **flags;
 
 	(void)argc;
-	(void)argv; 
-	ev = NULL;
+	(void)argv;
 	while (1)
 	{
 		signals();
-		str = readline("\033[1;95m susanashell # \033[0m");
-		add_history(str);
-		if (ft_strlen(str) > 0)
+		info.str = readline("\033[1;95m susanashell # \033[0m");
+		add_history(info.str);
+		if (ft_strlen(info.str) > 0)
 		{
-			tokens = dividetokens(str);
-			changetokentypes(tokens);
+			info.tokens = dividetokens(info.str);
+			changetokentypes(info.tokens);
 			// for (int i = 0; i < tokens[0].total; i++) 
 			// {
 			// 	printf("char *: %s ", tokens[i].t);
@@ -60,16 +56,17 @@ int	main(int argc, char **argv, char **envp)
 			// 	printf("index: %d ", tokens[i].index);
 			// 	printf("type: %s \n", get_type(tokens[i].type));
 			// }
-			ev = ft_convert_envp(envp);
+			info.tenv = ft_convert_envp(envp);
+            info.envp = envp;
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			//printEnvpList(ev);
-			flags = jointokens(tokens);
-			path = ft_findpath(ev, envp, flags);
-			if (path)
-				ft_single_exec(flags,envp , path);
+			//flags = jointokens(info.tokens);
+			//path = ft_findpath(info.tenv, info.envp, flags);
+            ft_main_exec(&info);
+            //ft_single_exec(flags,info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
-			free(path);
+			//free(path);
 		}
-		free(str);
+		free(info.str);
 	}
 }

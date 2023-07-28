@@ -17,15 +17,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-char	**jointokens(t_token *tokens)
+char	**jointokens(t_token *tokens, int idx)
 {
 	int	 	i;
 	char	*str;
 
 	i = -1;
 	str = "";
-	while (tokens[++i].type != command)
-		continue ;
+    while (idx >= 0)
+    {
+	    while (tokens[++i].type != command)
+		    continue ;
+        if (tokens[i].type == command)
+            idx--;
+    }
 	str = ft_strjoin(str, tokens[i].t);
 	i++;
 	while (tokens[i].type == flag)

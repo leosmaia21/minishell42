@@ -34,7 +34,7 @@ ignore:
 	${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${INCS}
 
 clean:
-	${RM} ${OBJdS}
+	${RM} ${OBJS}
 
 fclean:clean 
 	${RM} ${NAME}

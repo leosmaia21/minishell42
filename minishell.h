@@ -13,6 +13,14 @@
 # include "libft/libft.h"
 # include <errno.h>
 
+typedef struct s_info{
+    char            *str;
+    t_envp 			*tenv;
+    char            **envp;
+    t_token         *tokens;
+    int             exit_code;
+}	t_info;
+
 void	signals(void);
 void	handle_sigint(int signum);
 t_envp *ft_convert_envp(char **envp);
@@ -24,5 +32,6 @@ char *ft_find_value(t_envp *head, char *key);
 char *ft_findpath(t_envp *head, char **envp, char **flags);
 void	ft_single_exec(char **flags, char **envp, char *path);
 void	ft_freedoublepointer(char **dptr);
+void ft_main_exec(t_info *info);
 
 #endif
