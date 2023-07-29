@@ -6,11 +6,11 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/28 23:32:44 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 15:44:29 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include "builtins.h"
 #include "lexer.h"
 #include "minishell.h"
 
@@ -33,7 +33,6 @@ char *get_type(t_tokentype type)
 	return(NULL);
 }
 
-void	echo(char **info);
 int	main(int argc, char **argv, char **envp)
 {
     t_info info;
@@ -64,7 +63,8 @@ int	main(int argc, char **argv, char **envp)
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			//printEnvpList(ev);
 			flags = jointokens(info.tokens, 0);
-			echo(flags);
+			cd(flags);
+			pwd(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 
             // ft_main_exec(&info);

@@ -6,14 +6,13 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 20:36:07 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/28 22:40:34 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 15:40:03 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include "minishell.h"
+#include "builtins.h"
 
-int	echoval(char *info)
+static int	echoval(char *info)
 {
 	int		i;
 	char	*s;
@@ -65,4 +64,28 @@ void	echo(char **info)
 	}
 	if (n == 0)
 		printf("\n");
+}
+
+void	cd(char **info)
+{
+	if (chdir(*(++info)) != 0)
+		perror("chdir() error()");
+}
+
+void	pwd(char **info)
+{
+	char	*ret;
+
+	ret = getcwd(0, 0);
+	if (!ret)
+		perror("getcwd() error");
+	else
+		printf("%s\n", ret);
+	free(ret);
+}
+
+void	exitsusana(void)
+{
+	printf("Maravilha Maravilha\n");
+	exit(1);
 }

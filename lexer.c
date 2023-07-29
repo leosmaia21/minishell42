@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 00:56:16 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 15:15:06 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ char	**jointokens(t_token *tokens, int idx)
 
 	i = -1;
 	str = "";
-    while (idx >= 0)
-    {
-	    while (tokens[++i].type != command)
-		    continue ;
-        if (tokens[i].type == command)
-            idx--;
-    }
+	while (idx >= 0)
+	{
+		while (tokens[++i].type != command)
+			continue ;
+		if (tokens[i].type == command)
+			idx--;
+	}
 	str = ft_strjoin(str, tokens[i].t);
 	i++;
 	while (tokens[i].type == flag)
@@ -98,7 +98,7 @@ char	*copyquotes(char *src, char *c)
 			s = ft_strlen(src + 1);
 			break ;
 		}
-		if (src[s - 1] != 92)
+		if (src[s + 1] == ' ')
 			break ;
 	}
 	dst = ft_calloc(s + 3, 1);
@@ -182,12 +182,37 @@ void	changetokentypes(t_token *tokens)
 	}
 }
 
+void	removequotes(t_token *token)
+{
+	int		i;
+	int		n;
+	int		q;
+	char	*new;
+
+	i = -1;
+	n = 0;
+	q = 0;
+	new = ft_calloc(ft_strlen(token->t), 1);
+	while (++i < ft_strlen(token->t))
+		if (token->t[i] == '"')
+			q++;
+	i = -1;
+	while (++i < ft_strlen(token->t)) 
+	{
+		if (token->t[i] != '"')
+			new[n++] = token->t[i];
+	}
+	if (q % 2)
+		new[n] = '"';
+	free(token->t);
+	token->t = new;
+}
+
 t_token	*dividetokens(char *str)
 {
 	int			i;
 	int			t_index;
 	t_token		*tokens;
-	char		*leak;
 
 	tokens = ft_calloc(ft_strlen(str) + 1, sizeof(t_token));
 	i = 0;
@@ -212,9 +237,7 @@ t_token	*dividetokens(char *str)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		leak = tokens[i].t;
-		tokens[i].t = ft_strtrim(tokens[i].t, "\"\'");
-		free(leak);
+		removequotes(&tokens[i]);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
