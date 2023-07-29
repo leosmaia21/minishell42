@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:37:11 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 15:39:45 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 16:09:14 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "minishell.h"
 # include <unistd.h>
 
-void	exitsusana(void);
+void	exitsusana(char **info);
 void	pwd(char **info);
 void	cd(char **info);
 void	echo(char **info);

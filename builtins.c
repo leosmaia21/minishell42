@@ -6,16 +6,16 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 20:36:07 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 15:40:03 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 16:46:33 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include <assert.h>
 
 static int	echoval(char *info)
 {
 	int		i;
-	char	*s;
 	int		n;
 
 	i = 0;
@@ -47,6 +47,7 @@ void	echo(char **info)
 	i = 0;
 	x = 0;
 	n = 0;
+	assert(ft_strcmp(info[0], "echo") == 0);
 	while (info[++i])
 	{
 		x = echoval(info[i]);
@@ -68,24 +69,27 @@ void	echo(char **info)
 
 void	cd(char **info)
 {
+	assert(ft_strcmp(info[0], "cd") == 0);
 	if (chdir(*(++info)) != 0)
-		perror("chdir() error()");
+		perror("cd");
 }
 
 void	pwd(char **info)
 {
 	char	*ret;
 
+	assert(ft_strcmp(info[0], "pwd") == 0);
 	ret = getcwd(0, 0);
 	if (!ret)
-		perror("getcwd() error");
+		perror("pwd");
 	else
 		printf("%s\n", ret);
 	free(ret);
 }
 
-void	exitsusana(void)
+void	exitsusana(char **info)
 {
+	assert(ft_strcmp(info[0], "exit") == 0);
 	printf("Maravilha Maravilha\n");
 	exit(1);
 }

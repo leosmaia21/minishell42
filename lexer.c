@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 15:15:06 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/29 16:44:26 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**jointokens(t_token *tokens, int idx)
 	return (ft_split(str, ' '));
 }
 
-char	*copyuntil(char *src, char *c)
+static char	*copyuntil(char *src, char *c)
 {
 	long		i;
 	char		*dst;
@@ -50,18 +50,6 @@ char	*copyuntil(char *src, char *c)
 
 	s = 0;
 	i = -1;
-	// i = (long)ft_strbrk(src, c);
-	// i = i - (long)src;
-	// if (i < 0)
-	// 	i = ft_strlen(src);
-	// else if (i == 0)
-	// 	i = 1;
-	// dst = ft_calloc(i + 3, 1);
-	// while (n < i && src[n])
-	// {
-	// 	dst[n] = src[n];
-	// 	n++;
-	// }
 	while (s < ft_strlen(src))
 	{
 		s = (long)ft_strbrk(src + s, c) - (long)src;
@@ -82,7 +70,7 @@ char	*copyuntil(char *src, char *c)
 	return (dst);
 }
 
-char	*copyquotes(char *src, char *c)
+static char	*copyquotes(char *src, char *c)
 {
 	long	i;
 	long	s;
@@ -108,7 +96,7 @@ char	*copyquotes(char *src, char *c)
 	return (dst);
 }
 
-char	*copywhileequal(char *src, char c)
+static char	*copywhileequal(char *src, char c)
 {
 	int		i;
 	char	*dst;
@@ -126,28 +114,29 @@ char	*copywhileequal(char *src, char c)
 	return (dst);
 }
 
-int	changetokentypes2(t_token *tokens, int *i)
+static int	changetokentypes2(t_token *tokens, int *i)
 {
 	if (ft_strcmp(tokens[*i].t, ">") == 0)
 	{
-		if (*i > 0)
-			tokens[*i - 1].type = file;
+		if (*i < tokens[0].total - 1)
+			tokens[*i + 1].type = file;
 		tokens[*i].type = redirectR;
+		(*i)++;
 		return (1);
 	}
 	else if (ft_strcmp(tokens[*i].t, "<") == 0)
 	{
-		if (*i < tokens[0].total - 1)
-			tokens[*i + 1].type = file;
+		if (*i > 0)
+			tokens[*i - 1].type = file;
 		tokens[*i].type = redirectL;
-		i++;
 		return (1);
 	}
 	else if (ft_strcmp(tokens[*i].t, ">>") == 0)
 	{
-		if (*i > 0)
-			tokens[*i - 1].type = file;
-		tokens[*i].type = dredirectR;
+		if (*i < tokens[0].total - 1)
+			tokens[*i + 1].type = file;
+		tokens[*i].type = dredirectL;
+		(*i)++;
 		return (1);
 	}
 	return (0);
@@ -182,7 +171,7 @@ void	changetokentypes(t_token *tokens)
 	}
 }
 
-void	removequotes(t_token *token)
+static void	removequotes(t_token *token)
 {
 	int		i;
 	int		n;
@@ -208,6 +197,22 @@ void	removequotes(t_token *token)
 	token->t = new;
 }
 
+static void	dividetokensaux(t_token *tokens, int t_index)
+{
+	int	i;
+
+	i = -1;
+	while (++i < t_index)
+	{
+		tokens[i].total = t_index;
+		tokens[i].index = i;
+		tokens[i].end = 0;
+		removequotes(&tokens[i]);
+	}
+	tokens[i].end = 1;
+	tokens[i].t = "end";
+}
+
 t_token	*dividetokens(char *str)
 {
 	int			i;
@@ -231,15 +236,6 @@ t_token	*dividetokens(char *str)
 			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
-	i = -1;
-	while (++i < t_index)
-	{
-		tokens[i].total = t_index;
-		tokens[i].index = i;
-		tokens[i].end = 0;
-		removequotes(&tokens[i]);
-	}
-	tokens[i].end = 1;
-	tokens[i].t = "end";
+	dividetokensaux(tokens, t_index);
 	return (tokens);
 }
