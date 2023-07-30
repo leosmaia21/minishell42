@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 16:44:26 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/30 16:16:42 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 char	**jointokens(t_token *tokens, int idx)
 {
-	int	 	i;
+	int		i;
 	char	*str;
 
 	i = -1;
@@ -58,7 +58,7 @@ static char	*copyuntil(char *src, char *c)
 			s = ft_strlen(src);
 			break ;
 		}
-		if (src[s - 1] != 92)
+		if (src[s + 1] == ' ')
 			break ;
 		s++;
 	}
@@ -147,8 +147,6 @@ void	changetokentypes(t_token *tokens)
 	int		i;
 
 	i = -1;
-	if (!tokens)
-		return ;
 	while (++i < tokens[0].total)
 	{
 		if (ft_strcmp(tokens[i].t, "|") == 0)
@@ -162,7 +160,8 @@ void	changetokentypes(t_token *tokens)
 			tokens[i].type = dredirectL;
 			i++;
 		}
-		else if (tokens[i].t[0] == '-' || (i > 0 && (tokens[i - 1].type == flag ||tokens[i - 1].type == command)))
+		else if (tokens[i].t[0] == '-' || (i > 0 && (tokens[i - 1].type == flag \
+			|| tokens[i - 1].type == command)))
 			tokens[i].type = flag;
 		else if (tokens[i].t[0] == '"')
 			tokens[i].type = text;
@@ -181,7 +180,7 @@ static void	removequotes(t_token *token)
 	i = -1;
 	n = 0;
 	q = 0;
-	new = ft_calloc(ft_strlen(token->t), 1);
+	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	while (++i < ft_strlen(token->t))
 		if (token->t[i] == '"')
 			q++;
