@@ -15,7 +15,7 @@ INCS	= libft/libft.a
 # 	INCS	+= -I/Users/$(shell whoami)/.brew/opt/readline/include
 # endif
 
-RUN = ./$(NAME)
+#RUN = ./$(NAME)
 ifdef DEBUG
 		CFLAGS += -ggdb -O0
 		RUN = 

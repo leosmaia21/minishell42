@@ -26,10 +26,13 @@ char *ft_findpath(t_envp *head, char **envp, char **flags)
 
 void	ft_single_exec(char **flags, char **envp, char *path)
 {
-    if (path)
+    if (ft_check_builtin(flags, envp) != 0)
     {
-        if (execve(path, flags, envp) == -1)
-        perror("Error executing command");
+        if (path)
+        {
+            if (execve(path, flags, envp) == -1)
+            perror("Error executing command");
+        }
     }
 }
 
@@ -98,7 +101,7 @@ void ft_main_exec(t_info *info)
         {
             if (i < pipes - 1)
                 close(fd[1]);
-            waitpid(-1, &info->exit_code, 0);
+           waitpid(-1, &info->exit_code, 0);
             if (i < pipes - 1)
                 input_fd = fd[0];
         }

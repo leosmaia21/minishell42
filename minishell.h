@@ -45,5 +45,7 @@ char 	*ft_findpath(t_envp *head, char **envp, char **flags);
 void	ft_single_exec(char **flags, char **envp, char *path);
 void	ft_freedoublepointer(char **dptr);
 void 	ft_main_exec(t_info *info);
+char **ft_duplicate_envp(char **envp);
+int ft_check_builtin(char **flags, char **envp);
 
 #endif

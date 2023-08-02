@@ -24,5 +24,6 @@ void	cd(char **info);
 void	echo(char **info);
 void	exportsusana(char **info);
 void	unset(char **info);
-void	env(char **info);
+void	env(char **info, char **envp);
+
 #endif
