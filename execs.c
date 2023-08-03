@@ -13,7 +13,7 @@
 #include <sys/wait.h>
 #include "execs.h"
 
-char	*ft_findpath(t_envp *head, char **envp, char **flags)
+char	*ft_findpath(t_envp *head, char **flags)
 {
 	char	*p;
 	char	**split;
@@ -36,13 +36,16 @@ char	*ft_findpath(t_envp *head, char **envp, char **flags)
 	return (NULL);
 }
 
-void	ft_single_exec(char **flags, char **envp, char *path)
+void	ft_single_exec(char **flags, t_info *info)
 {
-	if (ft_check_builtin(flags, envp) != 0)
+	char *path;
+	
+	if (ft_check_builtin(flags, info->envp) != 0)
 	{
+		ft_findpath(info->tenv, flags);
 		if (path)
 		{
-			if (execve(path, flags, envp) == -1)
+			if (execve(path, flags, info->envp) == -1)
 				perror("Error executing command");
 		}
 	}
@@ -106,7 +109,7 @@ void	ft_main_exec(t_info *info)
 		else if (pid == 0)
 		{
 			setup_pipe(input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
-			ft_single_exec(flags, info->envp, ft_findpath(info->tenv, info->envp, flags));
+			ft_single_exec(flags, info);
 		}
 		else
 		{
