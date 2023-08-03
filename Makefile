@@ -4,8 +4,8 @@ CC = clang
 CFLAGS = -Wall -g -Wextra -lreadline #-fsanitize=thread
 
 RM = rm -f
-OBJS= $(SRCS:.c=.o)
-INCS	= libft/libft.a
+OBJS = $(SRCS:.c=.o)
+INCS = libft/libft.a
 
 # ifeq ($(shell uname), Linux)
 # 	CFLAGS = -glldb -Wall  -Wextra -lreadline
@@ -15,14 +15,7 @@ INCS	= libft/libft.a
 # 	INCS	+= -I/Users/$(shell whoami)/.brew/opt/readline/include
 # endif
 
-#RUN = ./$(NAME)
-ifdef DEBUG
-		CFLAGS += -ggdb -O0
-		RUN = 
-endif
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) $<   -c   
-
+RUN = ./$(NAME)
 all: ${NAME}
 
 $(NAME):runlibft $(OBJS)
@@ -40,7 +33,6 @@ clean:
 
 fclean:clean 
 	${RM} ${NAME}
-	make -C libft fclean
 
 re:fclean all
 

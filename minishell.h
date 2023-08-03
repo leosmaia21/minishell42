@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/29 17:17:04 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/03 19:40:42 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ t_envp 	*ft_create_node(char *var, char *key);
 void	printEnvpList(t_envp *head);
 t_envp 	*ft_new_var(t_envp *head, char *str);
 char 	*ft_find_value(t_envp *head, char *key);
-char 	*ft_findpath(t_envp *head, char **envp, char **flags);
-void	ft_single_exec(char **flags, char **envp, char *path);
+char 	*ft_findpath(t_envp *head, char **flags);
+void	ft_single_exec(char **flags, t_info *info, char *path);
 void	ft_freedoublepointer(char **dptr);
 void 	ft_main_exec(t_info *info);
-char    **ft_duplicate_envp(char **envp);
-int     ft_check_builtin(char **flags, char **envp);
+char 	**ft_duplicate_envp(char **envp);
+t_envp	*tnode(t_envp *cabeca, char *key);
+int ft_check_builtin(char **flags, char **envp, t_envp *env);
 
 #endif
