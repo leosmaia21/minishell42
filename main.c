@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/30 22:35:01 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/03 21:33:07 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	info.tenv = ft_convert_envp(envp);
 	while (1)
 	{
 		signals();
@@ -48,9 +49,9 @@ int	main(int argc, char **argv, char **envp)
 		add_history(info.str);
 		if (ft_strlen(info.str) > 0)
 		{
-			info.tokens = dividetokens(info.str);
+			info.tokens = dividetokens(info.str, info.tenv);
 			changetokentypes(info.tokens);
-			// t_token *tokens = info.tokens;
+			t_token *tokens = info.tokens;
 			// for (int i = 0; i < tokens[0].total; i++) 
 			// {
 			// 	printf("char *: %s ", tokens[i].t);
@@ -58,14 +59,13 @@ int	main(int argc, char **argv, char **envp)
 			// 	printf("index: %d ", tokens[i].index);
 			// 	printf("type: %s \n", get_type(tokens[i].type));
 			// }
-			info.tenv = ft_convert_envp(envp);
-            info.envp = ft_duplicate_envp(envp);
+   //          info.envp = ft_duplicate_envp(envp);
 			//ev = ft_new_var(ev,"batatinhas=teste");
-			//printEnvpList(ev);
-			//flags = jointokens(info.tokens, 0);
-			//echo(flags);
-			//pwd(flags);
-			//cd(flags);
+			flags = jointokens(info.tokens, 0);
+			// echo(flags);
+			// cd(flags, info.tenv);
+			// printEnvpList(info.tenv);
+			// pwd(flags);
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 

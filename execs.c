@@ -40,7 +40,7 @@ void	ft_single_exec(char **flags, t_info *info)
 {
 	char *path;
 	
-	if (ft_check_builtin(flags, info->envp) != 0)
+	if (ft_check_builtin(flags, info->envp, info->tenv) != 0)
 	{
 		ft_findpath(info->tenv, flags);
 		if (path)

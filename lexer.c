@@ -6,11 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/30 16:16:42 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/03 17:48:06 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "envp.h"
 #include "libft/libft.h"
 #include "minishell.h"
 #include <stdint.h>
@@ -58,7 +59,7 @@ static char	*copyuntil(char *src, char *c)
 			s = ft_strlen(src);
 			break ;
 		}
-		if (src[s + 1] == ' ')
+		if (src[s] == ' ')
 			break ;
 		s++;
 	}
@@ -176,24 +177,38 @@ static void	removequotes(t_token *token)
 	int		n;
 	int		q;
 	char	*new;
+	char	c;
 
 	i = -1;
 	n = 0;
 	q = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	while (++i < ft_strlen(token->t))
-		if (token->t[i] == '"')
+	{
+		if (token->t[i] == '"' || token->t[i] == '\'')
+		{
+			c = token->t[i];
+			break ;
+		}
+	}
+	i = -1;
+	while (++i < ft_strlen(token->t))
+		if (token->t[i] == c)
 			q++;
 	i = -1;
 	while (++i < ft_strlen(token->t)) 
 	{
-		if (token->t[i] != '"')
+			if (token->t[i] != c)
 			new[n++] = token->t[i];
 	}
 	if (q % 2)
-		new[n] = '"';
+		new[n] = c;
 	free(token->t);
 	token->t = new;
+	if (c == '\'')
+		token->squote = 1;
+	else
+		token->squote = 0;
 }
 
 static void	dividetokensaux(t_token *tokens, int t_index)
@@ -212,7 +227,7 @@ static void	dividetokensaux(t_token *tokens, int t_index)
 	tokens[i].t = "end";
 }
 
-t_token	*dividetokens(char *str)
+t_token	*dividetokens(char *str, t_envp *env)
 {
 	int			i;
 	int			t_index;
