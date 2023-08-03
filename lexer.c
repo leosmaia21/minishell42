@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/22 17:15:58 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/30 16:16:42 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,18 @@
 
 char	**jointokens(t_token *tokens, int idx)
 {
-	int	 	i;
+	int		i;
 	char	*str;
 
 	i = -1;
 	str = "";
-    while (idx >= 0)
-    {
-	    while (tokens[++i].type != command)
-		    continue ;
-        if (tokens[i].type == command)
-            idx--;
-    }
+	while (idx >= 0)
+	{
+		while (tokens[++i].type != command)
+			continue ;
+		if (tokens[i].type == command)
+			idx--;
+	}
 	str = ft_strjoin(str, tokens[i].t);
 	i++;
 	while (tokens[i].type == flag)
@@ -42,7 +42,7 @@ char	**jointokens(t_token *tokens, int idx)
 	return (ft_split(str, ' '));
 }
 
-char	*copyuntil(char *src, char *c)
+static char	*copyuntil(char *src, char *c)
 {
 	long		i;
 	char		*dst;
@@ -50,18 +50,6 @@ char	*copyuntil(char *src, char *c)
 
 	s = 0;
 	i = -1;
-	// i = (long)ft_strbrk(src, c);
-	// i = i - (long)src;
-	// if (i < 0)
-	// 	i = ft_strlen(src);
-	// else if (i == 0)
-	// 	i = 1;
-	// dst = ft_calloc(i + 3, 1);
-	// while (n < i && src[n])
-	// {
-	// 	dst[n] = src[n];
-	// 	n++;
-	// }
 	while (s < ft_strlen(src))
 	{
 		s = (long)ft_strbrk(src + s, c) - (long)src;
@@ -70,7 +58,7 @@ char	*copyuntil(char *src, char *c)
 			s = ft_strlen(src);
 			break ;
 		}
-		if (src[s - 1] != 92)
+		if (src[s + 1] == ' ')
 			break ;
 		s++;
 	}
@@ -82,7 +70,7 @@ char	*copyuntil(char *src, char *c)
 	return (dst);
 }
 
-char	*copyquotes(char *src, char *c)
+static char	*copyquotes(char *src, char *c)
 {
 	long	i;
 	long	s;
@@ -98,7 +86,7 @@ char	*copyquotes(char *src, char *c)
 			s = ft_strlen(src + 1);
 			break ;
 		}
-		if (src[s - 1] != 92)
+		if (src[s + 1] == ' ')
 			break ;
 	}
 	dst = ft_calloc(s + 3, 1);
@@ -108,7 +96,7 @@ char	*copyquotes(char *src, char *c)
 	return (dst);
 }
 
-char	*copywhileequal(char *src, char c)
+static char	*copywhileequal(char *src, char c)
 {
 	int		i;
 	char	*dst;
@@ -126,40 +114,102 @@ char	*copywhileequal(char *src, char c)
 	return (dst);
 }
 
+static int	changetokentypes2(t_token *tokens, int *i)
+{
+	if (ft_strcmp(tokens[*i].t, ">") == 0)
+	{
+		if (*i < tokens[0].total - 1)
+			tokens[*i + 1].type = file;
+		tokens[*i].type = redirectR;
+		(*i)++;
+		return (1);
+	}
+	else if (ft_strcmp(tokens[*i].t, "<") == 0)
+	{
+		if (*i > 0)
+			tokens[*i - 1].type = file;
+		tokens[*i].type = redirectL;
+		return (1);
+	}
+	else if (ft_strcmp(tokens[*i].t, ">>") == 0)
+	{
+		if (*i < tokens[0].total - 1)
+			tokens[*i + 1].type = file;
+		tokens[*i].type = dredirectL;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
 void	changetokentypes(t_token *tokens)
 {
 	int		i;
 
 	i = -1;
-	if (!tokens)
-		return ;
 	while (++i < tokens[0].total)
 	{
 		if (ft_strcmp(tokens[i].t, "|") == 0)
 			tokens[i].type = pipo;
-		else if (tokens[i].t[0] == '-')
+		else if (changetokentypes2(tokens, &i))
+			continue ;
+		else if (ft_strcmp(tokens[i].t, "<<") == 0)
+		{
+			if (i < tokens[0].total - 1)
+				tokens[i + 1].type = file;
+			tokens[i].type = dredirectL;
+			i++;
+		}
+		else if (tokens[i].t[0] == '-' || (i > 0 && (tokens[i - 1].type == flag \
+			|| tokens[i - 1].type == command)))
 			tokens[i].type = flag;
 		else if (tokens[i].t[0] == '"')
 			tokens[i].type = text;
-		else if (ft_strcmp(tokens[i].t, ">>") == 0)
-			tokens[i].type = dredirectR;
-		else if (ft_strcmp(tokens[i].t, "<<") == 0)
-			tokens[i].type = dredirectL;
-		else if (ft_strcmp(tokens[i].t, ">") == 0)
-			tokens[i].type = redirectR;
-		else if (ft_strcmp(tokens[i].t, "<") == 0)
-			tokens[i].type = redirectL;
-		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, ">") == 0))
-			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, "<") == 0))
-			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i - 1].t, ">>") == 0))
-			tokens[i].type = file;
-		else if (i > 0 && (ft_strcmp(tokens[i + 1].t, "<<") == 0))
-			tokens[i].type = file;
 		else
 			tokens[i].type = command;
 	}
+}
+
+static void	removequotes(t_token *token)
+{
+	int		i;
+	int		n;
+	int		q;
+	char	*new;
+
+	i = -1;
+	n = 0;
+	q = 0;
+	new = ft_calloc(ft_strlen(token->t) + 1, 1);
+	while (++i < ft_strlen(token->t))
+		if (token->t[i] == '"')
+			q++;
+	i = -1;
+	while (++i < ft_strlen(token->t)) 
+	{
+		if (token->t[i] != '"')
+			new[n++] = token->t[i];
+	}
+	if (q % 2)
+		new[n] = '"';
+	free(token->t);
+	token->t = new;
+}
+
+static void	dividetokensaux(t_token *tokens, int t_index)
+{
+	int	i;
+
+	i = -1;
+	while (++i < t_index)
+	{
+		tokens[i].total = t_index;
+		tokens[i].index = i;
+		tokens[i].end = 0;
+		removequotes(&tokens[i]);
+	}
+	tokens[i].end = 1;
+	tokens[i].t = "end";
 }
 
 t_token	*dividetokens(char *str)
@@ -178,21 +228,13 @@ t_token	*dividetokens(char *str)
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
 		else if (str[i] == '"')
-			tokens[t_index++].t = copyquotes(&str[i], "\"");
+			tokens[t_index++].t = (copyquotes(&str[i], "\""));
 		else if (str[i] == '\'')
-			tokens[t_index++].t = copyquotes(&str[i], "\'");
+			tokens[t_index++].t = (copyquotes(&str[i], "\'"));
 		else if (str[i] != '\0')
 			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
-	i = -1;
-	while (++i < t_index)
-	{
-		tokens[i].total = t_index;
-		tokens[i].index = i;
-		tokens[i].end = 0;
-	}
-	tokens[i].end = 1;
-	tokens[i].t = "end";
+	dividetokensaux(tokens, t_index);
 	return (tokens);
 }

@@ -6,12 +6,12 @@
 #    By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/07 22:28:43 by ledos-sa          #+#    #+#              #
-#    Updated: 2023/07/16 16:57:58 by ledos-sa         ###   ########.fr        #
+#    Updated: 2023/07/29 02:15:57 by ledos-sa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
-CC = cc
+CC = clang
 CFLAGS = -Wall -Wextra -Werror -O2
 NAME = libft.a
 

@@ -6,11 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/22 14:48:05 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/07/30 22:35:01 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include "builtins.h"
+#include "lexer.h"
 #include "minishell.h"
 
 char *get_type(t_tokentype type)
@@ -43,12 +44,13 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		signals();
-		info.str = readline("\033[1;95m susanashell # \033[0m");
+		info.str = readline("\033[1;95msusanashell # \033[0m");
 		add_history(info.str);
 		if (ft_strlen(info.str) > 0)
 		{
 			info.tokens = dividetokens(info.str);
 			changetokentypes(info.tokens);
+			// t_token *tokens = info.tokens;
 			// for (int i = 0; i < tokens[0].total; i++) 
 			// {
 			// 	printf("char *: %s ", tokens[i].t);
@@ -57,11 +59,16 @@ int	main(int argc, char **argv, char **envp)
 			// 	printf("type: %s \n", get_type(tokens[i].type));
 			// }
 			info.tenv = ft_convert_envp(envp);
-            info.envp = envp;
+            info.envp = ft_duplicate_envp(envp);
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			//printEnvpList(ev);
-			//flags = jointokens(info.tokens);
+			//flags = jointokens(info.tokens, 0);
+			//echo(flags);
+			//pwd(flags);
+			//cd(flags);
+			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
+
             ft_main_exec(&info);
             //ft_single_exec(flags,info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));

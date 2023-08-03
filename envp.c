@@ -108,3 +108,32 @@ char *ft_find_value(t_envp *head, char *key)
     }
     return(head->key);
 }
+
+
+char **ft_duplicate_envp(char **envp) 
+{
+    int envpCount;
+    char **duplicatedEnvp;
+    int i;
+
+    envpCount = 0;
+    i = -1;
+    if (envp == NULL)
+        return (NULL);
+    while (envp[envpCount] != NULL) 
+        envpCount++;
+    duplicatedEnvp = (char **)malloc(sizeof(char *) * (envpCount + 1));
+    if (duplicatedEnvp == NULL) 
+        return (NULL);
+    while (++i < envpCount) 
+    {
+        duplicatedEnvp[i] = ft_strdup(envp[i]);
+        if (duplicatedEnvp[i] == NULL) 
+        {
+            ft_freedoublepointer(duplicatedEnvp);
+            return (NULL);
+        }
+    }
+    duplicatedEnvp[envpCount] = NULL;
+    return(duplicatedEnvp);
+}
