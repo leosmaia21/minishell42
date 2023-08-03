@@ -135,8 +135,10 @@ int ft_check_builtin(char **flags, char **envp)
     else if (ft_strcmp(flags[0], "env") == 0)
         env(flags, envp);
     else if (ft_strcmp(flags[0], "exit") == 0)
-        exitsusana(flags);
-    else
-        return -1;
+        exitsusana(flags);	
+	else
+	{
+		return(-1);
+	}
 	return(0);
 }

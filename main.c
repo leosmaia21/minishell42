@@ -50,14 +50,14 @@ int	main(int argc, char **argv, char **envp)
 		{
 			info.tokens = dividetokens(info.str);
 			changetokentypes(info.tokens);
-			// t_token *tokens = info.tokens;
-			// for (int i = 0; i < tokens[0].total; i++) 
-			// {
-			// 	printf("char *: %s ", tokens[i].t);
-			// 	printf("total: %d ", tokens[i].total);
-			// 	printf("index: %d ", tokens[i].index);
-			// 	printf("type: %s \n", get_type(tokens[i].type));
-			// }
+			t_token *tokens = info.tokens;
+			for (int i = 0; i < tokens[0].total; i++) 
+			{
+				printf("char *: %s ", tokens[i].t);
+				printf("total: %d ", tokens[i].total);
+				printf("index: %d ", tokens[i].index);
+				printf("type: %s \n", get_type(tokens[i].type));
+			}
 			info.tenv = ft_convert_envp(envp);
             info.envp = ft_duplicate_envp(envp);
 			//ev = ft_new_var(ev,"batatinhas=teste");

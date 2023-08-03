@@ -26,13 +26,18 @@ char *ft_findpath(t_envp *head, char **envp, char **flags)
 
 void	ft_single_exec(char **flags, char **envp, char *path)
 {
-    if (ft_check_builtin(flags, envp) != 0)
+    // if (ft_check_builtin(flags, envp) != 0)
+    // {
+    //     if (path)
+    //     {
+    //         if (execve(path, flags, envp) == -1)
+    //         perror("Error executing command");
+    //     }
+    // }
+    if (path)
     {
-        if (path)
-        {
-            if (execve(path, flags, envp) == -1)
-            perror("Error executing command");
-        }
+        if (execve(path, flags, envp) == -1)
+        perror("Error executing command");
     }
 }
 
@@ -84,14 +89,12 @@ void ft_main_exec(t_info *info)
     int i;
 
     i = -1;
-    pid = 0;
     pipes = ft_count_command(info->tokens);
     if (pipe(fd) == -1)
         perror(strerror(errno));
     while (++i < pipes) {
         flags = jointokens(info->tokens, i);
-        if (i != 0)
-            pid = fork();
+        pid = fork();
         if (pid == -1)
             perror(strerror(errno));
         else if (pid == 0)
