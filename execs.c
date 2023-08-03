@@ -84,12 +84,14 @@ void ft_main_exec(t_info *info)
     int i;
 
     i = -1;
+    pid = 0;
     pipes = ft_count_command(info->tokens);
     if (pipe(fd) == -1)
         perror(strerror(errno));
     while (++i < pipes) {
         flags = jointokens(info->tokens, i);
-        pid = fork();
+        if (i != 0)
+            pid = fork();
         if (pid == -1)
             perror(strerror(errno));
         else if (pid == 0)

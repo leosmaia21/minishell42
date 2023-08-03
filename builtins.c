@@ -63,7 +63,7 @@ void	echo(char **info)
 	}
 	if (n == 0)
 		printf("\n");
-	exit(1);
+	//exit(1);
 }
 
 void	cd(char **info)
@@ -71,7 +71,7 @@ void	cd(char **info)
 	assert(ft_strcmp(info[0], "cd") == 0);
 	if (chdir(*(++info)) != 0)
 		perror("cd");
-	exit(1);
+	//exit(1);
 }
 
 void	pwd(char **info)
@@ -85,26 +85,26 @@ void	pwd(char **info)
 	else
 		printf("%s\n", ret);
 	free(ret);
-	exit(1);
+	//exit(1);
 }
 
 void	exitsusana(char **info)
 {
 	assert(ft_strcmp(info[0], "exit") == 0);
 	printf("Maravilha Maravilha\n");
-	exit(1);
+	//exit(1);
 }
 
 void	exportsusana(char **info)
 {
 	assert(ft_strcmp(info[0], "export") == 0);
-	exit(1);
+	//exit(1);
 }
 
 void	unset(char **info)
 {
 	assert(ft_strcmp(info[0], "unset") == 0);
-	exit(1);
+	//exit(1);
 }
 
 void	env(char **info, char **envp)
@@ -115,7 +115,7 @@ void	env(char **info, char **envp)
 		while (*envp++ != NULL)
 			printf("%s\n", *envp);
 	}
-	exit(1);
+	//exit(1);
 }
 
 int ft_check_builtin(char **flags, char **envp)
