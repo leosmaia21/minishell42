@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/04 23:52:45 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 00:14:34 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,14 @@ int	main(int argc, char **argv, char **envp)
 			// printEnvpList(info.tenv);
 			// printf("\n\n");
 			// unset(flags, info.tenv);
-			exportsusana(flags, info.tenv);
+			// exportsusana(flags, info.tenv);
 			// printEnvpList(info.tenv);
 			// pwd(flags);
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 
             // ft_main_exec(&info);
-            //ft_single_exec(flags,info.envp , path);
+            // ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
 			//free(path);
 		}

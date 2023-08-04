@@ -1,11 +1,13 @@
-/*														  :::	   ::::::::   */
-/*	 builtins.c											:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: ledos-sa <ledos-sa@student.42.fr>			+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2023/07/28 20:36:07 by ledos-sa		   #+#	  #+#			  */
-/*	 Updated: 2023/08/03 18:50:32 by ledos-sa		  ###	########.fr		  */
-/*																			  */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/08/05 00:04:20 by ledos-sa         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
@@ -130,14 +132,14 @@ void	exitsusana(char **info)
 void	exportsusana(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "export") == 0);
+	assert(info[1] != NULL);
 	ft_new_var(env, info[1]);
-
-	//exit(1);
 }
 
 void	unset(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "unset") == 0);
+	assert(info[1] != NULL);
 	removenode(&env, info[1]);
 }
 
@@ -149,10 +151,9 @@ void	env(char **info, char **envp)
 		while (*envp++ != NULL)
 			printf("%s\n", *envp);
 	}
-	//exit(1);
 }
 
-int ft_check_builtin(char **flags, char **envp, t_envp *e)
+int	ft_check_builtin(char **flags, char **envp, t_envp *e)
 {
 	if (flags[0] == NULL)
 		return (-1);
