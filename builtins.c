@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 00:04:20 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 00:37:19 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,10 @@ void	echo(char **info)
 		printf("\n");
 }
 
-static void	cdaux(char **info, t_envp *env, char **saux, char *end)
+static void	cdaux(char **info, t_envp *env, char **saux)
 {
+	char	*end;
+
 	if (info[1] != NULL)
 	{
 		if (info[1][0] == '~')
@@ -92,13 +94,12 @@ static void	cdaux(char **info, t_envp *env, char **saux, char *end)
 void	cd(char **info, t_envp *env)
 {
 	char	*saux;
-	char	*end;
 	t_envp	*node;
 	char	aux[2048];
 
 	assert(ft_strcmp(info[0], "cd") == 0);
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
-	cdaux(info, env, &saux, end);
+	cdaux(info, env, &saux);
 	node = tnode(env, "OLDPWD");
 	free(node->key);
 	node->key = saux;

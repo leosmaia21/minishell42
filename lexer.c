@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/03 17:48:06 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 00:33:19 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static char	*copywhileequal(char *src, char c)
 	return (dst);
 }
 
-static int	changetokentypes2(t_token *tokens, int *i)
+static int	changetokentypesaux(t_token *tokens, int *i)
 {
 	if (ft_strcmp(tokens[*i].t, ">") == 0)
 	{
@@ -152,7 +152,7 @@ void	changetokentypes(t_token *tokens)
 	{
 		if (ft_strcmp(tokens[i].t, "|") == 0)
 			tokens[i].type = pipo;
-		else if (changetokentypes2(tokens, &i))
+		else if (changetokentypesaux(tokens, &i))
 			continue ;
 		else if (ft_strcmp(tokens[i].t, "<<") == 0)
 		{
@@ -171,7 +171,26 @@ void	changetokentypes(t_token *tokens)
 	}
 }
 
-static void	removequotes(t_token *token)
+static void auxremovequotes(t_token *token, char *c, int *q)
+{
+	int	i;
+
+	i = -1;
+	while (++i < ft_strlen(token->t))
+	{
+		if (token->t[i] == '"' || token->t[i] == '\'')
+		{
+			*c = token->t[i];
+			break ;
+		}
+	}
+	i = -1;
+	while (++i < ft_strlen(token->t))
+		if (token->t[i] == *c)
+			(*q)++;
+}
+
+static char	removequotes(t_token *token)
 {
 	int		i;
 	int		n;
@@ -183,37 +202,24 @@ static void	removequotes(t_token *token)
 	n = 0;
 	q = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
-	while (++i < ft_strlen(token->t))
-	{
-		if (token->t[i] == '"' || token->t[i] == '\'')
-		{
-			c = token->t[i];
-			break ;
-		}
-	}
-	i = -1;
-	while (++i < ft_strlen(token->t))
-		if (token->t[i] == c)
-			q++;
+	auxremovequotes(token, &c, &q);
 	i = -1;
 	while (++i < ft_strlen(token->t)) 
 	{
-			if (token->t[i] != c)
+		if (token->t[i] != c)
 			new[n++] = token->t[i];
 	}
 	if (q % 2)
 		new[n] = c;
 	free(token->t);
 	token->t = new;
-	if (c == '\'')
-		token->squote = 1;
-	else
-		token->squote = 0;
+	return (c);
 }
 
 static void	dividetokensaux(t_token *tokens, int t_index)
 {
-	int	i;
+	int		i;
+	char	c;
 
 	i = -1;
 	while (++i < t_index)
@@ -221,7 +227,11 @@ static void	dividetokensaux(t_token *tokens, int t_index)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		removequotes(&tokens[i]);
+		c = removequotes(&tokens[i]);
+		if (c == '\'')
+			tokens[i].expandenv = 1;
+		else
+			tokens[i].expandenv = 0;
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";

@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/03 17:44:13 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 00:27:35 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_token{
 	int				index;
 	int				end;
 	int				pipe;
-	int				squote;
+	int				expandenv;
 }	t_token;
 
 t_token	*dividetokens(char *str, t_envp *env);
