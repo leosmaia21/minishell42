@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/03 19:40:42 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/04 22:25:26 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	ft_single_exec(char **flags, t_info *info, char *path);
 void	ft_freedoublepointer(char **dptr);
 void 	ft_main_exec(t_info *info);
 char 	**ft_duplicate_envp(char **envp);
+void	removenode(t_envp **head, char *key);
 t_envp	*tnode(t_envp *cabeca, char *key);
 int ft_check_builtin(char **flags, char **envp, t_envp *env);
 

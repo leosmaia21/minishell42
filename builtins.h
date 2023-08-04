@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 15:37:11 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/03 18:09:23 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/04 22:36:39 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	pwd(char **info);
 void	cd(char **info, t_envp *env);
 void	echo(char **info);
 void	exportsusana(char **info);
-void	unset(char **info);
+void	unset(char **info, t_envp *env);
 void	env(char **info, char **envp);
 
 #endif

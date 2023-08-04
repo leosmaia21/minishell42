@@ -1,21 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/08/04 22:59:15 by ledos-sa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "envp.h"
 #include "minishell.h"
 
-t_envp *ft_create_node(char *var, char *key)
+t_envp	*ft_create_node(char *var, char *key)
 {
-	t_envp *node = (t_envp *)malloc(sizeof(t_envp));
+	t_envp *node;
+
+	node = (t_envp *)malloc(sizeof(t_envp));
 	if (!node) 
-		return(0);
+		return (0);
 	node->var = ft_strdup(var);
 	node->key = ft_strdup(key);
 	node->next = NULL;
 	return (node);
 }
 
-void ft_add_node(t_envp **head, t_envp *node)
+void	ft_add_node(t_envp **head, t_envp *node)
 {
 	t_envp *temp;
+
 	if (!(*head)) 
 		*head = node;
 	else
@@ -27,7 +41,7 @@ void ft_add_node(t_envp **head, t_envp *node)
 	}
 }
 
-t_envp *ft_new_var(t_envp *head, char *str)
+t_envp	*ft_new_var(t_envp *head, char *str)
 {
 	t_envp	*node;
 	char	*var;
@@ -48,10 +62,10 @@ t_envp *ft_new_var(t_envp *head, char *str)
 	}
 	else
 		printf("failed to create node");
-	return(head);
+	return (head);
 }
 
-t_envp *ft_convert_envp(char **envp)
+t_envp	*ft_convert_envp(char **envp)
 {
 	t_envp	*head; 
 	t_envp	*node; 
@@ -61,12 +75,12 @@ t_envp *ft_convert_envp(char **envp)
 
 	head = NULL;
 	i = -1;
-	while(envp[++i] != NULL) 
+	while (envp[++i] != NULL) 
 	{
 		if (ft_strchr(envp[i], '='))
 		{
 			var = ft_substr(envp[i], 0, ft_strchr(envp[i], '=') - envp[i]);
-			key = ft_substr(envp[i], (ft_strchr(envp[i], '=') - envp[i])+ 1, ft_strlen(envp[i]));
+			key = ft_substr(envp[i], (ft_strchr(envp[i], '=') - envp[i]) + 1, ft_strlen(envp[i]));
 			node = ft_create_node(var, key);
 			if (!node) 
 			{
@@ -80,29 +94,57 @@ t_envp *ft_convert_envp(char **envp)
 					free(node->key);
 					free(node);
 				}
-				return(0);
+				return (0);
 			}
 			ft_add_node(&head, node);
 		}
 	}
-	return(head);
+	return (head);
+}
+
+void	removenode(t_envp **head, char *key)
+{
+	t_envp	*temp;
+	t_envp	*current;
+
+	current = *head;
+	temp = *head;
+	while (*head && !ft_strcmp((*head)->var, key))
+	{
+		*head = (*head)->next;
+		free(temp);
+	}
+	if (!*head) 
+		return ;
+	while (current->next) 
+	{
+		if (!ft_strcmp(current->next->var, key))
+		{
+			temp = current->next;
+			current->next = temp->next;
+			free(temp);
+		}
+		else 
+			current = current->next;
+	}
 }
 
 t_envp	*tnode(t_envp *cabeca, char *key)
 {
-	while(cabeca != NULL)
+	while (cabeca != NULL)
 	{
 		if (!ft_strcmp(cabeca->var, key))
-			break;
+			break ;
 		cabeca = cabeca->next;
 	}
-	return(cabeca);
+	return (cabeca);
 }
 
-void printEnvpList(t_envp *head) 
+void	printEnvpList(t_envp *head)
 {
-	t_envp *current = head;
+	t_envp *current;
 
+	current = head;
 	while (current != NULL) 
 	{
 		printf("declare -x %s=%s\n", current->var, current->key);
@@ -110,42 +152,41 @@ void printEnvpList(t_envp *head)
 	}
 }
 
-char *ft_find_value(t_envp *head, char *key)
+char	*ft_find_value(t_envp *head, char *key)
 {
-	while(head != NULL)
+	while (head != NULL)
 	{
 		if (!ft_strcmp(head->var, key))
-			break;
+			break ;
 		head = head->next;
 	}
-	return(head->key);
+	return (head->key);
 }
 
-
-char **ft_duplicate_envp(char **envp) 
+char	**ft_duplicate_envp(char **envp)
 {
-	int envpCount;
-	char **duplicatedEnvp;
-	int i;
+	int		envpcount;
+	char	**duplicatedenvp;
+	int		i;
 
-	envpCount = 0;
+	envpcount = 0;
 	i = -1;
 	if (envp == NULL)
 		return (NULL);
-	while (envp[envpCount] != NULL) 
-		envpCount++;
-	duplicatedEnvp = (char **)malloc(sizeof(char *) * (envpCount + 1));
-	if (duplicatedEnvp == NULL) 
+	while (envp[envpcount] != NULL) 
+		envpcount++;
+	duplicatedenvp = (char **)malloc(sizeof(char *) * (envpcount + 1));
+	if (duplicatedenvp == NULL) 
 		return (NULL);
-	while (++i < envpCount) 
+	while (++i < envpcount) 
 	{
-		duplicatedEnvp[i] = ft_strdup(envp[i]);
-		if (duplicatedEnvp[i] == NULL) 
+		duplicatedenvp[i] = ft_strdup(envp[i]);
+		if (duplicatedenvp[i] == NULL) 
 		{
-			ft_freedoublepointer(duplicatedEnvp);
+			ft_freedoublepointer(duplicatedenvp);
 			return (NULL);
 		}
 	}
-	duplicatedEnvp[envpCount] = NULL;
-	return(duplicatedEnvp);
+	duplicatedenvp[envpcount] = NULL;
+	return (duplicatedenvp);
 }

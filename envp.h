@@ -3,9 +3,8 @@
 
 typedef struct s_envp{
 	char			*var;
-    char            *key;
-    struct s_envp   *next;
+	char			*key;
+	struct s_envp	*next;
 }	t_envp;
-
 
 #endif

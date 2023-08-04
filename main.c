@@ -6,13 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/03 21:33:07 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/04 22:40:42 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "lexer.h"
 #include "minishell.h"
+#include <stdlib.h>
 
 char *get_type(t_tokentype type)
 {
@@ -64,12 +65,15 @@ int	main(int argc, char **argv, char **envp)
 			flags = jointokens(info.tokens, 0);
 			// echo(flags);
 			// cd(flags, info.tenv);
-			// printEnvpList(info.tenv);
+			printEnvpList(info.tenv);
+			printf("\n\n");
+			unset(flags, info.tenv);
+			printEnvpList(info.tenv);
 			// pwd(flags);
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 
-            ft_main_exec(&info);
+            // ft_main_exec(&info);
             //ft_single_exec(flags,info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
 			//free(path);

@@ -1,11 +1,11 @@
-/*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/28 20:36:07 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/03 18:50:32 by ledos-sa         ###   ########.fr       */
-/*                                                                            */
+/*														  :::	   ::::::::   */
+/*	 builtins.c											:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: ledos-sa <ledos-sa@student.42.fr>			+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2023/07/28 20:36:07 by ledos-sa		   #+#	  #+#			  */
+/*	 Updated: 2023/08/03 18:50:32 by ledos-sa		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "builtins.h"
@@ -128,17 +128,17 @@ void	exportsusana(char **info)
 	//exit(1);
 }
 
-void	unset(char **info)
+void	unset(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "unset") == 0);
-	//exit(1);
+	removenode(&env, info[1]);
 }
 
 void	env(char **info, char **envp)
 {
 	assert(ft_strcmp(info[0], "env") == 0);
 	if (envp != NULL)
-    {
+	{
 		while (*envp++ != NULL)
 			printf("%s\n", *envp);
 	}
@@ -147,24 +147,23 @@ void	env(char **info, char **envp)
 
 int ft_check_builtin(char **flags, char **envp, t_envp *e)
 {
-    if (flags[0] == NULL)
-        return -1;
-    if (ft_strcmp(flags[0], "echo") == 0)
-        echo(flags);
-    else if (ft_strcmp(flags[0], "cd") == 0)
-        cd(flags, e);
-    else if (ft_strcmp(flags[0], "pwd") == 0)
-        pwd(flags);
-    else if (ft_strcmp(flags[0], "export") == 0)
-        exportsusana(flags);
-    else if (ft_strcmp(flags[0], "unset") == 0)
-        unset(flags);
-    else if (ft_strcmp(flags[0], "env") == 0)
-        env(flags, envp);
-    else if (ft_strcmp(flags[0], "exit") == 0)
-        exitsusana(flags);
-		else
-			return(-1);
-	return(0);
+	if (flags[0] == NULL)
+		return (-1);
+	if (ft_strcmp(flags[0], "echo") == 0)
+		echo(flags);
+	else if (ft_strcmp(flags[0], "cd") == 0)
+		cd(flags, e);
+	else if (ft_strcmp(flags[0], "pwd") == 0)
+		pwd(flags);
+	else if (ft_strcmp(flags[0], "export") == 0)
+		exportsusana(flags);
+	else if (ft_strcmp(flags[0], "unset") == 0)
+		unset(flags, e);
+	else if (ft_strcmp(flags[0], "env") == 0)
+		env(flags, envp);
+	else if (ft_strcmp(flags[0], "exit") == 0)
+		exitsusana(flags);
+	else
+		return (-1);
+	return (0);
 }
-
