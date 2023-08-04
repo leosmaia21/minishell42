@@ -67,6 +67,26 @@ void	echo(char **info)
 		printf("\n");
 }
 
+static void	cdaux(char **info, t_envp *env, char **saux, char *end)
+{
+	if (info[1] != NULL)
+	{
+		if (info[1][0] == '~')
+			end = ft_strjoin(ft_find_value(env, "HOME"), &info[1][1]);
+		else if (info[1][0] == '-')
+			end = ft_strjoin(ft_find_value(env, "OLDPWD"), &info[1][1]);
+		else
+			end = ft_strjoin(*saux, info[1]);
+		free(info[1]);
+		info[1] = end;
+	}
+	else if (info[1] == NULL)
+	{
+		free(info[1]);
+		info[1] = ft_find_value(env, "HOME");
+	}
+}
+
 void	cd(char **info, t_envp *env)
 {
 	char	*saux;
@@ -76,22 +96,7 @@ void	cd(char **info, t_envp *env)
 
 	assert(ft_strcmp(info[0], "cd") == 0);
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
-	if (info[1] != NULL)
-	{
-		if (info[1][0] == '~')
-			end = ft_strjoin(ft_find_value(env, "HOME"), &info[1][1]);
-		else if (info[1][0] == '-')
-			end = ft_strjoin(ft_find_value(env, "OLDPWD"), &info[1][1]);
-		else
-			end = ft_strjoin(saux, info[1]);
-		free(info[1]);
-		info[1] = end;
-	}
-	else if (info[1] == NULL)
-	{
-		free(info[1]);
-		info[1] = ft_find_value(env, "HOME");
-	}
+	cdaux(info, env, &saux, end);
 	node = tnode(env, "OLDPWD");
 	free(node->key);
 	node->key = saux;
@@ -122,9 +127,11 @@ void	exitsusana(char **info)
 	//exit(1);
 }
 
-void	exportsusana(char **info)
+void	exportsusana(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "export") == 0);
+	ft_new_var(env, info[1]);
+
 	//exit(1);
 }
 
@@ -156,7 +163,7 @@ int ft_check_builtin(char **flags, char **envp, t_envp *e)
 	else if (ft_strcmp(flags[0], "pwd") == 0)
 		pwd(flags);
 	else if (ft_strcmp(flags[0], "export") == 0)
-		exportsusana(flags);
+		exportsusana(flags, e);
 	else if (ft_strcmp(flags[0], "unset") == 0)
 		unset(flags, e);
 	else if (ft_strcmp(flags[0], "env") == 0)
