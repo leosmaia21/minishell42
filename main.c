@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 00:37:54 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:02:31 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,14 @@ int	main(int argc, char **argv, char **envp)
 			}
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			flags = jointokens(info.tokens, 0);
-			// echo(flags);
-			cd(flags, info.tenv);
+			echo(flags);
+			// cd(flags, info.tenv);
 			// printEnvpList(info.tenv);
 			// printf("\n\n");
 			// unset(flags, info.tenv);
 			// exportsusana(flags, info.tenv);
 			// printEnvpList(info.tenv);
-			pwd(flags);
+			// pwd(flags);
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 

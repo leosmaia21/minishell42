@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 00:33:19 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:13:29 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ static char	removequotes(t_token *token)
 	i = -1;
 	n = 0;
 	q = 0;
+	c = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	auxremovequotes(token, &c, &q);
 	i = -1;
@@ -216,10 +217,11 @@ static char	removequotes(t_token *token)
 	return (c);
 }
 
-static void	dividetokensaux(t_token *tokens, int t_index)
+static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
 	char	c;
+	t_envp	*node;
 
 	i = -1;
 	while (++i < t_index)
@@ -228,10 +230,17 @@ static void	dividetokensaux(t_token *tokens, int t_index)
 		tokens[i].index = i;
 		tokens[i].end = 0;
 		c = removequotes(&tokens[i]);
-		if (c == '\'')
-			tokens[i].expandenv = 1;
-		else
-			tokens[i].expandenv = 0;
+		if (c != '\'' && tokens[i].t[0] == '$')
+		{
+			node = tnode(env, &(tokens[i].t[1]));
+			if (!node)
+			{
+				ft_memset(tokens[i].t, 0, ft_strlen(tokens[i].t));
+				continue ;
+			}
+			free(tokens[i].t);
+			tokens[i].t = node->key;
+		}
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
@@ -260,6 +269,6 @@ t_token	*dividetokens(char *str, t_envp *env)
 			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
-	dividetokensaux(tokens, t_index);
+	dividetokensaux(tokens, t_index, env);
 	return (tokens);
 }
