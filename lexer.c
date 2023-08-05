@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 01:13:29 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 04:55:30 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 char	**jointokens(t_token *tokens, int idx)
 {
 	int		i;
-	char	*str;
+	char	*str[2];
+	char	**ret;
 
 	i = -1;
-	str = "";
 	while (idx >= 0)
 	{
 		while (tokens[++i].type != command)
@@ -32,15 +32,19 @@ char	**jointokens(t_token *tokens, int idx)
 		if (tokens[i].type == command)
 			idx--;
 	}
-	str = ft_strjoin(str, tokens[i].t);
+	str[0] = ft_strdup(tokens[i].t);
 	i++;
 	while (tokens[i].type == flag)
 	{
-		str = ft_strjoin(str, " ");
-		str = ft_strjoin(str, tokens[i].t);
+		str[1] = ft_strjoin(str[0], "]");
+		free(str[0]);
+		str[0] = ft_strjoin(str[1], tokens[i].t);
+		free(str[1]);
 		i++;
 	}
-	return (ft_split(str, ' '));
+	ret = ft_split(str[0], ']');
+	free(str[0]);
+	return (ret);
 }
 
 static char	*copyuntil(char *src, char *c)
@@ -217,11 +221,36 @@ static char	removequotes(t_token *token)
 	return (c);
 }
 
+static void	expanddoleta(t_token *token, t_envp *env)
+{
+	t_envp	*node;
+	char	*str;
+	char	*aux[2];
+	int		i;
+
+	str = ft_calloc(ft_strlen(token->t) + 1, 1);
+	aux[0] = ft_calloc(ft_strlen(token->t), 1);
+	i = -1;
+	while (token->t[++i] && token->t[i] != '$')
+		aux[0][i] = token->t[i];
+	while (token->t[++i] != '\'' && token->t[i] != ' ' && token->t[i])
+		str[i - ft_strlen(aux[0]) - 1] = token->t[i];
+	node = tnode(env, str);
+	if (!node)
+		aux[1] = ft_strdup(&(token->t[i]));
+	else
+		aux[1] = ft_strjoin(node->key, &(token->t[i]));
+	free(token->t);
+	token->t = ft_strjoin(aux[0], aux[1]);
+	free(aux[0]);
+	free(aux[1]);
+	free(str);
+
+}
 static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
 	char	c;
-	t_envp	*node;
 
 	i = -1;
 	while (++i < t_index)
@@ -230,17 +259,8 @@ static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 		tokens[i].index = i;
 		tokens[i].end = 0;
 		c = removequotes(&tokens[i]);
-		if (c != '\'' && tokens[i].t[0] == '$')
-		{
-			node = tnode(env, &(tokens[i].t[1]));
-			if (!node)
-			{
-				ft_memset(tokens[i].t, 0, ft_strlen(tokens[i].t));
-				continue ;
-			}
-			free(tokens[i].t);
-			tokens[i].t = node->key;
-		}
+		if (c != '\'' && ft_strrchr(tokens[i].t, '$'))
+			expanddoleta(tokens + i, env);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
@@ -262,9 +282,9 @@ t_token	*dividetokens(char *str, t_envp *env)
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
 		else if (str[i] == '"')
-			tokens[t_index++].t = (copyquotes(&str[i], "\""));
+			tokens[t_index++].t = copyquotes(&str[i], "\"");
 		else if (str[i] == '\'')
-			tokens[t_index++].t = (copyquotes(&str[i], "\'"));
+			tokens[t_index++].t = copyquotes(&str[i], "\'");
 		else if (str[i] != '\0')
 			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
