@@ -85,12 +85,37 @@ void	setup_pipe(int input_fd, int output_fd)
 	}
 }
 
+void ft_exec_pipes(t_info *info, int *input_fd, int *fd, int i)
+{
+	int		pid;
+	char	**flags;
+	int		pipes;
+
+	pipes = ft_count_command(info->tokens);
+	flags = jointokens(info->tokens, i);
+	pid = fork();
+	if (pid == -1)
+		perror(strerror(errno));
+	else if (pid == 0)
+	{
+		setup_pipe(*input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
+		ft_single_exec(flags, info, ft_findpath(info->tenv, flags));
+	}
+	else
+	{
+		if (i < pipes - 1)
+			close(fd[1]);
+		waitpid(-1, &info->exit_code, 0);
+		if (i < pipes - 1)
+			input_fd = &fd[0];
+	}
+}
+
 void	ft_main_exec(t_info *info)
 {
 	int		pipes;
 	int		input_fd = STDIN_FILENO;
 	int		fd[2];
-	int		pid;
 	char	**flags;
 	int 	i;
 
@@ -101,21 +126,15 @@ void	ft_main_exec(t_info *info)
 	while (++i < pipes) 
     {
 		flags = jointokens(info->tokens, i);
-		pid = fork();
-		if (pid == -1)
-			perror(strerror(errno));
-		else if (pid == 0)
+		if(ft_is_builtin(flags) != 0)
 		{
-			setup_pipe(input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
-			ft_single_exec(flags, info, ft_findpath(info->tenv, flags));
+			if (ft_findpath(info->tenv, flags) != NULL)
+				ft_exec_pipes(info, &input_fd, fd, i);
 		}
 		else
 		{
-			if (i < pipes - 1)
-				close(fd[1]);
-			waitpid(-1, &info->exit_code, 0);
-			if (i < pipes - 1)
-				input_fd = fd[0];
+			setup_pipe(input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
+			ft_check_builtin(flags, info->envp, info->tenv);
 		}
 	}
 }

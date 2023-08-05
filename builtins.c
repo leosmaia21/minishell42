@@ -113,7 +113,7 @@ void	cd(char **info, t_envp *env)
 void	pwd(char **info)
 {
 	char	*ret;
-
+    (void)info;
 	// assert(ft_strcmp(info[0], "pwd") == 0);
 	ret = getcwd(0, 0);
 	if (!ret)
@@ -127,13 +127,13 @@ void	exitsusana(char **info)
 {
 	assert(ft_strcmp(info[0], "exit") == 0);
 	printf("Maravilha Maravilha\n");
-	//exit(1);
+	exit(1);
 }
 
 void	exportsusana(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "export") == 0);
-	assert(info[1] != NULL);
+	//assert(info[1] != NULL);
 	ft_new_var(env, info[1]);
 }
 
@@ -172,6 +172,30 @@ int	ft_check_builtin(char **flags, char **envp, t_envp *e)
 		env(flags, envp);
 	else if (ft_strcmp(flags[0], "exit") == 0)
 		exitsusana(flags);
+	else
+		return (-1);
+	return (0);
+}
+
+
+int	ft_is_builtin(char **flags)
+{
+	if (flags[0] == NULL)
+		return (-1);
+	if (ft_strcmp(flags[0], "echo") == 0)
+		return (0);
+	else if (ft_strcmp(flags[0], "cd") == 0)
+		return (0);
+	else if (ft_strcmp(flags[0], "pwd") == 0)
+		return (0);
+	else if (ft_strcmp(flags[0], "export") == 0)
+		return (0);
+	else if (ft_strcmp(flags[0], "unset") == 0)
+		return (0);
+	else if (ft_strcmp(flags[0], "env") == 0)
+		return (0);
+	else if (ft_strcmp(flags[0], "exit") == 0)
+		return (0);
 	else
 		return (-1);
 	return (0);

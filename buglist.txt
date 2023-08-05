@@ -1,0 +1,16 @@
+EXPORT
+    > tem que funcionar sem argumentos
+    > esta a adicionar na lista errada. 
+
+PIPES 
+    > Criar fork para builtins
+    > cria forks para comandos que nao existem
+    > bad FD com mais do que um PIPES
+
+EXIT 
+    > Nao faz free a nada
+
+ENV 
+    > imprime um NULL no fim 
+
+    
