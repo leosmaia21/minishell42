@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 04:55:30 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/05 15:34:33 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void	changetokentypes(t_token *tokens)
 	}
 }
 
-static void auxremovequotes(t_token *token, char *c, int *q)
+static void	auxremovequotes(t_token *token, char *c, int *q)
 {
 	int	i;
 
@@ -194,7 +194,33 @@ static void auxremovequotes(t_token *token, char *c, int *q)
 			(*q)++;
 }
 
-static char	removequotes(t_token *token)
+static void	expanddoleta(t_token *t, t_envp *env)
+{
+	t_envp	*node;
+	char	*str;
+	char	*aux[2];
+	int		i;
+
+	str = ft_calloc(ft_strlen(t->t) + 1, 1);
+	aux[0] = ft_calloc(ft_strlen(t->t), 1);
+	i = -1;
+	while (t->t[++i] && t->t[i] != '$')
+		aux[0][i] = t->t[i];
+	while (t->t[++i] != '\'' && t->t[i] != '"' && t->t[i] != ' ' && t->t[i])
+		str[i - ft_strlen(aux[0]) - 1] = t->t[i];
+	node = tnode(env, str);
+	if (!node)
+		aux[1] = ft_strdup(&(t->t[i]));
+	else
+		aux[1] = ft_strjoin(node->key, &(t->t[i]));
+	free(t->t);
+	t->t = ft_strjoin(aux[0], aux[1]);
+	free(aux[0]);
+	free(aux[1]);
+	free(str);
+}
+
+static char	removequotes(t_token *token, t_envp *env)
 {
 	int		i;
 	int		n;
@@ -208,6 +234,7 @@ static char	removequotes(t_token *token)
 	c = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	auxremovequotes(token, &c, &q);
+	expanddoleta(token, env);
 	i = -1;
 	while (++i < ft_strlen(token->t)) 
 	{
@@ -221,32 +248,6 @@ static char	removequotes(t_token *token)
 	return (c);
 }
 
-static void	expanddoleta(t_token *token, t_envp *env)
-{
-	t_envp	*node;
-	char	*str;
-	char	*aux[2];
-	int		i;
-
-	str = ft_calloc(ft_strlen(token->t) + 1, 1);
-	aux[0] = ft_calloc(ft_strlen(token->t), 1);
-	i = -1;
-	while (token->t[++i] && token->t[i] != '$')
-		aux[0][i] = token->t[i];
-	while (token->t[++i] != '\'' && token->t[i] != ' ' && token->t[i])
-		str[i - ft_strlen(aux[0]) - 1] = token->t[i];
-	node = tnode(env, str);
-	if (!node)
-		aux[1] = ft_strdup(&(token->t[i]));
-	else
-		aux[1] = ft_strjoin(node->key, &(token->t[i]));
-	free(token->t);
-	token->t = ft_strjoin(aux[0], aux[1]);
-	free(aux[0]);
-	free(aux[1]);
-	free(str);
-
-}
 static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
@@ -258,9 +259,9 @@ static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		c = removequotes(&tokens[i]);
-		if (c != '\'' && ft_strrchr(tokens[i].t, '$'))
-			expanddoleta(tokens + i, env);
+		c = removequotes(&tokens[i], env);
+		// if (c != '\'' && ft_strrchr(tokens[i].t, '$'))
+		// 	expanddoleta(tokens + i, env);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
