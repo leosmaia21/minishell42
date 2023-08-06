@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 15:34:33 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/06 04:47:34 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static char	*copyuntil(char *src, char *c)
 	}
 	if (s == 0)
 		s = 1;
-	dst = ft_calloc(s + 3, 1);
+	dst = ft_calloc(s + 10, 1);
 	while (++i < s)
 		dst[i] = src[i];
 	return (dst);
@@ -234,7 +234,8 @@ static char	removequotes(t_token *token, t_envp *env)
 	c = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	auxremovequotes(token, &c, &q);
-	expanddoleta(token, env);
+	if (c != '\'')
+		expanddoleta(token, env);
 	i = -1;
 	while (++i < ft_strlen(token->t)) 
 	{
@@ -251,7 +252,6 @@ static char	removequotes(t_token *token, t_envp *env)
 static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
-	char	c;
 
 	i = -1;
 	while (++i < t_index)
@@ -259,9 +259,7 @@ static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		c = removequotes(&tokens[i], env);
-		// if (c != '\'' && ft_strrchr(tokens[i].t, '$'))
-		// 	expanddoleta(tokens + i, env);
+		removequotes(&tokens[i], env);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
