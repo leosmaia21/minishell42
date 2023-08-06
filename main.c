@@ -37,8 +37,8 @@ char *get_type(t_tokentype type)
 int	main(int argc, char **argv, char **envp)
 {
     t_info info;
-	char *path = NULL;
-	char **flags;
+	//char *path = NULL;
+	//char **flags;
 
 	(void)argc;
 	(void)argv;
@@ -53,17 +53,17 @@ int	main(int argc, char **argv, char **envp)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
 			changetokentypes(info.tokens);
-			t_token *tokens = info.tokens;
-			for (int i = 0; i < tokens[0].total; i++) 
-			{
-				printf("char *: %s ", tokens[i].t);
-				printf("total: %d ", tokens[i].total);
-				printf("index: %d ", tokens[i].index);
-				printf("type: %s \n", get_type(tokens[i].type));
-			}
+			// t_token *tokens = info.tokens;
+			// for (int i = 0; i < tokens[0].total; i++) 
+			// {
+			// 	printf("char *: %s ", tokens[i].t);
+			// 	printf("total: %d ", tokens[i].total);
+			// 	printf("index: %d ", tokens[i].index);
+			// 	printf("type: %s \n", get_type(tokens[i].type));
+			// }
 			//ev = ft_new_var(ev,"batatinhas=teste");
-			flags = jointokens(info.tokens, 0);
-			echo(flags);
+			//flags = jointokens(info.tokens, 0);
+			//echo(flags);
 			// cd(flags, info.tenv);
 			// printEnvpList(info.tenv);
 			// printf("\n\n");
@@ -74,7 +74,7 @@ int	main(int argc, char **argv, char **envp)
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 
-            // ft_main_exec(&info);
+            ft_main_exec(&info);
             // ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
 			//free(path);
