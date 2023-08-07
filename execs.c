@@ -36,18 +36,6 @@ char	*ft_findpath(t_envp *head, char **flags)
 	return (NULL);
 }
 
-void	ft_single_exec(char **flags, t_info *info, char *path)
-{
-    if (ft_check_builtin(flags, info->envp, info->tenv) != 0)
-    {
-        if (path)
-        {
-            if (execve(path, flags, info ->envp) == -1)
-            perror("Error executing command");
-        }
-    }
-}
-
 int	ft_count_command(t_token *tokens)
 {
 	int count;
@@ -63,58 +51,63 @@ int	ft_count_command(t_token *tokens)
 	return(count);
 }
 
-void	setup_pipe(int input_fd, int output_fd)
-{
-	if (input_fd != STDIN_FILENO)
-	{
-		if (dup2(input_fd, STDIN_FILENO) == -1)
-		{
-			perror(strerror(errno));
-			exit(EXIT_FAILURE);
-		}
-		close(input_fd);
-	}
-	if (output_fd != STDOUT_FILENO)
-	{
-		if (dup2(output_fd, STDOUT_FILENO) == -1)
-		{
-			perror(strerror(errno));
-			exit(EXIT_FAILURE);
-		}
-		close(output_fd);
-	}
-}
+// void	ft_single_exec(char **flags, t_info *info, char *path)
+// {
+// 	if (path)
+// 	{
+// 		if (execve(path, flags, info ->envp) == -1)
+// 			perror("Error executing command");
+// 	}
 
-void ft_exec_pipes(t_info *info, int *input_fd, int *fd, int i)
+// }
+
+
+void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
-	char	**flags;
-	int		pipes;
-
-	pipes = ft_count_command(info->tokens);
-	flags = jointokens(info->tokens, i);
+	
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
-	else if (pid == 0)
+	if (pid == 0)
 	{
-		setup_pipe(*input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
-		ft_single_exec(flags, info, ft_findpath(info->tenv, flags));
+		close(fd_pipe[0]);
+        if (ft_count_command(info->tokens) > 1)
+		    dup2(fd_pipe[1], STDOUT_FILENO);
+		execve(path, flags, info->envp);
 	}
-	else
+    else
+    {
+		close(fd_pipe[1]);
+	    waitpid(pid, &info->exit_code, 0);
+	    ft_freedoublepointer(flags);
+    }
+}
+
+void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
+{
+	int		pid;
+	
+	pid = fork();
+	if (pid == -1)
+		perror(strerror(errno));
+	if (pid == 0)
 	{
-		if (i < pipes - 1)
-			close(fd[1]);
-		waitpid(-1, &info->exit_code, 0);
-		if (i < pipes - 1)
-			input_fd = &fd[0];
+		close(fd_pipe[1]);
+		//dup2(fd_pipe[0], STDIN_FILENO);
+		execve(path, flags, info->envp);
 	}
+    else
+    {
+		close(fd_pipe[0]);
+	    waitpid(pid, &info->exit_code, 0);
+	    ft_freedoublepointer(flags);
+    }
 }
 
 void	ft_main_exec(t_info *info)
 {
 	int		pipes;
-	int		input_fd = STDIN_FILENO;
 	int		fd[2];
 	char	**flags;
 	int 	i;
@@ -126,15 +119,28 @@ void	ft_main_exec(t_info *info)
 	while (++i < pipes) 
     {
 		flags = jointokens(info->tokens, i);
-		if(ft_is_builtin(flags) != 0)
-		{
-			if (ft_findpath(info->tenv, flags) != NULL)
-				ft_exec_pipes(info, &input_fd, fd, i);
-		}
-		else
-		{
-			setup_pipe(input_fd, i < pipes - 1 ? fd[1] : STDOUT_FILENO);
-			ft_check_builtin(flags, info->envp, info->tenv);
-		}
+        if(ft_is_builtin(flags) != 0)
+        {
+            if (ft_findpath(info->tenv, flags) != NULL)
+            {
+                if (i == 0)
+                    first_process(fd, flags, info, ft_findpath(info->tenv, flags));
+                else
+                    second_process(fd, flags, info, ft_findpath(info->tenv, flags));
+            }
+        }
+        else
+        {
+            if (pipes - 1 - i > 0)
+            {
+                dup2(fd[0], STDOUT_FILENO); 
+                //close(fd[0]);
+            }   
+            ft_check_builtin(flags, info->envp, info->tenv);
+        }
 	}
+    close(fd[0]);
+    close(fd[1]);
 }
+
+
