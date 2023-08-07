@@ -47,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		signals();
-		info.str = readline("\033[1;95msusanashell # \0C33[0m");
+		info.str = readline("\033[1;95msusanashell # \033[0m");
 		add_history(info.str);
 		if (ft_strlen(info.str) > 0)
 		{

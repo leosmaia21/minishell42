@@ -13,4 +13,8 @@ EXIT
 ENV 
     > imprime um NULL no fim 
 
+EXPAND DOLETA
+    > "echo $PWD/a" esta a dar segfault
+    > 
+
     
