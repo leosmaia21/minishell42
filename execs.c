@@ -94,7 +94,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	if (pid == 0)
 	{
 		close(fd_pipe[1]);
-		//dup2(fd_pipe[0], STDIN_FILENO);
+		dup2(fd_pipe[0], STDIN_FILENO);
 		execve(path, flags, info->envp);
 	}
     else
@@ -134,7 +134,7 @@ void	ft_main_exec(t_info *info)
             if (pipes - 1 - i > 0)
             {
                 dup2(fd[0], STDOUT_FILENO); 
-                //close(fd[0]);
+                close(fd[1]);
             }   
             ft_check_builtin(flags, info->envp, info->tenv);
         }
