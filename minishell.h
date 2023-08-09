@@ -48,7 +48,7 @@ void 	ft_main_exec(t_info *info);
 char 	**ft_duplicate_envp(char **envp);
 void	removenode(t_envp **head, char *key);
 t_envp	*tnode(t_envp *cabeca, char *key);
-int ft_check_builtin(char **flags, char **envp, t_envp *env);
+void	ft_exec_builtin(char **flags, char **envp, t_envp *e, int flag);
 void ft_exec_pipes(t_info *info, int *input_fd, int *fd, int i);
 int	ft_is_builtin(char **flags);
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path);

@@ -23,7 +23,7 @@ char	*ft_findpath(t_envp *head, char **flags)
 	split = ft_split(p, ':');
 	while (split)
 	{
-		cmd_path = ft_strjoin(*split++, "/");
+		cmd_path = ft_strjoin(*split++, "/"); //possivel leak 
 		cmd_path = ft_strjoin(cmd_path, flags[0]);
 		if (!cmd_path)
 			break ;
@@ -32,7 +32,7 @@ char	*ft_findpath(t_envp *head, char **flags)
 		free(cmd_path);
 		cmd_path = NULL;
 	}
-	perror(strerror(errno));
+	//perror(flags[0]);
 	return (NULL);
 }
 
@@ -51,19 +51,12 @@ int	ft_count_command(t_token *tokens)
 	return(count);
 }
 
-void ft_move_fds_1(t_info *info, int fd_pipe[2], char **flags)
-{
-	if ((ft_count_command(info->tokens) > 1) && (ft_is_builtin(flags) != 0))
-		dup2(fd_pipe[1], STDOUT_FILENO);
-	if ((ft_count_command(info->tokens) > 1) && (ft_is_builtin(flags) == 0))
-		dup2(fd_pipe[0], STDOUT_FILENO);
-}
 
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
 
-	if(ft_is_builtin(flags) != 0)
+	if(ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
 		pid = fork();
 	else
 		pid = 0;
@@ -77,16 +70,14 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if(ft_is_builtin(flags) != 0)
 			execve(path, flags, info->envp);
 		else
-			ft_check_builtin(flags, info->envp, info->tenv);
+			ft_exec_builtin(flags, info->envp, info->tenv, ft_count_command(info->tokens) > 1);
 
 	}
-	if(ft_is_builtin(flags) != 0)
+	if(ft_count_command(info->tokens) > 1)
 	{
-
 		close(fd_pipe[1]);
 		waitpid(pid, &info->exit_code, 0);
 	}
-	
 	ft_freedoublepointer(flags);
 }
 
@@ -94,28 +85,24 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
 
-	if(ft_is_builtin(flags) != 0)
-		pid = fork();
-	else
-		pid = 0;
+	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
 	if (pid == 0)
 	{
 		
-		dup2(fd_pipe[0], STDIN_FILENO);
 		dup2(STDOUT_FILENO, fd_pipe[1]);
 		close(fd_pipe[1]);
 		if(ft_is_builtin(flags) != 0)
+		{
+			dup2(fd_pipe[0], STDIN_FILENO);
 			execve(path, flags, info->envp);
+		}
 		else
-			ft_check_builtin(flags, info->envp, info->tenv);
+			ft_exec_builtin(flags, info->envp, info->tenv,0);
 	}
-	if(ft_is_builtin(flags) != 0)
-	{
-		close(fd_pipe[0]);
-		waitpid(pid, &info->exit_code, 0);
-	}
+	close(fd_pipe[0]);
+	waitpid(pid, &info->exit_code, 0);
 	ft_freedoublepointer(flags);
 }
 
@@ -135,13 +122,17 @@ void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
 	{
 		close(temp_fd[0]);
 		close(fd_pipe[1]);
-		dup2(fd_pipe[0], STDIN_FILENO);
 		dup2(temp_fd[1], STDOUT_FILENO);
-		execve(path, flags, info->envp);
+		if(ft_is_builtin(flags) != 0)
+		{
+			dup2(fd_pipe[0], STDIN_FILENO);
+			execve(path, flags, info->envp);
+		}	
+		else
+			ft_exec_builtin(flags, info->envp, info->tenv, ft_count_command(info->tokens) > 1);
 	}
 	waitpid(pid, &info->exit_code, 0);
 	dup2(temp_fd[0], fd_pipe[0]);
-	// dup2(next_fd[1], fd_pipe[1]);
 	close(temp_fd[1]);
 	close(temp_fd[0]);
 }
@@ -171,8 +162,6 @@ void	ft_main_exec(t_info *info)
 				midle_process(fd, flags, info, ft_findpath(info->tenv, flags));
 		}
 	}
-    //close(fd[0]);
-    //close(fd[1]);
 }
 
 

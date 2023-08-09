@@ -1,11 +1,11 @@
 EXPORT
-    > tem que funcionar sem argumentos
+    > tem que funcionar sem argumentos (segfault)
     > esta a adicionar na lista errada. 
 
 PIPES 
-    > Criar fork para builtins
+    > (fixed - acho) Criar fork para builtins
     > (fixed) cria forks para comandos que nao existem
-    > bad FD com mais do que um PIPE
+    > (fixed) bad FD com mais do que um PIPE
 
 EXIT 
     > Nao faz free a nada
@@ -21,4 +21,9 @@ CD
     > cd .. fica com .. no caminho
     > cd / nao fez um caralho
 
+LEXER 
+    > input "pwd |wc -l" separado em  
+        pwd = comando 
+        |wc = flag  
+        -l = flag
     

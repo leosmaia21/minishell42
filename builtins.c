@@ -164,10 +164,8 @@ void	env(char **info, char **envp)
 	}
 }
 
-int	ft_check_builtin(char **flags, char **envp, t_envp *e)
+void	ft_exec_builtin(char **flags, char **envp, t_envp *e, int exit_flag)
 {
-	if (flags[0] == NULL)
-		return (-1);
 	if (ft_strcmp(flags[0], "echo") == 0)
 		echo(flags);
 	else if (ft_strcmp(flags[0], "cd") == 0)
@@ -182,9 +180,8 @@ int	ft_check_builtin(char **flags, char **envp, t_envp *e)
 		env(flags, envp);
 	else if (ft_strcmp(flags[0], "exit") == 0)
 		exitsusana(flags);
-	else
-		return (-1);
-	return (0);
+	if (exit_flag)
+		exit(0);
 }
 
 
