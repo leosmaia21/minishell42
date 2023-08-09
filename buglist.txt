@@ -6,6 +6,7 @@ PIPES
     > (fixed - acho) Criar fork para builtins
     > (fixed) cria forks para comandos que nao existem
     > (fixed) bad FD com mais do que um PIPE
+    > Nenhum comando funciona se usar o full path para ele. (ex: /bin/ls)
 
 EXIT 
     > Nao faz free a nada

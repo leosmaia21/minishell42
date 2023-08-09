@@ -1,7 +1,7 @@
 SRCS = main.c lexer.c utils.c signals.c envp.c execs.c builtins.c
 NAME = minishell
-CC = clang
-CFLAGS = -Wall -g -Wextra -lreadline #-fsanitize=thread
+CC = cc
+CFLAGS = -Wall -Werror -Wextra #-g -fsanitize=thread
 
 RM = rm -f
 OBJS = $(SRCS:.c=.o)
@@ -19,8 +19,8 @@ RUN = ./$(NAME)
 all: ${NAME}
 
 $(NAME):runlibft $(OBJS)
-		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${INCS}
-		$(RUN)
+		${CC} ${CFLAGS} -lreadline -o  ${NAME} ${OBJS} ${INCS}
+#		$(RUN)
 
 deb:runlibft $(OBJS)
 		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${INCS}
@@ -32,6 +32,7 @@ clean:
 	${RM} ${OBJS}
 
 fclean:clean 
+	make fclean -C libft
 	${RM} ${NAME}
 
 re:fclean all
