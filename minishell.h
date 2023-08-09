@@ -54,5 +54,6 @@ int	ft_is_builtin(char **flags);
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path);
 void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path);
 char	**list_to_doublepointer(t_envp *head);
+void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path);
 
 #endif

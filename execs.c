@@ -119,6 +119,34 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	ft_freedoublepointer(flags);
 }
 
+
+void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
+{
+	int	pid;
+	int temp_fd[2];
+
+	close(fd_pipe[1]);
+	if (pipe(temp_fd) == -1)
+		perror(strerror(errno));
+	pid = fork();
+	if (pid == -1)
+		perror(strerror(errno));
+	if (pid == 0)
+	{
+		close(temp_fd[0]);
+		close(fd_pipe[1]);
+		dup2(fd_pipe[0], STDIN_FILENO);
+		dup2(temp_fd[1], STDOUT_FILENO);
+		execve(path, flags, info->envp);
+	}
+	waitpid(pid, &info->exit_code, 0);
+	dup2(temp_fd[0], fd_pipe[0]);
+	// dup2(next_fd[1], fd_pipe[1]);
+	close(temp_fd[1]);
+	close(temp_fd[0]);
+}
+
+
 void	ft_main_exec(t_info *info)
 {
 	int		pipes;
@@ -137,8 +165,10 @@ void	ft_main_exec(t_info *info)
 		{
 			if (i == 0)
 				first_process(fd, flags, info, ft_findpath(info->tenv, flags));
-			else
+			else if (i == pipes - 1)
 				second_process(fd, flags, info, ft_findpath(info->tenv, flags));
+			else
+				midle_process(fd, flags, info, ft_findpath(info->tenv, flags));
 		}
 	}
     //close(fd[0]);
