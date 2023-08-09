@@ -43,24 +43,25 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	info.tenv = ft_convert_envp(envp);
-	info.envp = ft_duplicate_envp(envp);
+	//info.envp = ft_duplicate_envp(envp);
 	while (1)
 	{
+		info.envp = list_to_doublepointer(info.tenv);
 		signals();
-		info.str = readline("\033[1;95msusanashell # \0C33[0m");
+		info.str = readline("\033[1;95msusanashell # \033[0m");
 		add_history(info.str);
 		if (ft_strlen(info.str) > 0)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
 			changetokentypes(info.tokens);
-			// t_token *tokens = info.tokens;
-			// for (int i = 0; i < tokens[0].total; i++) 
-			// {
-			// 	printf("char *: %s ", tokens[i].t);
-			// 	printf("total: %d ", tokens[i].total);
-			// 	printf("index: %d ", tokens[i].index);
-			// 	printf("type: %s \n", get_type(tokens[i].type));
-			// }
+			t_token *tokens = info.tokens;
+			for (int i = 0; i < tokens[0].total; i++) 
+			{
+				printf("char *: %s ", tokens[i].t);
+				printf("total: %d ", tokens[i].total);
+				printf("index: %d ", tokens[i].index);
+				printf("type: %s \n", get_type(tokens[i].type));
+			}
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			//flags = jointokens(info.tokens, 0);
 			//echo(flags);

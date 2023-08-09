@@ -101,11 +101,21 @@ void	cd(char **info, t_envp *env)
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
 	cdaux(info, env, &saux);
 	node = tnode(env, "OLDPWD");
-	free(node->key);
-	node->key = saux;
+	if (node)
+	{
+		free(node->key);
+		node->key = saux;
+	}
+	else
+		ft_add_node(&env, ft_create_node("OLDPWD", saux));
 	node = tnode(env, "PWD");
-	free(node->key);
-	node->key = info[1];
+	if (node)
+	{
+		free(node->key);
+		node->key = ft_strdup(info[1]);
+	}
+	else
+		ft_add_node(&env, ft_create_node("PWD", info[1]));
 	if (chdir(info[1]) != 0)
 		perror("cd");
 }

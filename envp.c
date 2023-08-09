@@ -160,6 +160,8 @@ char	*ft_find_value(t_envp *head, char *key)
 			break ;
 		head = head->next;
 	}
+	if (!head)
+		return(NULL);
 	return (head->key);
 }
 
@@ -190,3 +192,46 @@ char	**ft_duplicate_envp(char **envp)
 	duplicatedenvp[envpcount] = NULL;
 	return (duplicatedenvp);
 }
+
+int	ft_envlstsize(t_envp *lst)
+{
+	int		x;
+
+	x = 0;
+	while (lst)
+	{
+		lst = lst->next;
+		x++;
+	}
+	return (x);
+}
+
+char	**list_to_doublepointer(t_envp *head)
+{
+	t_envp	*current;
+	char 	**envp;
+	int 	i;
+	char 	*tmp;
+
+	i = 0;
+	envp = (char **)ft_calloc(sizeof(char *), (ft_envlstsize(head) + 1));
+	if (!envp)
+		return NULL;
+	current = head;
+	while (current != NULL)
+	{
+		envp[i] = (char *)malloc(ft_strlen(current->var) + ft_strlen(current->key) + 2);
+		if (!envp[i])
+		{
+			ft_freedoublepointer(envp);
+			return NULL;
+		}
+		tmp = ft_strjoin(current->var, "=");
+		envp[i++] = ft_strjoin(tmp, current->key);
+		free(tmp);
+		current = current->next;
+	}
+	return (envp);
+}
+
+

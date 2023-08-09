@@ -4,13 +4,21 @@ EXPORT
 
 PIPES 
     > Criar fork para builtins
-    > cria forks para comandos que nao existem
-    > bad FD com mais do que um PIPES
+    > (fixed) cria forks para comandos que nao existem
+    > bad FD com mais do que um PIPE
 
 EXIT 
     > Nao faz free a nada
 
 ENV 
     > imprime um NULL no fim 
+
+EXPAND DOLETA
+    > "echo $PWD/a" esta a dar segfault
+
+CD 
+    > (fixed )Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
+    > cd .. fica com .. no caminho
+    > cd / nao fez um caralho
 
     

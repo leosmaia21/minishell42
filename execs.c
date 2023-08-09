@@ -51,22 +51,22 @@ int	ft_count_command(t_token *tokens)
 	return(count);
 }
 
-// void	ft_single_exec(char **flags, t_info *info, char *path)
-// {
-// 	if (path)
-// 	{
-// 		if (execve(path, flags, info ->envp) == -1)
-// 			perror("Error executing command");
-// 	}
-
-// }
-
+void ft_move_fds_1(t_info *info, int fd_pipe[2], char **flags)
+{
+	if ((ft_count_command(info->tokens) > 1) && (ft_is_builtin(flags) != 0))
+		dup2(fd_pipe[1], STDOUT_FILENO);
+	if ((ft_count_command(info->tokens) > 1) && (ft_is_builtin(flags) == 0))
+		dup2(fd_pipe[0], STDOUT_FILENO);
+}
 
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
-	
-	pid = fork();
+
+	if(ft_is_builtin(flags) != 0)
+		pid = fork();
+	else
+		pid = 0;
 	if (pid == -1)
 		perror(strerror(errno));
 	if (pid == 0)
@@ -74,35 +74,49 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		close(fd_pipe[0]);
         if (ft_count_command(info->tokens) > 1)
 		    dup2(fd_pipe[1], STDOUT_FILENO);
-		execve(path, flags, info->envp);
+		if(ft_is_builtin(flags) != 0)
+			execve(path, flags, info->envp);
+		else
+			ft_check_builtin(flags, info->envp, info->tenv);
+
 	}
-    else
-    {
+	if(ft_is_builtin(flags) != 0)
+	{
+
 		close(fd_pipe[1]);
-	    waitpid(pid, &info->exit_code, 0);
-	    ft_freedoublepointer(flags);
-    }
+		waitpid(pid, &info->exit_code, 0);
+	}
+	
+	ft_freedoublepointer(flags);
 }
 
 void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
-	
-	pid = fork();
+
+	if(ft_is_builtin(flags) != 0)
+		pid = fork();
+	else
+		pid = 0;
 	if (pid == -1)
 		perror(strerror(errno));
 	if (pid == 0)
 	{
-		close(fd_pipe[1]);
+		
 		dup2(fd_pipe[0], STDIN_FILENO);
-		execve(path, flags, info->envp);
+		dup2(STDOUT_FILENO, fd_pipe[1]);
+		close(fd_pipe[1]);
+		if(ft_is_builtin(flags) != 0)
+			execve(path, flags, info->envp);
+		else
+			ft_check_builtin(flags, info->envp, info->tenv);
 	}
-    else
-    {
+	if(ft_is_builtin(flags) != 0)
+	{
 		close(fd_pipe[0]);
-	    waitpid(pid, &info->exit_code, 0);
-	    ft_freedoublepointer(flags);
-    }
+		waitpid(pid, &info->exit_code, 0);
+	}
+	ft_freedoublepointer(flags);
 }
 
 void	ft_main_exec(t_info *info)
@@ -119,28 +133,16 @@ void	ft_main_exec(t_info *info)
 	while (++i < pipes) 
     {
 		flags = jointokens(info->tokens, i);
-        if(ft_is_builtin(flags) != 0)
-        {
-            if (ft_findpath(info->tenv, flags) != NULL)
-            {
-                if (i == 0)
-                    first_process(fd, flags, info, ft_findpath(info->tenv, flags));
-                else
-                    second_process(fd, flags, info, ft_findpath(info->tenv, flags));
-            }
-        }
-        else
-        {
-            if (pipes - 1 - i > 0)
-            {
-                dup2(fd[0], STDOUT_FILENO); 
-                close(fd[1]);
-            }   
-            ft_check_builtin(flags, info->envp, info->tenv);
-        }
+        if ((ft_findpath(info->tenv, flags) != NULL) || ft_is_builtin(flags) == 0)
+		{
+			if (i == 0)
+				first_process(fd, flags, info, ft_findpath(info->tenv, flags));
+			else
+				second_process(fd, flags, info, ft_findpath(info->tenv, flags));
+		}
 	}
-    close(fd[0]);
-    close(fd[1]);
+    //close(fd[0]);
+    //close(fd[1]);
 }
 
 
