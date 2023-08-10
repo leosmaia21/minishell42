@@ -1,4 +1,4 @@
-SRCS = main.c lexer.c utils.c signals.c envp.c execs.c builtins.c
+SRCS = main.c lexer.c utils.c signals.c envp.c execs.c builtins.c free.c
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Werror -Wextra #-g -fsanitize=thread

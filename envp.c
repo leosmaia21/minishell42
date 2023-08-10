@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/04 22:59:15 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/10 22:01:27 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "envp.h"
-#include "minishell.h"
 
 t_envp	*ft_create_node(char *var, char *key)
 {
@@ -23,6 +22,8 @@ t_envp	*ft_create_node(char *var, char *key)
 	node->var = ft_strdup(var);
 	node->key = ft_strdup(key);
 	node->next = NULL;
+	ft_freestr(var);
+	ft_freestr(key);
 	return (node);
 }
 
@@ -227,7 +228,9 @@ char	**list_to_doublepointer(t_envp *head)
 			return NULL;
 		}
 		tmp = ft_strjoin(current->var, "=");
-		envp[i++] = ft_strjoin(tmp, current->key);
+		free(envp[i]);
+		envp[i] = ft_strjoin(tmp, current->key);
+		i++;
 		free(tmp);
 		current = current->next;
 	}

@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 00:37:19 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/10 21:18:35 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
-#include "envp.h"
-#include "libft/libft.h"
-#include "minishell.h"
-#include <assert.h>
-#include <stdlib.h>
 
 static int	echoval(char *info)
 {
@@ -133,9 +128,11 @@ void	pwd(char **info)
 	free(ret);
 }
 
-void	exitsusana(char **info)
+void	exitsusana(char **flags, t_info *info)
 {
-	assert(ft_strcmp(info[0], "exit") == 0);
+	assert(ft_strcmp(flags[0], "exit") == 0);
+	ft_freestruct(info);
+	rl_clear_history();
 	printf("Maravilha Maravilha\n");
 	exit(1);
 }
@@ -164,22 +161,22 @@ void	env(char **info, char **envp)
 	}
 }
 
-void	ft_exec_builtin(char **flags, char **envp, t_envp *e, int exit_flag)
+void	ft_exec_builtin(char **flags, t_info *info, int exit_flag)
 {
 	if (ft_strcmp(flags[0], "echo") == 0)
 		echo(flags);
 	else if (ft_strcmp(flags[0], "cd") == 0)
-		cd(flags, e);
+		cd(flags, info->tenv);
 	else if (ft_strcmp(flags[0], "pwd") == 0)
 		pwd(flags);
 	else if (ft_strcmp(flags[0], "export") == 0)
-		exportsusana(flags, e);
+		exportsusana(flags, info->tenv);
 	else if (ft_strcmp(flags[0], "unset") == 0)
-		unset(flags, e);
+		unset(flags, info->tenv);
 	else if (ft_strcmp(flags[0], "env") == 0)
-		env(flags, envp);
+		env(flags, info->envp);
 	else if (ft_strcmp(flags[0], "exit") == 0)
-		exitsusana(flags);
+		exitsusana(flags, info);
 	if (exit_flag)
 		exit(0);
 }

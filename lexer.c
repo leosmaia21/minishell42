@@ -6,17 +6,17 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 04:55:30 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/10 22:18:44 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include "envp.h"
-#include "libft/libft.h"
-#include "minishell.h"
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+// #include "envp.h"
+// #include "libft/libft.h"
+// #include "minishell.h"
+// #include <stdint.h>
+// #include <stdio.h>
+// #include <stdlib.h>
 
 char	**jointokens(t_token *tokens, int idx)
 {
@@ -247,6 +247,7 @@ static void	expanddoleta(t_token *token, t_envp *env)
 	free(str);
 
 }
+
 static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;

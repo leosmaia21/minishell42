@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:41:20 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/07/15 15:35:23 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/10 14:43:08 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,3 @@ char	*readfromstdin(void)
 	return (str);
 }
 
-void	ft_freedoublepointer(char **dptr)
-{
-	int	i;
-
-	i = 0;
-	while (dptr[i])
-	{
-		free(dptr[i]);
-		i++;
-	}
-	free(dptr);
-}

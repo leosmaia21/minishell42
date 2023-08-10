@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/04 22:25:26 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/10 21:27:03 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -19,11 +20,37 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
-# include "lexer.h"
-# include "envp.h"
-# include "utils.h"
-# include "libft/libft.h"
 # include <errno.h>
+# include <assert.h>
+# include <sys/wait.h>
+
+typedef enum s_token_type{
+	command,
+	flag,
+	redirectL,
+	dredirectL,
+	redirectR,
+	dredirectR,
+	pipo,
+	text,
+	file
+}	t_tokentype;
+
+typedef struct s_envp{
+	char			*var;
+	char			*key;
+	struct s_envp	*next;
+}	t_envp;
+
+typedef struct s_token{
+	char			*t;
+	t_tokentype		type;
+	int				total;
+	int				index;
+	int				end;
+	int				pipe;
+	int				expandenv;
+}	t_token;
 
 typedef struct s_info{
     char            *str;
@@ -32,6 +59,16 @@ typedef struct s_info{
     t_token         *tokens;
     int             exit_code;
 }	t_info;
+
+
+
+# include "envp.h"
+# include "lexer.h"
+# include "execs.h"
+# include "builtins.h"
+# include "utils.h"
+# include "free.h"
+# include "libft/libft.h"
 
 void	signals(void);
 void	handle_sigint(int signum);
@@ -48,7 +85,7 @@ void 	ft_main_exec(t_info *info);
 char 	**ft_duplicate_envp(char **envp);
 void	removenode(t_envp **head, char *key);
 t_envp	*tnode(t_envp *cabeca, char *key);
-void	ft_exec_builtin(char **flags, char **envp, t_envp *e, int flag);
+void	ft_exec_builtin(char **flags, t_info *info, int flag);
 void ft_exec_pipes(t_info *info, int *input_fd, int *fd, int i);
 int	ft_is_builtin(char **flags);
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path);

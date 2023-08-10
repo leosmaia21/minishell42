@@ -6,36 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 00:27:35 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/10 21:25:57 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-# include "envp.h"
-
-typedef enum s_token_type{
-	command,
-	flag,
-	redirectL,
-	dredirectL,
-	redirectR,
-	dredirectR,
-	pipo,
-	text,
-	file
-}	t_tokentype;
-
-typedef struct s_token{
-	char			*t;
-	t_tokentype		type;
-	int				total;
-	int				index;
-	int				end;
-	int				pipe;
-	int				expandenv;
-}	t_token;
+# include "minishell.h"
 
 t_token	*dividetokens(char *str, t_envp *env);
 char	**jointokens(t_token *tokens, int idx);

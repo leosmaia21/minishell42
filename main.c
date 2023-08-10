@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/05 01:02:31 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/10 22:19:11 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	main(int argc, char **argv, char **envp)
             // ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
 			//free(path);
+			ft_freetokens(info.tokens);
 		}
 		ft_freedoublepointer(info.envp);
 		free(info.str);

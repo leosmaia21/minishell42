@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   free.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 16:42:23 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 21:16:51 by bde-sous         ###   ########.fr       */
+/*   Created: 2023/07/14 16:46:58 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/08/10 22:19:32 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
-
+#ifndef FREE_H
+# define FREE_H
 # include "minishell.h"
 
-char	*ft_realloc(char *str, int n);
-char	*readfromstdin(void);
+void	ft_freestr(void *dptr);
+void 	ft_freestruct(t_info *info);
+void 	ft_freelistenv(t_envp *lst);
+void	ft_freedoublepointer(char **dptr);
+void    ft_freetokens(t_token *tokens);
 
 #endif
