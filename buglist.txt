@@ -3,10 +3,10 @@ EXPORT
     > esta a adicionar na lista errada. 
 
 PIPES 
-    > (fixed - acho) Criar fork para builtins
+    > (fixed) Criar fork para builtins
     > (fixed) cria forks para comandos que nao existem
     > (fixed) bad FD com mais do que um PIPE
-    > Nenhum comando funciona se usar o full path para ele. (ex: /bin/ls)
+    > (fixed) Nenhum comando funciona se usar o full path para ele. (ex: /bin/ls)
 
 EXIT 
     > Nao faz free a nada
@@ -18,13 +18,21 @@ EXPAND DOLETA
     > "echo $PWD/a" esta a dar segfault
 
 CD 
-    > (fixed )Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
+    > (fixed)Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
     > cd .. fica com .. no caminho
     > cd / nao fez um caralho
-
+    > cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
+    
 LEXER 
     > input "pwd |wc -l" separado em  
         pwd = comando 
         |wc = flag  
         -l = flag
-    
+
+
+MISSING FEATURES
+    > Redirects e Heredoc
+    > Parsing
+    > Exit Codes
+    > Memory Leaks
+    > Normas

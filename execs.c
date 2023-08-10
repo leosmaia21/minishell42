@@ -19,6 +19,8 @@ char	*ft_findpath(t_envp *head, char **flags)
 	char	**split;
 	char	*cmd_path;
 
+	if (!access(flags[0], F_OK))
+			return (ft_strdup(flags[0]));
 	p = ft_find_value(head, "PATH");
 	split = ft_split(p, ':');
 	while (split)
@@ -71,13 +73,10 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 			execve(path, flags, info->envp);
 		else
 			ft_exec_builtin(flags, info->envp, info->tenv, ft_count_command(info->tokens) > 1);
-
 	}
 	if(ft_count_command(info->tokens) > 1)
-	{
 		close(fd_pipe[1]);
-		waitpid(pid, &info->exit_code, 0);
-	}
+	waitpid(pid, &info->exit_code, 0);
 	ft_freedoublepointer(flags);
 }
 
@@ -161,6 +160,8 @@ void	ft_main_exec(t_info *info)
 			else
 				midle_process(fd, flags, info, ft_findpath(info->tenv, flags));
 		}
+		else
+			perror(flags[0]);
 	}
 }
 
