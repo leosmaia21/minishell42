@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 22:18:44 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/30 21:07:20 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,16 +131,17 @@ static int	changetokentypesaux(t_token *tokens, int *i)
 	}
 	else if (ft_strcmp(tokens[*i].t, "<") == 0)
 	{
-		if (*i > 0)
-			tokens[*i - 1].type = file;
+		if (*i < tokens[0].total - 1)
+			tokens[*i + 1].type = file;
 		tokens[*i].type = redirectL;
+		(*i)++;
 		return (1);
 	}
 	else if (ft_strcmp(tokens[*i].t, ">>") == 0)
 	{
 		if (*i < tokens[0].total - 1)
 			tokens[*i + 1].type = file;
-		tokens[*i].type = dredirectL;
+		tokens[*i].type = dredirectR;
 		(*i)++;
 		return (1);
 	}

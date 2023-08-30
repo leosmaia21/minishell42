@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 22:19:11 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/30 19:24:07 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ int	main(int argc, char **argv, char **envp)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
 			changetokentypes(info.tokens);
-			//t_token *tokens = info.tokens;
-			// for (int i = 0; i < tokens[0].total; i++) 
-			// {
-			// 	printf("char *: %s ", tokens[i].t);
-			// 	printf("total: %d ", tokens[i].total);
-			// 	printf("index: %d ", tokens[i].index);
-			// 	printf("type: %s \n", get_type(tokens[i].type));
-			// }
+			t_token *tokens = info.tokens;
+			for (int i = 0; i < tokens[0].total; i++) 
+			{
+				printf("char *: %s ", tokens[i].t);
+				printf("total: %d ", tokens[i].total);
+				printf("index: %d ", tokens[i].index);
+				printf("type: %s \n", get_type(tokens[i].type));
+			}
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			//flags = jointokens(info.tokens, 0);
 			//echo(flags);

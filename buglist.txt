@@ -9,7 +9,7 @@ PIPES
     > (fixed) Nenhum comando funciona se usar o full path para ele. (ex: /bin/ls)
 
 EXIT 
-    > Nao faz free a nada
+    > (in progress) Nao faz free a nada
 
 ENV 
     > imprime um NULL no fim 
@@ -29,9 +29,14 @@ LEXER
         |wc = flag  
         -l = flag
 
+Redirects
+    > Redirect de builtins NOK
+    > Estou a dar Open dos FD's mas nunca lhes dou close.
 
 MISSING FEATURES
     > Redirects e Heredoc
+        Multiple Heredoc processa do primeiro ate ao ultimo e usa o ultimo para o comando seguinte
+        Multiple Redirects verifica se consegue abrir todos os ficheiros e usa o ultimo para o comando seguinte
     > Parsing
     > Exit Codes
     > Memory Leaks

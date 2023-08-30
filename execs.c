@@ -72,8 +72,11 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	if (pid == 0)
 	{
 		close(fd_pipe[0]);
+		dup2(ft_input_fd(info->tokens), STDIN_FILENO);
         if (ft_count_command(info->tokens) > 1)
 		    dup2(fd_pipe[1], STDOUT_FILENO);
+		else
+			dup2(ft_output_fd(info->tokens), STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
 			execve(path, flags, info->envp);
 		else
@@ -93,8 +96,8 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		perror(strerror(errno));
 	if (pid == 0)
 	{
-		
-		dup2(STDOUT_FILENO, fd_pipe[1]);
+		//dup2(STDOUT_FILENO, fd_pipe[1]);
+		dup2(ft_output_fd(info->tokens), STDOUT_FILENO);
 		close(fd_pipe[1]);
 		if(ft_is_builtin(flags) != 0)
 		{

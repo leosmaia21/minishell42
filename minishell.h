@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 21:27:03 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/30 19:04:27 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <assert.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 
 typedef enum s_token_type{
 	command,
@@ -68,6 +69,7 @@ typedef struct s_info{
 # include "builtins.h"
 # include "utils.h"
 # include "free.h"
+# include "redirect.h"
 # include "libft/libft.h"
 
 void	signals(void);
