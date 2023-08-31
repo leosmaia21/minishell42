@@ -18,12 +18,12 @@ EXPAND DOLETA
     > (fixed)"echo $PWD/a" esta a dar segfault
 
 CD 
-    > (fixed)Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
+    > (fixed) Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
     > (fixed - adolfo)cd .. fica com .. no caminho
     > (fixed - adolfo)cd / nao fez um caralho
     > (fixed - adolfo)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
     
-LEXER 
+LEXER / Parsing
     > input "pwd |wc -l" separado em  
         pwd = comando 
         |wc = flag  
@@ -34,10 +34,8 @@ Redirects
     > (fixed) Estou a dar Open dos FD's mas nunca lhes dou close.
 
 MISSING FEATURES
-    > Redirects e Heredoc
+    > Heredoc
         Multiple Heredoc processa do primeiro ate ao ultimo e usa o ultimo para o comando seguinte
-        Multiple Redirects verifica se consegue abrir todos os ficheiros e usa o ultimo para o comando seguinte
-    > Parsing
     > Exit Codes
     > Memory Leaks
     > Normas

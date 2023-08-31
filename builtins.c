@@ -6,11 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/31 16:41:48 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/31 22:01:27 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include "libft/libft.h"
+#include <unistd.h>
 
 static int	echoval(char *info)
 {
@@ -74,15 +76,18 @@ static void	cdaux(char **info, t_envp *env, char **saux)
 			end = ft_strjoin(ft_find_value(env, "HOME"), &info[1][1]);
 		else if (info[1][0] == '-')
 			end = ft_strjoin(ft_find_value(env, "OLDPWD"), &info[1][1]);
+		else if (info[1][0] == '/')
+			end = ft_strdup(info[1]);
 		else
-				end = ft_strjoin(*saux, info[1]);
+			end = ft_strjoin(*saux, info[1]);
 		free(info[1]);
 		info[1] = end;
 	}
-	else if (info[1] == NULL)
+	else
 	{
+		end = ft_find_value(env, "HOME");
 		free(info[1]);
-		info[1] = ft_find_value(env, "HOME");
+		info[1] = end;
 	}
 }
 
@@ -95,25 +100,25 @@ void	cd(char **info, t_envp *env)
 	// assert(ft_strcmp(info[0], "cd") == 0);
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
 	cdaux(info, env, &saux);
+	free(saux);
 	node = tnode(env, "OLDPWD");
 	if (node)
 	{
 		free(node->key);
-		node->key = saux;
+		node->key = getcwd(0, 0);
 	}
 	else
-		ft_add_node(&env, ft_create_node("OLDPWD", saux));
+		ft_add_node(&env, ft_create_node("OLDPWD", getcwd(0, 0)));
 	node = tnode(env, "PWD");
+	if (chdir(info[1]) != 0)
+		perror("cd");
 	if (node)
 	{
 		free(node->key);
-		node->key = ft_strdup(info[1]);
+		node->key = getcwd(0, 0);
 	}
 	else
-		ft_add_node(&env, ft_create_node("PWD", info[1]));
-	if (chdir(info[1]) != 0)
-	if ("/")
-		perror("cd");
+		ft_add_node(&env, ft_create_node("PWD", getcwd(0, 0)));
 }
 
 void	pwd(char **info)
@@ -142,7 +147,8 @@ void	exportsusana(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "export") == 0);
 	//assert(info[1] != NULL);
-	ft_new_var(env, info[1]);
+	if (info[1])
+		ft_new_var(env, info[1]);
 }
 
 void	unset(char **info, t_envp *env)
