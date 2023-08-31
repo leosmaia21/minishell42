@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/10 12:56:40 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/08/10 22:30:52 by bde-sous         ###   ########.fr       */
+/*   Created: 2023/08/31 22:04:23 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/08/31 22:08:19 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 void	ft_freestr(void *dptr)
 {
-	free(dptr);
-    dptr = NULL;
+	if (dptr)
+	{
+		free(dptr);
+		dptr = NULL;
+	}
 }
 
 void	ft_freedoublepointer(char **dptr)
@@ -28,41 +31,41 @@ void	ft_freedoublepointer(char **dptr)
 	ft_freestr(dptr);
 }
 
-void ft_freelistenv(t_envp *lst)
+void	ft_freelistenv(t_envp *lst)
 {
-    t_envp  *head;
+	t_envp	*head;
 
-    head = lst;
-    while (lst)
+	head = lst;
+	while (lst)
 	{
-        head = lst->next;
-        ft_freestr(lst->var);
-        ft_freestr(lst->key);
-        ft_freestr(lst);
+		head = lst->next;
+		ft_freestr(lst->var);
+		ft_freestr(lst->key);
+		ft_freestr(lst);
 		lst = head;
 	}
 }
 
-void ft_freetokens(t_token *tokens)
+void	ft_freetokens(t_token *tokens)
 {
-    int i;
-    int total;
+	int	i;
+	int	total;
 
-    total = tokens->total;
-    i = -1;
-    if (tokens == NULL)
-        return;
-    while (++i < total)
-    {
-        ft_freestr(tokens[i].t);
-    }
-    ft_freestr(tokens);
+	total = tokens->total;
+	i = -1;
+	if (tokens == NULL)
+		return ;
+	while (++i < total)
+	{
+		ft_freestr(tokens[i].t);
+	}
+	ft_freestr(tokens);
 }
 
-void ft_freestruct(t_info *info)
+void	ft_freestruct(t_info *info)
 {
-    ft_freestr(info->str);
-    ft_freelistenv(info->tenv);
-    ft_freedoublepointer(info->envp);
-    ft_freetokens(info->tokens);
+	ft_freestr(info->str);
+	ft_freelistenv(info->tenv);
+	ft_freedoublepointer(info->envp);
+	ft_freetokens(info->tokens);
 }
