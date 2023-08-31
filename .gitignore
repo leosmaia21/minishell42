@@ -1,4 +1,5 @@
 *.o
+libft/*.o
 **/*.o
 **/*.a
 ./.vscode
