@@ -62,7 +62,9 @@ int	ft_count_command(t_token *tokens)
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
+	int		ft_stdout;
 
+	ft_stdout = dup(1);
 	if(ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
 		pid = fork();
 	else
@@ -80,7 +82,10 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if(ft_is_builtin(flags) != 0)
 			execve(path, flags, info->envp);
 		else
+		{
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
+			dup2(ft_stdout, 1);
+		}
 	}
 	if(ft_count_command(info->tokens) > 1)
 		close(fd_pipe[1]);

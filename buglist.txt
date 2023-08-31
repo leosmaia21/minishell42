@@ -15,13 +15,13 @@ ENV
     > (ta feito) imprime um NULL no fim 
 
 EXPAND DOLETA
-    > (ja funfra)"echo $PWD/a" esta a dar segfault
+    > (fixed)"echo $PWD/a" esta a dar segfault
 
 CD 
     > (fixed)Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
-    > (nao sei o que falas)cd .. fica com .. no caminho
-    > (e uma situacao interessante) cd / nao fez um caralho
-    > (nao sei o que falas)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
+    > (fixed - adolfo)cd .. fica com .. no caminho
+    > (fixed - adolfo)cd / nao fez um caralho
+    > (fixed - adolfo)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
     
 LEXER 
     > input "pwd |wc -l" separado em  
@@ -30,8 +30,8 @@ LEXER
         -l = flag
 
 Redirects
-    > Redirect de builtins NOK
-    > Estou a dar Open dos FD's mas nunca lhes dou close.
+    > (fixed) Redirect de builtins
+    > (fixed) Estou a dar Open dos FD's mas nunca lhes dou close.
 
 MISSING FEATURES
     > Redirects e Heredoc
