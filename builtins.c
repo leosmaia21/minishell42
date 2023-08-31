@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 21:18:35 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:41:48 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	cdaux(char **info, t_envp *env, char **saux)
 		else if (info[1][0] == '-')
 			end = ft_strjoin(ft_find_value(env, "OLDPWD"), &info[1][1]);
 		else
-			end = ft_strjoin(*saux, info[1]);
+				end = ft_strjoin(*saux, info[1]);
 		free(info[1]);
 		info[1] = end;
 	}
@@ -92,7 +92,7 @@ void	cd(char **info, t_envp *env)
 	t_envp	*node;
 	char	aux[2048];
 
-	assert(ft_strcmp(info[0], "cd") == 0);
+	// assert(ft_strcmp(info[0], "cd") == 0);
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
 	cdaux(info, env, &saux);
 	node = tnode(env, "OLDPWD");
@@ -112,6 +112,7 @@ void	cd(char **info, t_envp *env)
 	else
 		ft_add_node(&env, ft_create_node("PWD", info[1]));
 	if (chdir(info[1]) != 0)
+	if ("/")
 		perror("cd");
 }
 
@@ -156,8 +157,11 @@ void	env(char **info, char **envp)
 	assert(ft_strcmp(info[0], "env") == 0);
 	if (envp != NULL)
 	{
-		while (*envp++ != NULL)
+		while (*envp != NULL)
+		{
 			printf("%s\n", *envp);
+			envp++;
+		}
 	}
 }
 

@@ -6,11 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/30 21:07:20 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:20:22 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "libft/libft.h"
+#include "minishell.h"
 // #include "envp.h"
 // #include "libft/libft.h"
 // #include "minishell.h"
@@ -224,29 +226,37 @@ static char	removequotes(t_token *token)
 
 static void	expanddoleta(t_token *token, t_envp *env)
 {
-	t_envp	*node;
 	char	*str;
 	char	*aux[2];
 	int		i;
+	char 	*x;
+	char	*ret;
 
 	str = ft_calloc(ft_strlen(token->t) + 1, 1);
-	aux[0] = ft_calloc(ft_strlen(token->t), 1);
 	i = -1;
 	while (token->t[++i] && token->t[i] != '$')
 		aux[0][i] = token->t[i];
-	while (token->t[++i] != '\'' && token->t[i] != ' ' && token->t[i])
-		str[i - ft_strlen(aux[0]) - 1] = token->t[i];
-	node = tnode(env, str);
-	if (!node)
-		aux[1] = ft_strdup(&(token->t[i]));
-	else
-		aux[1] = ft_strjoin(node->key, &(token->t[i]));
+	if (token->t[i] == 0)
+		return ;
+	i++;
+	ft_strlcpy(str, token->t, i);
+	ret = 0;
+	while (env->next != NULL)
+	{
+		x =	ft_strnstr(&(token->t[i]), env->var, ft_strlen(&(token->t[i])));
+		if (x)
+		{
+			ret = ft_strjoin(str, env->key);
+			free(str);
+			i += ft_strlen(env->var);
+			break ;
+		}
+		env = env->next;
+	}
+	str = ft_strjoin(ret, &(token->t[i]));
+	free(ret);
 	free(token->t);
-	token->t = ft_strjoin(aux[0], aux[1]);
-	free(aux[0]);
-	free(aux[1]);
-	free(str);
-
+	token->t = str;
 }
 
 static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)

@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/30 19:24:07 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:40:18 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ char *get_type(t_tokentype type)
 int	main(int argc, char **argv, char **envp)
 {
     t_info info;
-	//char *path = NULL;
-	//char **flags;
+	// char *path = NULL;
+	char **flags;
 
 	(void)argc;
 	(void)argv;
@@ -63,15 +63,17 @@ int	main(int argc, char **argv, char **envp)
 				printf("type: %s \n", get_type(tokens[i].type));
 			}
 			//ev = ft_new_var(ev,"batatinhas=teste");
-			//flags = jointokens(info.tokens, 0);
-			//echo(flags);
+			flags = jointokens(info.tokens, 0);
+			ft_exec_builtin(flags, &info, 0);
+			// echo(flags);
 			// cd(flags, info.tenv);
+			// env(flags, info.tenv);
+			// pwd(flags);
 			// printEnvpList(info.tenv);
 			// printf("\n\n");
 			// unset(flags, info.tenv);
 			// exportsusana(flags, info.tenv);
 			// printEnvpList(info.tenv);
-			// pwd(flags);
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 

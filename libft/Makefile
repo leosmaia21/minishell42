@@ -6,13 +6,13 @@
 #    By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/07 22:28:43 by ledos-sa          #+#    #+#              #
-#    Updated: 2023/07/29 02:15:57 by ledos-sa         ###   ########.fr        #
+#    Updated: 2023/08/03 19:05:12 by ledos-sa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -O2
+CFLAGS = -Wall -Wextra -Werror -O2 -g
 NAME = libft.a
 
 SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c\

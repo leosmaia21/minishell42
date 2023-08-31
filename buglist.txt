@@ -12,16 +12,16 @@ EXIT
     > (in progress) Nao faz free a nada
 
 ENV 
-    > imprime um NULL no fim 
+    > (ta feito) imprime um NULL no fim 
 
 EXPAND DOLETA
-    > "echo $PWD/a" esta a dar segfault
+    > (ja funfra)"echo $PWD/a" esta a dar segfault
 
 CD 
     > (fixed)Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
-    > cd .. fica com .. no caminho
+    > (nao sei o que falas)cd .. fica com .. no caminho
     > cd / nao fez um caralho
-    > cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
+    > (nao sei o que falas)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
     
 LEXER 
     > input "pwd |wc -l" separado em  
