@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/31 16:40:18 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:52:29 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,12 @@ int	main(int argc, char **argv, char **envp)
 			}
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			flags = jointokens(info.tokens, 0);
-			ft_exec_builtin(flags, &info, 0);
+			// ft_exec_builtin(flags, &info, 0);
 			// echo(flags);
-			// cd(flags, info.tenv);
+			cd(flags, info.tenv);
 			// env(flags, info.tenv);
-			// pwd(flags);
+			printf("boas");
+			pwd(flags);
 			// printEnvpList(info.tenv);
 			// printf("\n\n");
 			// unset(flags, info.tenv);
@@ -77,11 +78,11 @@ int	main(int argc, char **argv, char **envp)
 			//exitsusana(flags);
 			//path = ft_findpath(info.tenv, info.envp, flags);
 
-            ft_main_exec(&info);
+            // ft_main_exec(&info);
             // ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
 			//free(path);
-			ft_freetokens(info.tokens);
+			// ft_freetokens(info.tokens);
 		}
 		ft_freedoublepointer(info.envp);
 		free(info.str);

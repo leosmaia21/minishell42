@@ -20,7 +20,7 @@ EXPAND DOLETA
 CD 
     > (fixed)Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
     > (nao sei o que falas)cd .. fica com .. no caminho
-    > cd / nao fez um caralho
+    > (e uma situacao interessante) cd / nao fez um caralho
     > (nao sei o que falas)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
     
 LEXER 
