@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/31 16:20:22 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:44:48 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,29 +52,52 @@ char	**jointokens(t_token *tokens, int idx)
 static char	*copyuntil(char *src, char *c)
 {
 	long		i;
+	long		x;
 	char		*dst;
 	long		s;
 
-	s = 0;
+	dst = ft_calloc(ft_strlen(src) + 1, 1);
 	i = -1;
-	while (s < ft_strlen(src))
+	while (++i < ft_strlen(src))
 	{
-		s = (long)ft_strbrk(src + s, c) - (long)src;
-		if (s < 0)
-		{
-			s = ft_strlen(src);
+		x = -1;
+		while (c[++x])
+			if (src[i] == c[x])
+				break ;
+		if (src[i] == c[x])
 			break ;
-		}
-		if (src[s] == ' ')
-			break ;
-		s++;
 	}
-	if (s == 0)
-		s = 1;
-	dst = ft_calloc(s + 3, 1);
-	while (++i < s)
-		dst[i] = src[i];
+	i = -1;
+	while (++i < ft_strlen(src))
+	{
+		if (i == 0 && src[i] == c[x])
+			dst[i] = c[x];
+		if (src[i] != c[x])
+			dst[i] = src[i];
+		else
+			break ;
+	}
 	return (dst);
+	// s = 0;
+	// i = -1;
+	// while (s < ft_strlen(src))
+	// {
+	// 	s = (long)ft_strbrk(src + s, c) - (long)src;
+	// 	if (s < 0)
+	// 	{
+	// 		s = ft_strlen(src);
+	// 		break ;
+	// 	}
+	// 	if (src[s] == ' ')
+	// 		break ;
+	// 	s++;
+	// }
+	// if (s == 0)
+	// 	s = 1;
+	// dst = ft_calloc(s + 3, 1);
+	// while (++i < s)
+	// 	dst[i] = src[i];
+	// return (dst);
 }
 
 static char	*copyquotes(char *src, char *c)
@@ -227,15 +250,14 @@ static char	removequotes(t_token *token)
 static void	expanddoleta(t_token *token, t_envp *env)
 {
 	char	*str;
-	char	*aux[2];
 	int		i;
 	char 	*x;
 	char	*ret;
 
 	str = ft_calloc(ft_strlen(token->t) + 1, 1);
-	i = -1;
-	while (token->t[++i] && token->t[i] != '$')
-		aux[0][i] = token->t[i];
+	i = 0;
+	while (token->t[i] && token->t[i] != '$')
+		i++;
 	if (token->t[i] == 0)
 		return ;
 	i++;

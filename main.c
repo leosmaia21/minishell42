@@ -6,11 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/08/31 21:54:55 by bde-sous         ###   ########.fr       */
-=======
-/*   Updated: 2023/08/31 18:28:46 by ledos-sa         ###   ########.fr       */
->>>>>>> c25c5318464b2bdc1d3d27de55c0abfd893140f2
+/*   Updated: 2023/09/01 13:22:25 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +54,14 @@ int	main(int argc, char **argv, char **envp)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
  			changetokentypes(info.tokens);
-			// t_token *tokens = info.tokens;
-			// for (int i = 0; i < tokens[0].total; i++) 
-			// {
-			// 	printf("char *: %s ", tokens[i].t);
-			// 	printf("total: %d ", tokens[i].total);
-			// 	printf("index: %d ", tokens[i].index);
-			// 	printf("type: %s \n", get_type(tokens[i].type));
-			// }
+			t_token *tokens = info.tokens;
+			for (int i = 0; i < tokens[0].total; i++) 
+			{
+				printf("char *: %s ", tokens[i].t);
+				printf("total: %d ", tokens[i].total);
+				printf("index: %d ", tokens[i].index);
+				printf("type: %s \n", get_type(tokens[i].type));
+			}
 			//ev = ft_new_var(ev,"batatinhas=teste");
 			//flags = jointokens(info.tokens, 0);
 			// ft_exec_builtin(flags, &info, 0);
