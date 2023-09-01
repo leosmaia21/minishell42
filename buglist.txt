@@ -24,7 +24,9 @@ CD
     > (fixed - adolfo)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
     
 LEXER / Parsing
-    > input "pwd |wc -l" separado em  
+    > (acho que esta resolvido)
+	mas é possivel que tenha fdd alguma coisa, é melhor fazer mais testes
+	input "pwd |wc -l" separado em  
         pwd = comando 
         |wc = flag  
         -l = flag
