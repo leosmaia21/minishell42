@@ -6,13 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/30 19:04:27 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/01 17:20:26 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -61,8 +60,6 @@ typedef struct s_info{
     int             exit_code;
 }	t_info;
 
-
-
 # include "envp.h"
 # include "lexer.h"
 # include "execs.h"
@@ -75,10 +72,10 @@ typedef struct s_info{
 void	signals(void);
 void	handle_sigint(int signum);
 t_envp	*ft_convert_envp(char **envp);
-void 	ft_add_node(t_envp **head, t_envp *node);
-t_envp 	*ft_create_node(char *var, char *key);
+void	ft_add_node(t_envp **head, t_envp *node);
+t_envp	*ft_create_node(char *var, char *key);
 void	printEnvpList(t_envp *head);
-t_envp 	*ft_new_var(t_envp *head, char *str);
+t_envp	*ft_new_var(t_envp *head, char *str);
 char 	*ft_find_value(t_envp *head, char *key);
 char 	*ft_findpath(t_envp *head, char **flags);
 void	ft_single_exec(char **flags, t_info *info, char *path);
@@ -88,8 +85,8 @@ char 	**ft_duplicate_envp(char **envp);
 void	removenode(t_envp **head, char *key);
 t_envp	*tnode(t_envp *cabeca, char *key);
 void	ft_exec_builtin(char **flags, t_info *info, int flag);
-void ft_exec_pipes(t_info *info, int *input_fd, int *fd, int i);
-int	ft_is_builtin(char **flags);
+void 	ft_exec_pipes(t_info *info, int *input_fd, int *fd, int i);
+int		ft_is_builtin(char **flags);
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path);
 void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path);
 char	**list_to_doublepointer(t_envp *head);
