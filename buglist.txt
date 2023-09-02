@@ -25,7 +25,9 @@ CD
     > cd sem argumentos parte tudo 
     
 LEXER / Parsing
-    > input "pwd |wc -l" separado em  
+    > (acho que esta resolvido)
+	mas é possivel que tenha fdd alguma coisa, é melhor fazer mais testes
+	input "pwd |wc -l" separado em  
         pwd = comando 
         |wc = flag  
         -l = flag
