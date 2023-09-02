@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/02 18:19:01 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/02 20:26:15 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char *get_type(t_tokentype type)
 	case file: return("file");
 	default: return(NULL);
 	}
-	return(NULL);
 	return(NULL);
 }
 
@@ -92,22 +91,6 @@ int	main(int argc, char **argv, char **envp)
 				printf("index: %d ", tokens[i].index);
 				printf("type: %s \n", get_type(tokens[i].type));
 			}
-			//ev = ft_new_var(ev,"batatinhas=teste");
-			//flags = jointokens(info.tokens, 0);
-			// ft_exec_builtin(flags, &info, 0);
-			// echo(flags);
-			//cd(flags, info.tenv);m
-			// env(flags, info.tenv);
-			//printf("boas");
-			//pwd(flags);
-			// printEnvpList(info.tenv);
-			// printf("\n\n");
-			// unset(flags, info.tenv);
-			// exportsusana(flags, info.tenv);
-			// printEnvpList(info.tenv);
-			//exitsusana(flags);
-			//path = ft_findpath(info.tenv, info.envp, flags);
-
             ft_main_exec(&info);
             // ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));

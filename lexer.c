@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/02 15:41:17 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/02 20:26:36 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ static char	*copyuntil(char *src, char *c)
 	long		i;
 	long		x;
 	char		*dst;
-	long		s;
-
+	
 	dst = ft_calloc(ft_strlen(src) + 1, 1);
 	i = -1;
 	while (++i < ft_strlen(src))

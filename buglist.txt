@@ -22,6 +22,7 @@ CD
     > (fixed - adolfo)cd .. fica com .. no caminho
     > (fixed - adolfo)cd / nao fez um caralho
     > (fixed - adolfo)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
+    > cd sem argumentos parte tudo 
     
 LEXER / Parsing
     > (acho que esta resolvido)
