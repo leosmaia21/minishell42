@@ -6,12 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/31 22:01:27 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/02 20:24:26 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "libft/libft.h"
+#include "minishell.h"
 #include <unistd.h>
 
 static int	echoval(char *info)
@@ -66,9 +67,10 @@ void	echo(char **info)
 		printf("\n");
 }
 
-static void	cdaux(char **info, t_envp *env, char **saux)
+static char	*cdaux(char **info, t_envp *env, char *saux)
 {
 	char	*end;
+	char 	*ret;
 
 	if (info[1] != NULL)
 	{
@@ -79,28 +81,26 @@ static void	cdaux(char **info, t_envp *env, char **saux)
 		else if (info[1][0] == '/')
 			end = ft_strdup(info[1]);
 		else
-			end = ft_strjoin(*saux, info[1]);
-		free(info[1]);
-		info[1] = end;
+			end = ft_strjoin(saux, info[1]);
+		ret = end;
 	}
 	else
 	{
-		end = ft_find_value(env, "HOME");
-		free(info[1]);
-		info[1] = end;
+		ret = ft_find_value(env, "HOME");
 	}
+	free(saux);
+	return (ret);
 }
 
 void	cd(char **info, t_envp *env)
 {
 	char	*saux;
 	t_envp	*node;
+	char	*path;
 	char	aux[2048];
 
-	// assert(ft_strcmp(info[0], "cd") == 0);
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
-	cdaux(info, env, &saux);
-	free(saux);
+	path = cdaux(info, env, saux);
 	node = tnode(env, "OLDPWD");
 	if (node)
 	{
@@ -110,7 +110,7 @@ void	cd(char **info, t_envp *env)
 	else
 		ft_add_node(&env, ft_create_node("OLDPWD", getcwd(0, 0)));
 	node = tnode(env, "PWD");
-	if (chdir(info[1]) != 0)
+	if (chdir(path) != 0)
 		perror("cd");
 	if (node)
 	{
@@ -124,8 +124,9 @@ void	cd(char **info, t_envp *env)
 void	pwd(char **info)
 {
 	char	*ret;
-    (void)info;
-	// assert(ft_strcmp(info[0], "pwd") == 0);
+
+	(void)info;
+	assert(ft_strcmp(info[0], "pwd") == 0);
 	ret = getcwd(0, 0);
 	if (!ret)
 		perror("pwd");
@@ -145,10 +146,19 @@ void	exitsusana(char **flags, t_info *info)
 
 void	exportsusana(char **info, t_envp *env)
 {
-	assert(ft_strcmp(info[0], "export") == 0);
-	//assert(info[1] != NULL);
 	if (info[1])
 		ft_new_var(env, info[1]);
+	else
+	{
+		while (env)
+		{
+			if (ft_strlen(env->key))
+				printf("declare -x %s=%s\n", env->var, env->key);
+			else
+				printf("declare -x %s\n", env->var);
+			env = env->next;
+		}
+	}
 }
 
 void	unset(char **info, t_envp *env)
@@ -158,15 +168,16 @@ void	unset(char **info, t_envp *env)
 	removenode(&env, info[1]);
 }
 
-void	env(char **info, char **envp)
+void	env(char **info, t_envp *env)
 {
 	assert(ft_strcmp(info[0], "env") == 0);
-	if (envp != NULL)
+	if (env != NULL)
 	{
-		while (*envp != NULL)
+		while (env)
 		{
-			printf("%s\n", *envp);
-			envp++;
+			if (ft_strlen(env->key))
+				printf("%s=%s\n", env->var, env->key);
+			env = env->next;
 		}
 	}
 }
@@ -184,13 +195,12 @@ void	ft_exec_builtin(char **flags, t_info *info, int exit_flag)
 	else if (ft_strcmp(flags[0], "unset") == 0)
 		unset(flags, info->tenv);
 	else if (ft_strcmp(flags[0], "env") == 0)
-		env(flags, info->envp);
+		env(flags, info->tenv);
 	else if (ft_strcmp(flags[0], "exit") == 0)
 		exitsusana(flags, info);
 	if (exit_flag)
 		exit(0);
 }
-
 
 int	ft_is_builtin(char **flags)
 {

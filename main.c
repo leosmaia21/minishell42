@@ -6,12 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/01 23:52:38 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/02 18:19:01 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "lexer.h"
+#include "libft/libft.h"
 #include "minishell.h"
 #include <stdlib.h>
 
@@ -34,9 +35,33 @@ char *get_type(t_tokentype type)
 	return(NULL);
 }
 
+int	parser(t_token *tokens)
+{
+	int	i;
+
+	i = -1;
+	while (++i < tokens[0].total) 
+	{
+		if (!ft_strcmp(tokens[i].t, "&&"))
+			return (0);
+		if (!ft_strcmp(tokens[i].t, "||"))
+			return (0);
+		if (!ft_strcmp(tokens[i].t, "<<") && tokens[0].total == 1)
+			return (0);
+		if (!ft_strcmp(tokens[tokens[0].total - 1].t, "|"))
+			return (0);
+		if (!ft_strcmp(tokens[i].t, "<") && tokens[0].total == 1)
+			return (0);
+		if (!ft_strcmp(tokens[i].t, ">") && tokens[0].total == 1)
+			return (0);
+	}
+	return (1);
+
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-    t_info info;
+    t_info 	info;
 	// char *path = NULL;
 	//char **flags;
 
@@ -54,6 +79,11 @@ int	main(int argc, char **argv, char **envp)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
  			changetokentypes(info.tokens);
+			if (parser(info.tokens) == 0)
+			{
+				printf("Muito bom input!\n");
+				continue ;
+			}
 			t_token *tokens = info.tokens;
 			for (int i = 0; i < tokens[0].total; i++) 
 			{

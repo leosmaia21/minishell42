@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/01 16:44:48 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/02 15:41:17 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,7 @@ t_token	*dividetokens(char *str, t_envp *env)
 	int			t_index;
 	t_token		*tokens;
 
-	tokens = ft_calloc(ft_strlen(str) + 1, sizeof(t_token));
+	tokens = ft_calloc(ft_strlen(str) + 10, sizeof(t_token));
 	i = 0;
 	t_index = 0;
 	while (i < ft_strlen(str))

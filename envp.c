@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 22:01:27 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/02 19:00:55 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,21 @@ t_envp	*ft_new_var(t_envp *head, char *str)
 	char	*var;
 	char	*key;
 
-	if (ft_strchr(str, '='))
+	// if (ft_strchr(str, '='))
+	// {
+	var = ft_substr(str, 0, ft_strchr(str, '=') - str);
+	key = ft_substr(str, (ft_strchr(str, '=') - str) + 1, ft_strlen(str));
+	node = ft_create_node(var, key);
+	if (!node) 
 	{
-		var = ft_substr(str, 0, ft_strchr(str, '=') - str);
-		key = ft_substr(str, (ft_strchr(str, '=') - str)+ 1, ft_strlen(str));
-		node = ft_create_node(var, key);
-		if (!node) 
-		{
-			free(var);
-			free(key);
-		}
-		else
-			ft_add_node(&head, node);
+		free(var);
+		free(key);
 	}
 	else
-		printf("failed to create node");
+		ft_add_node(&head, node);
+	// }
+	// else
+	// 	printf("failed to create node");
 	return (head);
 }
 
