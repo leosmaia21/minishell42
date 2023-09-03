@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/02 20:24:26 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/03 09:12:55 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,9 +163,13 @@ void	exportsusana(char **info, t_envp *env)
 
 void	unset(char **info, t_envp *env)
 {
+	int	i;
+
+	i = 0;
 	assert(ft_strcmp(info[0], "unset") == 0);
-	assert(info[1] != NULL);
-	removenode(&env, info[1]);
+	if (info[1])
+		while (info[++i])
+			removenode(&env, info[1]);
 }
 
 void	env(char **info, t_envp *env)

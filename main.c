@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/02 20:26:15 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/03 12:42:48 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ int	main(int argc, char **argv, char **envp)
 				continue ;
 			}
 			t_token *tokens = info.tokens;
-			for (int i = 0; i < tokens[0].total; i++) 
-			{
-				printf("char *: %s ", tokens[i].t);
-				printf("total: %d ", tokens[i].total);
-				printf("index: %d ", tokens[i].index);
-				printf("type: %s \n", get_type(tokens[i].type));
-			}
+			// for (int i = 0; i < tokens[0].total; i++) 
+			// {
+			// 	printf("char *: %s ", tokens[i].t);
+			// 	printf("total: %d ", tokens[i].total);
+			// 	printf("index: %d ", tokens[i].index);
+			// 	printf("type: %s \n", get_type(tokens[i].type));
+			// }
             ft_main_exec(&info);
             // ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));

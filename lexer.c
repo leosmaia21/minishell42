@@ -6,19 +6,13 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/02 20:26:36 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/03 12:49:27 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft/libft.h"
 #include "minishell.h"
-// #include "envp.h"
-// #include "libft/libft.h"
-// #include "minishell.h"
-// #include <stdint.h>
-// #include <stdio.h>
-// #include <stdlib.h>
 
 char	**jointokens(t_token *tokens, int idx)
 {
@@ -49,12 +43,12 @@ char	**jointokens(t_token *tokens, int idx)
 	return (ret);
 }
 
-static char	*copyuntil(char *src, char *c)
+char	*copyuntil(char *src, char *c)
 {
 	long		i;
 	long		x;
 	char		*dst;
-	
+
 	dst = ft_calloc(ft_strlen(src) + 1, 1);
 	i = -1;
 	while (++i < ft_strlen(src))
@@ -77,29 +71,9 @@ static char	*copyuntil(char *src, char *c)
 			break ;
 	}
 	return (dst);
-	// s = 0;
-	// i = -1;
-	// while (s < ft_strlen(src))
-	// {
-	// 	s = (long)ft_strbrk(src + s, c) - (long)src;
-	// 	if (s < 0)
-	// 	{
-	// 		s = ft_strlen(src);
-	// 		break ;
-	// 	}
-	// 	if (src[s] == ' ')
-	// 		break ;
-	// 	s++;
-	// }
-	// if (s == 0)
-	// 	s = 1;
-	// dst = ft_calloc(s + 3, 1);
-	// while (++i < s)
-	// 	dst[i] = src[i];
-	// return (dst);
 }
 
-static char	*copyquotes(char *src, char *c)
+char	*copyquotes(char *src, char *c)
 {
 	long	i;
 	long	s;
@@ -125,7 +99,7 @@ static char	*copyquotes(char *src, char *c)
 	return (dst);
 }
 
-static char	*copywhileequal(char *src, char c)
+char	*copywhileequal(char *src, char c)
 {
 	int		i;
 	char	*dst;
@@ -143,7 +117,7 @@ static char	*copywhileequal(char *src, char c)
 	return (dst);
 }
 
-static int	changetokentypesaux(t_token *tokens, int *i)
+int	changetokentypesaux(t_token *tokens, int *i)
 {
 	if (ft_strcmp(tokens[*i].t, ">") == 0)
 	{
@@ -200,7 +174,7 @@ void	changetokentypes(t_token *tokens)
 	}
 }
 
-static void auxremovequotes(t_token *token, char *c, int *q)
+void auxremovequotes(t_token *token, char *c, int *q)
 {
 	int	i;
 
@@ -219,7 +193,7 @@ static void auxremovequotes(t_token *token, char *c, int *q)
 			(*q)++;
 }
 
-static char	removequotes(t_token *token)
+char	removequotes(t_token *token)
 {
 	int		i;
 	int		n;
@@ -246,7 +220,7 @@ static char	removequotes(t_token *token)
 	return (c);
 }
 
-static void	expanddoleta(t_token *token, t_envp *env)
+void	expanddoleta(t_token *token, t_envp *env)
 {
 	char	*str;
 	int		i;
@@ -280,7 +254,7 @@ static void	expanddoleta(t_token *token, t_envp *env)
 	token->t = str;
 }
 
-static void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
+void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
 	char	c;
