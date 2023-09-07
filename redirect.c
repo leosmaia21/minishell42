@@ -6,63 +6,83 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:51:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/02 19:16:42 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:20:40 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirect.h"
 
-int ft_input_fd(t_token *tokens)
+int ft_get_id_pipe(t_token *tokens, int idx)
+{
+    int i;
+    i = -1;
+	while (idx >= 0)
+	{
+		while (tokens[++i].type != command)
+			continue ;
+		if (tokens[i].type == command)
+			idx--;
+	}
+    return(i);
+}
+
+int ft_input_fd(t_token *tokens, int command, int default_fd)
 {
     int fd;
     int i;
 
-	i = 0;
-    fd = STDIN_FILENO;
-	while ((tokens[i].type == redirectL) || (tokens[i].type == dredirectL))
+	i = ft_get_id_pipe(tokens, command) - 1;
+    fd = default_fd;
+    while ((++i < tokens[0].total) && (tokens[i].type != pipo))
 	{
-        if (fd != STDIN_FILENO)
-            close(fd);
-        if (tokens[i].type == dredirectL)
+        if ((tokens[i].type == redirectL) || (tokens[i].type == dredirectL))
         {
-            fd = ft_heredoc(tokens[i + 1].t);
+            if (fd != default_fd)
+                close(fd);
+            if (tokens[i].type == dredirectL)
+            {
+                fd = ft_heredoc(tokens[i + 1].t);
+            }
+            else
+            {
+                if (!access(tokens[i + 1].t, F_OK))
+                    fd = open(tokens[i + 1].t, O_RDONLY);
+                else
+                    perror(tokens[i + 1].t);
+            }
             i++;
         }
-        else
-        {
-            if (!access(tokens[i + 1].t, F_OK))
-                fd = open(tokens[i + 1].t, O_RDONLY);
-            else
-                perror(tokens[i + 1].t);
-        }
-        i++;
-	}
+    }
     return(fd);
 }
 
-int ft_output_fd(t_token *tokens)
+int ft_output_fd(t_token *tokens, int command, int default_fd)
 {
     int fd;
     int i;
 
-	i = 0;
-    fd = STDOUT_FILENO;
-	while (((tokens[i].type != redirectR) && (tokens[i].type != dredirectR)) && (i < tokens[0].total - 1))
-        i++;
-    if (i == tokens[0].total - 1)
-        return(fd); 
-    while ((tokens[i].type == redirectR) || (tokens[i].type == dredirectR))
+	i = ft_get_id_pipe(tokens, command);
+    fd = default_fd;
+	// while (((tokens[i].type != redirectR) && (tokens[i].type != dredirectR)) && (i < tokens[0].total - 1))
+    //     i++;
+    // if (i == tokens[0].total - 1)
+    //     return(fd);
+    while ((++i < tokens[0].total) && (tokens[i].type != pipo)) 
     {
-        if (fd != STDOUT_FILENO)
-            close(fd);
-        if (tokens[i].type == redirectR)
-            fd = open(tokens[i + 1].t, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        else
-            fd = open(tokens[i + 1].t, O_CREAT | O_RDWR | O_APPEND, 0666);
-        if (fd == -1)
-            perror(tokens[i + 1].t);
-        i = i + 2;
+        if ((tokens[i].type == redirectR) || (tokens[i].type == dredirectR))
+        {
+            if (fd != default_fd)
+                close(fd);
+            if (tokens[i].type == redirectR)
+                fd = open(tokens[i + 1].t, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            else
+                fd = open(tokens[i + 1].t, O_CREAT | O_RDWR | O_APPEND, 0666);
+            if (fd == -1)
+                perror(tokens[i + 1].t);
+            i = i + 2;
+        }
     }
+    //printf("estou aqui\n");
     return(fd);
 }
 

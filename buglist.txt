@@ -1,6 +1,32 @@
 EXPORT
-    > tem que funcionar sem argumentos (segfault)
-    > esta a adicionar na lista errada. 
+    > (fixed)tem que funcionar sem argumentos (segfault)
+    > (fixed)esta a adicionar na lista errada. 
+    > Adiciona multiplas vezes a mesma variavel. Devia procurar se ja existe e substituir
+
+EXIT 
+    > (in progress) Nao faz free a nada
+
+UNSET
+    > fiz unset ao OLDPWD e logo de seguida consegui fazer echo $OLDPWD
+
+ECHO 
+    > Quando a variavel nao existe da segfault
+    > echo $OLDPWD adiciona PWD no final do output
+
+ENV 
+    > (fixed) imprime um NULL no fim 
+    > Adiciona multiplas vezes a mesma variavel. Devia procurar se ja existe e substituir
+
+EXPAND DOLETA
+    > (fixed)"echo $PWD/a" esta a dar segfault
+
+CD 
+    > (fixed) Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
+    > (fixed)cd .. fica com .. no caminho
+    > (fixed)cd / nao fez um caralho
+    > (fixed)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
+    > (fixed)cd sem argumentos parte tudo 
+    
 
 PIPES 
     > (fixed) Criar fork para builtins
@@ -8,37 +34,28 @@ PIPES
     > (fixed) bad FD com mais do que um PIPE
     > (fixed) Nenhum comando funciona se usar o full path para ele. (ex: /bin/ls)
 
-EXIT 
-    > (in progress) Nao faz free a nada
-
-ENV 
-    > (ta feito) imprime um NULL no fim 
-
-EXPAND DOLETA
-    > (fixed)"echo $PWD/a" esta a dar segfault
-
-CD 
-    > (fixed) Se fizer unset ao oldpwd, dá segfault. o mesmo deve acontecer se fizer unset ao PWD, nao testei
-    > (fixed - adolfo)cd .. fica com .. no caminho
-    > (fixed - adolfo)cd / nao fez um caralho
-    > (fixed - adolfo)cd ../../bde-sous/Documents/42cursus/../  --> PWD=/nfs/homes/bde-sous/Documents/../../bde-sous/Documents/42cursus/../
-    > cd sem argumentos parte tudo 
     
 LEXER / Parsing
-    > (acho que esta resolvido)
+    > (?fixed)
 	mas é possivel que tenha fdd alguma coisa, é melhor fazer mais testes
 	input "pwd |wc -l" separado em  
         pwd = comando 
         |wc = flag  
         -l = flag
+    > >a echo >b >c ola > c susana --> devia fazer echo ola susana para o ficheiro c (putas, abilio)
 
 Redirects
     > (fixed) Redirect de builtins
     > (fixed) Estou a dar Open dos FD's mas nunca lhes dou close.
+    > redirects nos pipes intermedios nao estao a 100%
+    > redirects sem comandos nao funcionam
+    > parar de processar redirects em caso de erro em algum. seja input ou output
+    > heredoc tem sempre prioridade
 
 MISSING FEATURES
-    > Heredoc
-        Multiple Heredoc processa do primeiro ate ao ultimo e usa o ultimo para o comando seguinte
     > Exit Codes
+        > Nenhum builtin esta a definir o exit code
     > Memory Leaks
+        > Quando se faz um cd, e o proximo comando tem pipes, aparece um leak relacionado com o CD
+        > CTRL + D chora com leaks, nao sei se ha algo a fazer quanto a isto
     > Normas

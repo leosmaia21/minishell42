@@ -64,7 +64,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	int		pid;
 	int		ft_stdout;
 
-	ft_stdout = dup(1);
+	ft_stdout = ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO);
 	if(ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
 		pid = fork();
 	else
@@ -74,11 +74,11 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	if (pid == 0)
 	{
 		close(fd_pipe[0]);
-		dup2(ft_input_fd(info->tokens), STDIN_FILENO);
+		dup2(ft_input_fd(info->tokens, info->ordem, STDIN_FILENO), STDIN_FILENO);
         if (ft_count_command(info->tokens) > 1)
 		    dup2(fd_pipe[1], STDOUT_FILENO);
-		else
-			dup2(ft_output_fd(info->tokens), STDOUT_FILENO);
+		//else
+		dup2(ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO), STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
 			execve(path, flags, info->envp);
 		else
@@ -101,8 +101,8 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		perror(strerror(errno));
 	if (pid == 0)
 	{
-		//dup2(STDOUT_FILENO, fd_pipe[1]);
-		dup2(ft_output_fd(info->tokens), STDOUT_FILENO);
+		dup2(ft_input_fd(info->tokens, info->ordem, fd_pipe[0]), fd_pipe[0]);
+		dup2(ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO), STDOUT_FILENO);
 		close(fd_pipe[1]);
 		if(ft_is_builtin(flags) != 0)
 		{
@@ -121,10 +121,14 @@ void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
 {
 	int	pid;
 	int temp_fd[2];
+	int input;
+	int output;
 
+	input = ft_input_fd(info->tokens, info->ordem, fd_pipe[0]);
 	close(fd_pipe[1]);
 	if (pipe(temp_fd) == -1)
 		perror(strerror(errno));
+	output = ft_output_fd(info->tokens, info->ordem, temp_fd[1]);
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
@@ -132,17 +136,22 @@ void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
 	{
 		close(temp_fd[0]);
 		close(fd_pipe[1]);
-		dup2(temp_fd[1], STDOUT_FILENO);
+		dup2(output, STDOUT_FILENO);
+		//dup2(output, STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
 		{
-			dup2(fd_pipe[0], STDIN_FILENO);
+			//dup2(fd_pipe[0], STDIN_FILENO);
+			dup2(input, STDIN_FILENO);
 			execve(path, flags, info->envp);
 		}	
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
 	}
 	waitpid(pid, &info->exit_code, 0);
-	dup2(temp_fd[0], fd_pipe[0]);
+	if (output == temp_fd[1])
+		dup2(temp_fd[0], fd_pipe[0]);
+	//else
+	//	dup2(output, fd_pipe[0]);
 	close(temp_fd[1]);
 	close(temp_fd[0]);
 }
@@ -154,21 +163,21 @@ void	ft_main_exec(t_info *info)
 	int		fd[2];
 	char	**flags;
 	char	*path;
-	int 	i;
+	//int 	i;
 
-	i = -1;
+	//i = -1;
 	pipes = ft_count_command(info->tokens);
 	if (pipe(fd) == -1)
 		perror(strerror(errno));
-	while (++i < pipes) 
+	while (++info->ordem < pipes) 
     {
-		flags = jointokens(info->tokens, i);
+		flags = jointokens(info->tokens, info->ordem);
 		path = ft_findpath(info->tenv, flags);
         if ((path != NULL) || ft_is_builtin(flags) == 0)
 		{
-			if (i == 0)
+			if (info->ordem == 0)
 				first_process(fd, flags, info, path);
-			else if (i == pipes - 1)
+			else if (info->ordem == pipes - 1)
 				second_process(fd, flags, info, path);
 			else
 				midle_process(fd, flags, info, path);

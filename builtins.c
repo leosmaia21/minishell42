@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/03 09:12:55 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/07 21:34:20 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,8 +140,8 @@ void	exitsusana(char **flags, t_info *info)
 	assert(ft_strcmp(flags[0], "exit") == 0);
 	ft_freestruct(info);
 	rl_clear_history();
-	printf("Maravilha Maravilha\n");
-	exit(1);
+	printf("exit\n");
+	exit(info->exit_code);
 }
 
 void	exportsusana(char **info, t_envp *env)
@@ -172,16 +172,16 @@ void	unset(char **info, t_envp *env)
 			removenode(&env, info[1]);
 }
 
-void	env(char **info, t_envp *env)
+void	env(char **info, t_envp *envp)
 {
 	assert(ft_strcmp(info[0], "env") == 0);
-	if (env != NULL)
+	if (envp != NULL)
 	{
-		while (env)
+		while (envp)
 		{
-			if (ft_strlen(env->key))
-				printf("%s=%s\n", env->var, env->key);
-			env = env->next;
+			if (ft_strlen(envp->key))
+				printf("%s=%s\n", envp->var, envp->key);
+			envp = envp->next;
 		}
 	}
 }
