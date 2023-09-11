@@ -62,29 +62,26 @@ int	ft_count_command(t_token *tokens)
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
-	int		ft_stdout;
 
-	ft_stdout = ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO);
 	if(ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
 		pid = fork();
 	else
 		pid = 0;
+	if (ft_count_command(info->tokens) > 1)
+			info->fds[1] = fd_pipe[1];
 	if (pid == -1)
 		perror(strerror(errno));
-	if (pid == 0)
+	if (pid == 0 && ft_process_fd(info))
 	{
 		close(fd_pipe[0]);
-		dup2(ft_input_fd(info->tokens, info->ordem, STDIN_FILENO), STDIN_FILENO);
-        if (ft_count_command(info->tokens) > 1)
-		    dup2(fd_pipe[1], STDOUT_FILENO);
-		//else
-		dup2(ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO), STDOUT_FILENO);
+		dup2(info->fds[0], STDIN_FILENO);
+		dup2(info->fds[1], STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
 			execve(path, flags, info->envp);
 		else
 		{
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
-			dup2(ft_stdout, 1);
+			dup2(info->fds[1], 1);
 		}
 	}
 	if(ft_count_command(info->tokens) > 1)
@@ -96,13 +93,14 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
 
+	info->fds[0] = fd_pipe[0];
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
-	if (pid == 0)
+	if (pid == 0 && ft_process_fd(info))
 	{
-		dup2(ft_input_fd(info->tokens, info->ordem, fd_pipe[0]), fd_pipe[0]);
-		dup2(ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO), STDOUT_FILENO);
+		dup2(info->fds[0], fd_pipe[0]);
+		dup2(info->fds[1], STDOUT_FILENO);
 		close(fd_pipe[1]);
 		if(ft_is_builtin(flags) != 0)
 		{
@@ -121,37 +119,34 @@ void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
 {
 	int	pid;
 	int temp_fd[2];
-	int input;
-	int output;
-
-	input = ft_input_fd(info->tokens, info->ordem, fd_pipe[0]);
+	// int input;
+	// int output;
+	// input = ft_input_fd(info->tokens, info->ordem, fd_pipe[0]);
 	close(fd_pipe[1]);
 	if (pipe(temp_fd) == -1)
 		perror(strerror(errno));
-	output = ft_output_fd(info->tokens, info->ordem, temp_fd[1]);
+	info->fds[0] = fd_pipe[0];
+	info->fds[1] = temp_fd[1];
+	// output = ft_output_fd(info->tokens, info->ordem, temp_fd[1]);
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
-	if (pid == 0)
+	if (pid == 0 && ft_process_fd(info))
 	{
 		close(temp_fd[0]);
 		close(fd_pipe[1]);
-		dup2(output, STDOUT_FILENO);
-		//dup2(output, STDOUT_FILENO);
+		dup2(info->fds[1], STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
 		{
-			//dup2(fd_pipe[0], STDIN_FILENO);
-			dup2(input, STDIN_FILENO);
+			dup2(info->fds[0], STDIN_FILENO);
 			execve(path, flags, info->envp);
 		}	
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
 	}
 	waitpid(pid, &info->exit_code, 0);
-	if (output == temp_fd[1])
+	if (info->fds[1] == temp_fd[1])
 		dup2(temp_fd[0], fd_pipe[0]);
-	//else
-	//	dup2(output, fd_pipe[0]);
 	close(temp_fd[1]);
 	close(temp_fd[0]);
 }

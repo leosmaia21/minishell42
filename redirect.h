@@ -3,8 +3,9 @@
 
 # include "minishell.h"
 
-int ft_input_fd(t_token *tokens, int command, int default_fd);
-int ft_output_fd(t_token *tokens, int command, int default_fd);
 int ft_heredoc(char *escape);
+int ft_process_input(int i, int fd_input, t_info *info, int fd_heredoc);
+int ft_process_output(int i, int fd, t_info *info);
+int ft_process_fd(t_info *info);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/06 21:30:54 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/11 18:43:40 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ typedef struct s_info{
     t_token         *tokens;
     int             exit_code;
 	int				ordem;
+	int				fds[2];
+	int				flag_stop;
 }	t_info;
 
 # include "envp.h"
