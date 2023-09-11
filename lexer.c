@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/03 12:49:27 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/11 21:25:52 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ void	expanddoleta(t_token *token, t_envp *env)
 {
 	char	*str;
 	int		i;
-	char 	*x;
+	int 	x;
 	char	*ret;
 
 	str = ft_calloc(ft_strlen(token->t) + 1, 1);
@@ -236,10 +236,11 @@ void	expanddoleta(t_token *token, t_envp *env)
 	i++;
 	ft_strlcpy(str, token->t, i);
 	ret = 0;
-	while (env->next != NULL)
+	while (env)
 	{
-		x =	ft_strnstr(&(token->t[i]), env->var, ft_strlen(&(token->t[i])));
-		if (x)
+		// x =	ft_strnstr(&(token->t[i]), env->var, ft_strlen(&(token->t[i])));
+		x = ft_strncmp(&(token->t[i]), env->var, ft_strlen(env->var));
+		if (!x)
 		{
 			ret = ft_strjoin(str, env->key);
 			free(str);
@@ -249,6 +250,8 @@ void	expanddoleta(t_token *token, t_envp *env)
 		env = env->next;
 	}
 	str = ft_strjoin(ret, &(token->t[i]));
+	if (!str)
+		str = ft_calloc(1, 1);
 	free(ret);
 	free(token->t);
 	token->t = str;
