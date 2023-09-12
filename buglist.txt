@@ -57,6 +57,7 @@ MISSING FEATURES
     > Exit Codes
         > Nenhum builtin esta a definir o exit code
     > Memory Leaks
-        > Quando se faz um cd, e o proximo comando tem pipes, aparece um leak relacionado com o CD
+        >(acho que esta resolvido) Quando se faz um cd, e o proximo comando tem pipes, aparece um leak relacionado com o CD
         > CTRL + D chora com leaks, nao sei se ha algo a fazer quanto a isto
+			isto é meter as funcoes de free no signal handler penso eu, aquelas duas ultimas
     > Normas
