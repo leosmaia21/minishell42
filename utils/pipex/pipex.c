@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 18:45:38 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/04/16 14:59:13 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/12 21:08:35 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	second_process(int fd_pipe[2], char **av, char **envp, char *path)
 	close(fd);
 	return (status);
 }
-irst_p
+
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd_pipe[2];
