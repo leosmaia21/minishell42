@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 16:15:53 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/12 16:37:19 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,27 @@ char	**jointokens(t_token *tokens, int idx)
 
 char	*copyuntil(char *src, char *c)
 {
-	long		i;
-	long		x;
+	long		i[2];
 	char		*dst;
 
 	dst = ft_calloc(ft_strlen(src) + 1, 1);
-	i = -1;
-	while (++i < ft_strlen(src))
+	i[0] = -1;
+	while (++i[0] < ft_strlen(src))
 	{
-		x = -1;
-		while (c[++x])
-			if (src[i] == c[x])
+		i[1] = -1;
+		while (c[++i[1]])
+			if (src[i[0]] == c[i[1]])
 				break ;
-		if (src[i] == c[x])
+		if (src[i[0]] == c[i[1]])
 			break ;
 	}
-	i = -1;
-	while (++i < ft_strlen(src))
+	i[0] = -1;
+	while (++i[0] < ft_strlen(src))
 	{
-		if (i == 0 && src[i] == c[x])
-			dst[i] = c[x];
-		if (src[i] != c[x])
-			dst[i] = src[i];
+		if (i[0] == 0 && src[i[0]] == c[i[1]])
+			dst[i[0]] = c[i[1]];
+		if (src[i[0]] != c[i[1]])
+			dst[i[0]] = src[i[0]];
 		else
 			break ;
 	}
