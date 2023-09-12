@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 22:04:23 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 15:19:30 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/12 15:44:21 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,10 @@ void	ft_freestr(void *dptr)
 void	ft_freedoublepointer(char **dptr)
 {
 	int	i;
-	char *c;
 
 	i = -1;
 	while (dptr[++i] != NULL)
-	{
-		c = dptr[i];
 		ft_freestr(dptr[i]);
-	}
 	ft_freestr(dptr);
 }
 

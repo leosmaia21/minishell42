@@ -1,7 +1,7 @@
 SRCS = main.c lexer.c utils.c signals.c envp.c execs.c builtins.c free.c redirect.c
 NAME = minishell
 CC = clang
-CFLAGS = -Wall -Wextra -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -g -fsanitize=address
 
 RM = rm -f
 OBJS = $(SRCS:.c=.o)
