@@ -1,16 +1,17 @@
 /* ************************************************************************** */
-/*																			  */
-/*														  :::	   ::::::::   */
-/*	 execs.c											:+:		 :+:	:+:   */
-/*													  +:+ +:+		  +:+	  */
-/*	 By: ledos-sa <ledos-sa@student.42.fr>			+#+  +:+	   +#+		  */
-/*												  +#+#+#+#+#+	+#+			  */
-/*	 Created: 2023/08/02 13:01:58 by ledos-sa		   #+#	  #+#			  */
-/*	 Updated: 2023/08/02 13:02:00 by ledos-sa		  ###	########.fr		  */
-/*																			  */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execs.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/09/12 16:26:07 by ledos-sa         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "execs.h"
+#include "lexer.h"
 
 char	*ft_findpath(t_envp *head, char **flags)
 {
@@ -21,7 +22,7 @@ char	*ft_findpath(t_envp *head, char **flags)
 	char	**aux_split;
 
 	if (!access(flags[0], F_OK))
-			return (ft_strdup(flags[0]));
+		return (ft_strdup(flags[0]));
 	p = ft_find_value(head, "PATH");
 	split = ft_split(p, ':');
 	aux_split = split;
@@ -45,19 +46,18 @@ char	*ft_findpath(t_envp *head, char **flags)
 
 int	ft_count_command(t_token *tokens)
 {
-	int count;
-	int i;
+	int	count;
+	int	i;
 
-	i=-1;
+	i = -1;
 	count = 0;
 	while (++i < tokens[0].total)
 	{
 		if (tokens[i].type == command)
 			count++;
 	}
-	return(count);
+	return (count);
 }
-
 
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
@@ -75,8 +75,8 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	{
 		close(fd_pipe[0]);
 		dup2(ft_input_fd(info->tokens, info->ordem, STDIN_FILENO), STDIN_FILENO);
-        if (ft_count_command(info->tokens) > 1)
-		    dup2(fd_pipe[1], STDOUT_FILENO);
+		if (ft_count_command(info->tokens) > 1)
+			dup2(fd_pipe[1], STDOUT_FILENO);
 		//else
 		dup2(ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO), STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
@@ -87,7 +87,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 			dup2(ft_stdout, 1);
 		}
 	}
-	if(ft_count_command(info->tokens) > 1)
+	if (ft_count_command(info->tokens) > 1)
 		close(fd_pipe[1]);
 	waitpid(pid, &info->exit_code, 0);
 }
@@ -104,7 +104,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		dup2(ft_input_fd(info->tokens, info->ordem, fd_pipe[0]), fd_pipe[0]);
 		dup2(ft_output_fd(info->tokens, info->ordem, STDOUT_FILENO), STDOUT_FILENO);
 		close(fd_pipe[1]);
-		if(ft_is_builtin(flags) != 0)
+		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(fd_pipe[0], STDIN_FILENO);
 			execve(path, flags, info->envp);
@@ -116,13 +116,12 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	waitpid(pid, &info->exit_code, 0);
 }
 
-
-void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
+void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int	pid;
-	int temp_fd[2];
-	int input;
-	int output;
+	int	temp_fd[2];
+	int	input;
+	int	output;
 
 	input = ft_input_fd(info->tokens, info->ordem, fd_pipe[0]);
 	close(fd_pipe[1]);
@@ -138,7 +137,7 @@ void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
 		close(fd_pipe[1]);
 		dup2(output, STDOUT_FILENO);
 		//dup2(output, STDOUT_FILENO);
-		if(ft_is_builtin(flags) != 0)
+		if (ft_is_builtin(flags) != 0)
 		{
 			//dup2(fd_pipe[0], STDIN_FILENO);
 			dup2(input, STDIN_FILENO);
@@ -156,24 +155,21 @@ void	midle_process(int	fd_pipe[2], char	**flags, t_info *info,char	*path)
 	close(temp_fd[0]);
 }
 
-
 void	ft_main_exec(t_info *info)
 {
 	int		pipes;
 	int		fd[2];
 	char	**flags;
 	char	*path;
-	//int 	i;
 
-	//i = -1;
 	pipes = ft_count_command(info->tokens);
 	if (pipe(fd) == -1)
 		perror(strerror(errno));
 	while (++info->ordem < pipes) 
-    {
+	{
 		flags = jointokens(info->tokens, info->ordem);
 		path = ft_findpath(info->tenv, flags);
-        if ((path != NULL) || ft_is_builtin(flags) == 0)
+		if ((path != NULL) || ft_is_builtin(flags) == 0)
 		{
 			if (info->ordem == 0)
 				first_process(fd, flags, info, path);
@@ -189,5 +185,3 @@ void	ft_main_exec(t_info *info)
 		ft_freedoublepointer(flags);
 	}
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/11 21:29:16 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/12 16:22:02 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ typedef struct s_info{
 }	t_info;
 
 # include "envp.h"
-# include "lexer.h"
 # include "execs.h"
 # include "builtins.h"
 # include "utils.h"
