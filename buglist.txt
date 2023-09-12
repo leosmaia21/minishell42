@@ -15,7 +15,7 @@ ECHO
 
 ENV 
     > (fixed) imprime um NULL no fim 
-    > Adiciona multiplas vezes a mesma variavel. Devia procurar se ja existe e substituir
+    > (fixed)Adiciona multiplas vezes a mesma variavel. Devia procurar se ja existe e substituir
 
 EXPAND DOLETA
     > (fixed)"echo $PWD/a" esta a dar segfault

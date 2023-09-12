@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/11 20:55:41 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/12 15:16:47 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ t_envp	*ft_create_node(char *var, char *key)
 	node->var = ft_strdup(var);
 	node->key = ft_strdup(key);
 	node->next = NULL;
-	ft_freestr(var);
-	ft_freestr(key);
+	if (var)
+		ft_freestr(var);
+	if (key)
+		ft_freestr(key);
 	return (node);
 }
 
