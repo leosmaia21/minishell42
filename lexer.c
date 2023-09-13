@@ -274,13 +274,11 @@ char	removequotes(t_token *token, t_envp *env)
 {
 	int		i;
 	int		n;
-	int		q;
 	char	*new;
 	char	*aux[10];
 
 	i = -1;
 	n = 0;
-	q = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	// auxremovequotes(token, &c, &q);
 	i = -1;
@@ -328,7 +326,6 @@ char	removequotes(t_token *token, t_envp *env)
 void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
-	char	c;
 
 	i = -1;
 	while (++i < t_index)
@@ -336,7 +333,7 @@ void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		c = removequotes(&tokens[i], env);
+		removequotes(&tokens[i], env);
 		// while (c != '\'' && ft_strrchr(tokens[i].t, '$'))
 		// 	expanddoleta(tokens + i, env, 10);
 	}
