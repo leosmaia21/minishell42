@@ -251,7 +251,7 @@ char	*expanddoleta(char *token, t_envp *env, int *y)
 	return (str);
 }
 
-void auxremovequotes(t_token *token, char *c, int *q)
+void	auxremovequotes(t_token *token, char *c, int *q)
 {
 	int	i;
 
@@ -277,12 +277,10 @@ char	removequotes(t_token *token, t_envp *env)
 	int		q;
 	char	*new;
 	char	*aux[10];
-	char	c;
 
 	i = -1;
 	n = 0;
 	q = 0;
-	c = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
 	// auxremovequotes(token, &c, &q);
 	i = -1;
@@ -291,6 +289,15 @@ char	removequotes(t_token *token, t_envp *env)
 		if (token->t[i] == '"')
 		{
 			i++;
+			aux[0] = expanddoleta(&(token->t[i]), env, &i);
+			n += ft_strlen(aux[0]) - 1;
+			aux[1] = ft_strjoin(new, aux[0]);
+			free(aux[0]);
+			free(new);
+			new = aux[1];
+		}
+		else if(token->t[i] == '$')
+		{
 			aux[0] = expanddoleta(&(token->t[i]), env, &i);
 			n += ft_strlen(aux[0]) - 1;
 			aux[1] = ft_strjoin(new, aux[0]);
@@ -315,8 +322,9 @@ char	removequotes(t_token *token, t_envp *env)
 	}
 	free(token->t);
 	token->t = new;
-	return (c);
+	return (0);
 }
+
 void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
