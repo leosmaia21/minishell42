@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:46:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 16:19:43 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/13 16:10:13 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ char	*copywhileequal(char *src, char c);
 int		changetokentypesaux(t_token *tokens, int *i);
 void	changetokentypes(t_token *tokens);
 void	auxremovequotes(t_token *token, char *c, int *q);
-char	removequotes(t_token *token);
+char	removequotes(t_token *token, t_envp *env);
 void	expandoletafree(t_token *token, char *ret, int i, char *str);;
-void	expanddoleta(t_token *token, t_envp *env);
+char	*expanddoleta(char *token, t_envp *env, int *y);
 void	dividetokensaux(t_token *tokens, int t_index, t_envp *env);
 t_token	*dividetokens(char *str, t_envp *env);
 #endif

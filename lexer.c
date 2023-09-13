@@ -1,18 +1,19 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 22:02:46 by ledos-sa         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 lexer.c											:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: bde-sous <bde-sous@student.42porto.com>	+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2023/07/14 16:45:58 by ledos-sa		   #+#	  #+#			  */
+/*	 Updated: 2023/09/13 14:19:36 by ledos-sa		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include "utils/pipex/libft/libft.h"
 
 char	**jointokens(t_token *tokens, int idx)
 {
@@ -173,6 +174,83 @@ void	changetokentypes(t_token *tokens)
 	}
 }
 
+
+void	expandoletafree(t_token *token, char *ret, int i, char *str)
+{
+	str = ft_strjoin(ret, &(token->t[i]));
+	if (!str)
+		str = ft_calloc(1, 1);
+	free(ret);
+	free(token->t);
+	token->t = str;
+}
+
+int	ft_findchar(char *str, char c)
+{
+	int	i;
+
+	i = -1;
+	while (++i < ft_strlen(str))
+		if (str[i] == c)
+			return (i);
+	return (ft_strlen(str));
+}
+
+char	*expanddoleta(char *token, t_envp *env, int *y)
+{
+	char	*str;
+	char	*aux;
+	int		i;
+	int 	n;
+	char	*ret;
+
+	str = ft_calloc(ft_strlen(token) + 1, 1);
+	ret = 0;
+	i = 0;
+	n = 0;
+	while (token[i] && token[i] != '"')
+	{
+		if (token[i] != '$')
+		{
+			aux = ft_calloc(ft_strlen(&token[i]) + 1, 1);
+			while (token[i] && token[i] != '$')
+				aux[n++] = token[i++];
+			ret = ft_strjoin(str, aux);
+			free(str);
+			free(aux);
+			str = ret;
+			*y += ft_findchar(&(token[i]), '"') + 1;
+		}
+		else
+		{
+			i++;
+			while (env)
+			{
+				if (!ft_strncmp(&(token[i]), env->var, ft_findchar(&(token[i]), '"')))
+				{
+					ret = ft_strjoin(str, env->key);
+					free(str);
+					str = ret;
+					*y += ft_findchar(&(token[i]), '"') + 1;
+					i += ft_findchar(&(token[i]), '"') - 1;
+					break ;
+				}
+				env = env->next;
+			}
+			if (!ret)
+			{
+				ret = ft_strjoin(str, "");
+				free(str);
+				str = ret;
+				*y += ft_findchar(&(token[i]), '"') + 1;
+				i += ft_findchar(&(token[i]), '"') - 1;
+			}
+		}
+		i++;
+	}
+	return (str);
+}
+
 void auxremovequotes(t_token *token, char *c, int *q)
 {
 	int	i;
@@ -192,12 +270,13 @@ void auxremovequotes(t_token *token, char *c, int *q)
 			(*q)++;
 }
 
-char	removequotes(t_token *token)
+char	removequotes(t_token *token, t_envp *env)
 {
 	int		i;
 	int		n;
 	int		q;
 	char	*new;
+	char	*aux[10];
 	char	c;
 
 	i = -1;
@@ -205,58 +284,39 @@ char	removequotes(t_token *token)
 	q = 0;
 	c = 0;
 	new = ft_calloc(ft_strlen(token->t) + 1, 1);
-	auxremovequotes(token, &c, &q);
+	// auxremovequotes(token, &c, &q);
 	i = -1;
-	while (++i < ft_strlen(token->t)) 
+	while (++i < ft_strlen(token->t))
 	{
-		if (token->t[i] != c)
+		if (token->t[i] == '"')
+		{
+			i++;
+			aux[0] = expanddoleta(&(token->t[i]), env, &i);
+			n += ft_strlen(aux[0]) - 1;
+			aux[1] = ft_strjoin(new, aux[0]);
+			free(aux[0]);
+			free(new);
+			new = aux[1];
+		}
+		else if (token->t[i] == '\'')
+		{
+			i++;
+			while (token->t[i] != '\'')
+				new[n++] = token->t[i++];
+		}
+		else
+		{
+			aux[3] = ft_calloc(ft_strlen(new) + 100, 1);
+			ft_strlcpy(aux[3], new, ft_strlen(new) + 1);
+			free(new);
+			new = aux[3];
 			new[n++] = token->t[i];
+		}
 	}
-	if (q % 2)
-		new[n] = c;
 	free(token->t);
 	token->t = new;
 	return (c);
 }
-
-void	expandoletafree(t_token *token, char *ret, int i, char *str)
-{
-	str = ft_strjoin(ret, &(token->t[i]));
-	if (!str)
-		str = ft_calloc(1, 1);
-	free(ret);
-	free(token->t);
-	token->t = str;
-}
-
-void	expanddoleta(t_token *token, t_envp *env)
-{
-	char	*str;
-	int		i;
-	char	*ret;
-
-	str = ft_calloc(ft_strlen(token->t) + 1, 1);
-	i = 0;
-	while (token->t[i] && token->t[i] != '$')
-		i++;
-	if (token->t[i] == 0)
-		return ;
-	ft_strlcpy(str, token->t, ++i);
-	ret = 0;
-	while (env)
-	{
-		if (!ft_strncmp(&(token->t[i]), env->var, ft_strlen(env->var)))
-		{
-			ret = ft_strjoin(str, env->key);
-			free(str);
-			i += ft_strlen(env->var);
-			break ;
-		}
-		env = env->next;
-	}
-	expandoletafree(token, ret, i, str);
-}
-
 void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
@@ -268,9 +328,9 @@ void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		c = removequotes(&tokens[i]);
-		if (c != '\'' && ft_strrchr(tokens[i].t, '$'))
-			expanddoleta(tokens + i, env);
+		c = removequotes(&tokens[i], env);
+		// while (c != '\'' && ft_strrchr(tokens[i].t, '$'))
+		// 	expanddoleta(tokens + i, env, 10);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
