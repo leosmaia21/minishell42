@@ -332,23 +332,25 @@ void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 
 	i = -1;
 	c = -1;
+	doublequotes = 0;
+	singlequotes = 0;
 	while (++i < t_index)
 	{
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		while (tokens[i].t[++c])
-		{
-			if (tokens[i].t[c] == '"')
-				doublequotes++;
-			else if (tokens[i].t[c] == '\'')
-				singlequotes++;
-		}
-		if (doublequotes % 2 != 0 || singlequotes % 2 != 0)
-		{
-			printf("Error: quotes not closed\n");
-			exit(1);
-		}
+		// while (tokens[i].t[++c])
+		// {
+		// 	if (tokens[i].t[c] == '"')
+		// 		doublequotes++;
+		// 	else if (tokens[i].t[c] == '\'')
+		// 		singlequotes++;
+		// }
+		// if (doublequotes % 2 != 0 || singlequotes % 2 != 0)
+		// {
+		// 	printf("Error: quotes not closed\n");
+		// 	exit(1);
+		// }
 		removequotes(&tokens[i], env);
 	}
 	tokens[i].end = 1;
