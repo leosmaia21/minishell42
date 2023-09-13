@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:51:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/11 21:41:12 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/13 20:01:35 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,19 @@ int ft_process_input(int i, int fd_input, t_info *info, int fd_heredoc)
         close(fd_input);
     if (info->tokens[i].type == dredirectL)
     {
-        if (info->flag_stop == 1)
+        if (info->flag_stop != 1)
             fd_input = fd_heredoc;
     }
     else
     {
-        if (info->flag_stop == 1)
+        if (info->flag_stop != 1)
         {
             if (!access(info->tokens[i + 1].t, F_OK))
                 fd_input = open(info->tokens[i + 1].t, O_RDONLY);
             else
             {
                 info->flag_stop = 1;
+                fd_input = -1;
                 perror(info->tokens[i + 1].t);
             }
         }
@@ -73,7 +74,10 @@ int ft_process_output(int i, int fd, t_info *info)
     else
         fd = open(info->tokens[i + 1].t, O_CREAT | O_RDWR | O_APPEND, 0666);
     if (fd == -1)
+    {
         perror(info->tokens[i + 1].t);
+        info->flag_stop = 1;
+    }
     return(fd);
 }
 
@@ -107,6 +111,7 @@ int ft_process_fd(t_info *info)
     }
     return(erro);
 }
+
 
 int ft_heredoc(char *escape) {
     int fd[2];

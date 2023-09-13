@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/13 17:57:35 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/13 20:01:42 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 			info->fds[1] = fd_pipe[1];
 	if (pid == -1)
 		perror(strerror(errno));
-	if (pid == 0 && ft_process_fd(info))
+	if (pid == 0)
 	{
 		close(fd_pipe[0]);
 		dup2(info->fds[0], STDIN_FILENO);
@@ -93,11 +93,12 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
 
-	info->fds[0] = fd_pipe[0];
+	if (info->fds[0] == STDIN_FILENO)
+		info->fds[0] = fd_pipe[0];
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
-	if (pid == 0 && ft_process_fd(info))
+	if (pid == 0)
 	{
 		dup2(info->fds[0], fd_pipe[0]);
 		dup2(info->fds[1], STDOUT_FILENO);
@@ -118,19 +119,16 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int	pid;
 	int temp_fd[2];
-	// int input;
-	// int output;
-	// input = ft_input_fd(info->tokens, info->ordem, fd_pipe[0]);
+
 	close(fd_pipe[1]);
 	if (pipe(temp_fd) == -1)
 		perror(strerror(errno));
 	info->fds[0] = fd_pipe[0];
 	info->fds[1] = temp_fd[1];
-	// output = ft_output_fd(info->tokens, info->ordem, temp_fd[1]);
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
-	if (pid == 0 && ft_process_fd(info))
+	if (pid == 0 )
 	{
 		close(temp_fd[0]);
 		close(fd_pipe[1]);
@@ -160,18 +158,27 @@ void	ft_main_exec(t_info *info)
 	pipes = ft_count_command(info->tokens);
 	if (pipe(fd) == -1)
 		perror(strerror(errno));
-	while (++info->ordem < pipes) 
+	while (++info->ordem < pipes)
 	{
 		flags = jointokens(info->tokens, info->ordem);
 		path = ft_findpath(info->tenv, flags);
 		if ((path != NULL) || ft_is_builtin(flags) == 0)
 		{
-			if (info->ordem == 0)
-				first_process(fd, flags, info, path);
-			else if (info->ordem == pipes - 1)
-				second_process(fd, flags, info, path);
+			if (ft_process_fd(info))
+			{
+				if (info->ordem == 0)
+					first_process(fd, flags, info, path);
+				else if (info->ordem == pipes - 1)
+					second_process(fd, flags, info, path);
+				else
+					midle_process(fd, flags, info, path);
+			}
 			else
-				midle_process(fd, flags, info, path);
+			{
+				info->flag_stop = 0;
+				info->fds[0]=0;
+				info->fds[1]=1;
+			}
 		}
 		else
 			perror(flags[0]);
