@@ -1,5 +1,5 @@
 EXIT 
-    > (in progress) Nao faz free a nada
+    > (in progress) Nao faz free a nada 
 
 ECHO 
     > echo "$OLDPWD"/a esta a comer o ultimo caracter
