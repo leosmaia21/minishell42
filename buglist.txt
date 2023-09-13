@@ -7,7 +7,7 @@ EXIT
     > (in progress) Nao faz free a nada
 
 UNSET
-    > fiz unset ao OLDPWD e logo de seguida consegui fazer echo $OLDPWD
+    > (fixed) fiz unset ao OLDPWD e logo de seguida consegui fazer echo $OLDPWD
 
 ECHO 
     > Quando a variavel nao existe da segfault
@@ -15,7 +15,7 @@ ECHO
 
 ENV 
     > (fixed) imprime um NULL no fim 
-    > Adiciona multiplas vezes a mesma variavel. Devia procurar se ja existe e substituir
+    > (fixed)Adiciona multiplas vezes a mesma variavel. Devia procurar se ja existe e substituir
 
 EXPAND DOLETA
     > (fixed)"echo $PWD/a" esta a dar segfault
@@ -43,6 +43,7 @@ LEXER / Parsing
         |wc = flag  
         -l = flag
     > >a echo >b >c ola > c susana --> devia fazer echo ola susana para o ficheiro c (putas, abilio)
+	(fazer echo com variaveis que nao existem ja funciona, print uma linha em branco)
 
 Redirects
     > (fixed) Redirect de builtins
@@ -56,6 +57,7 @@ MISSING FEATURES
     > Exit Codes
         > Nenhum builtin esta a definir o exit code
     > Memory Leaks
-        > Quando se faz um cd, e o proximo comando tem pipes, aparece um leak relacionado com o CD
+        >(acho que esta resolvido) Quando se faz um cd, e o proximo comando tem pipes, aparece um leak relacionado com o CD
         > CTRL + D chora com leaks, nao sei se ha algo a fazer quanto a isto
+			isto é meter as funcoes de free no signal handler penso eu, aquelas duas ultimas
     > Normas

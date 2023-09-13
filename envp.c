@@ -6,11 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/02 19:00:55 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/12 15:16:47 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "envp.h"
+#include "minishell.h"
 
 t_envp	*ft_create_node(char *var, char *key)
 {
@@ -22,8 +23,10 @@ t_envp	*ft_create_node(char *var, char *key)
 	node->var = ft_strdup(var);
 	node->key = ft_strdup(key);
 	node->next = NULL;
-	ft_freestr(var);
-	ft_freestr(key);
+	if (var)
+		ft_freestr(var);
+	if (key)
+		ft_freestr(key);
 	return (node);
 }
 
@@ -42,16 +45,33 @@ void	ft_add_node(t_envp **head, t_envp *node)
 	}
 }
 
+int	ft_change_var(t_envp *head, char *key, char *var)
+{
+	while (head != NULL)
+	{
+		if (!ft_strcmp(head->var, var))
+		{
+			free(head->key);
+			head->key = ft_strdup(key);
+			free(var);
+			free(key);
+			return (1);
+		}
+		head = head->next;
+	}
+	return (0);
+}
+
 t_envp	*ft_new_var(t_envp *head, char *str)
 {
 	t_envp	*node;
 	char	*var;
 	char	*key;
 
-	// if (ft_strchr(str, '='))
-	// {
 	var = ft_substr(str, 0, ft_strchr(str, '=') - str);
 	key = ft_substr(str, (ft_strchr(str, '=') - str) + 1, ft_strlen(str));
+	if (ft_change_var(head, key, var))
+		return (head);
 	node = ft_create_node(var, key);
 	if (!node) 
 	{
@@ -60,9 +80,6 @@ t_envp	*ft_new_var(t_envp *head, char *str)
 	}
 	else
 		ft_add_node(&head, node);
-	// }
-	// else
-	// 	printf("failed to create node");
 	return (head);
 }
 

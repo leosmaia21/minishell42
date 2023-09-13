@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:45:58 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/03 12:49:27 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/12 22:02:46 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,28 +45,27 @@ char	**jointokens(t_token *tokens, int idx)
 
 char	*copyuntil(char *src, char *c)
 {
-	long		i;
-	long		x;
+	long		i[2];
 	char		*dst;
 
 	dst = ft_calloc(ft_strlen(src) + 1, 1);
-	i = -1;
-	while (++i < ft_strlen(src))
+	i[0] = -1;
+	while (++i[0] < ft_strlen(src))
 	{
-		x = -1;
-		while (c[++x])
-			if (src[i] == c[x])
+		i[1] = -1;
+		while (c[++i[1]])
+			if (src[i[0]] == c[i[1]])
 				break ;
-		if (src[i] == c[x])
+		if (src[i[0]] == c[i[1]])
 			break ;
 	}
-	i = -1;
-	while (++i < ft_strlen(src))
+	i[0] = -1;
+	while (++i[0] < ft_strlen(src))
 	{
-		if (i == 0 && src[i] == c[x])
-			dst[i] = c[x];
-		if (src[i] != c[x])
-			dst[i] = src[i];
+		if (i[0] == 0 && src[i[0]] == c[i[1]])
+			dst[i[0]] = c[i[1]];
+		if (src[i[0]] != c[i[1]])
+			dst[i[0]] = src[i[0]];
 		else
 			break ;
 	}
@@ -220,11 +219,20 @@ char	removequotes(t_token *token)
 	return (c);
 }
 
+void	expandoletafree(t_token *token, char *ret, int i, char *str)
+{
+	str = ft_strjoin(ret, &(token->t[i]));
+	if (!str)
+		str = ft_calloc(1, 1);
+	free(ret);
+	free(token->t);
+	token->t = str;
+}
+
 void	expanddoleta(t_token *token, t_envp *env)
 {
 	char	*str;
 	int		i;
-	char 	*x;
 	char	*ret;
 
 	str = ft_calloc(ft_strlen(token->t) + 1, 1);
@@ -233,13 +241,11 @@ void	expanddoleta(t_token *token, t_envp *env)
 		i++;
 	if (token->t[i] == 0)
 		return ;
-	i++;
-	ft_strlcpy(str, token->t, i);
+	ft_strlcpy(str, token->t, ++i);
 	ret = 0;
-	while (env->next != NULL)
+	while (env)
 	{
-		x =	ft_strnstr(&(token->t[i]), env->var, ft_strlen(&(token->t[i])));
-		if (x)
+		if (!ft_strncmp(&(token->t[i]), env->var, ft_strlen(env->var)))
 		{
 			ret = ft_strjoin(str, env->key);
 			free(str);
@@ -248,10 +254,7 @@ void	expanddoleta(t_token *token, t_envp *env)
 		}
 		env = env->next;
 	}
-	str = ft_strjoin(ret, &(token->t[i]));
-	free(ret);
-	free(token->t);
-	token->t = str;
+	expandoletafree(token, ret, i, str);
 }
 
 void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
@@ -293,7 +296,7 @@ t_token	*dividetokens(char *str, t_envp *env)
 		else if (str[i] == '\'')
 			tokens[t_index++].t = copyquotes(&str[i], "\'");
 		else if (str[i] != '\0')
-			tokens[t_index++].t = copyuntil(&str[i], "\"\'|>< ");
+			tokens[t_index++].t = copyuntil(&str[i], "|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
 	dividetokensaux(tokens, t_index, env);
