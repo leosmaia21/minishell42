@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/13 17:57:57 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/13 21:36:46 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,32 @@ char *get_type(t_tokentype type)
 	return(NULL);
 }
 
-int	parser(t_token *tokens)
+int	checkclosedquotes(char *str)
+{
+	int	doubleq;
+	int	singleq;
+	int	i;
+
+	i = -1;
+	doubleq = 0;
+	singleq = 0;
+	while (str[++i])
+	{
+		if (str[i] == '"')
+			doubleq++;
+		if (str[i] == '\'')
+			singleq++;
+	}
+	return ((doubleq % 2 == 0) && (singleq % 2 == 0));
+}
+
+int	parser(t_token *tokens, t_info *info)
 {
 	int	i;
 
 	i = -1;
+	if (!checkclosedquotes(info->str))
+		return (0);
 	while (++i < tokens[0].total) 
 	{
 		if (!ft_strcmp(tokens[i].t, "&&"))
@@ -79,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
  			changetokentypes(info.tokens);
-			if (parser(info.tokens) == 0)
+			if (parser(info.tokens, &info) == 0)
 			{
 				printf("Muito bom input!\n");
 				continue ;
