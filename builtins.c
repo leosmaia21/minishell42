@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 15:43:15 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:36:15 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,10 @@ void	exportsusana(char **info, t_envp *env)
 		{
 			if (ft_strlen(env->key))
 				printf("declare -x %s=%s\n", env->var, env->key);
-			else
+			else if (env->equal == 0)
 				printf("declare -x %s\n", env->var);
+			else if (env->equal == 1)
+				printf("declare -x %s=\"\"\n", env->var);
 			env = env->next;
 		}
 	}
@@ -182,6 +184,8 @@ void	env(char **info, t_envp *envp)
 		{
 			if (ft_strlen(envp->key))
 				printf("%s=%s\n", envp->var, envp->key);
+			else if (envp->equal == 0)
+				printf("%s=\n", envp->var);
 			envp = envp->next;
 		}
 	}

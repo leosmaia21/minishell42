@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/13 17:59:41 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:21:45 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef enum s_token_type{
 typedef struct s_envp{
 	char			*var;
 	char			*key;
+	int				equal;
 	struct s_envp	*next;
 }	t_envp;
 

@@ -196,13 +196,14 @@ int	ft_findchar(char *str, char c)
 	return (ft_strlen(str));
 }
 
-char	*expanddoleta(char *token, t_envp *env, int *y)
+char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 {
 	char	*str;
 	char	*aux;
 	int		i;
 	int 	n;
 	char	*ret;
+	int q;
 
 	str = ft_calloc(ft_strlen(token) + 1, 1);
 	ret = 0;
@@ -220,30 +221,36 @@ char	*expanddoleta(char *token, t_envp *env, int *y)
 			free(aux);
 			str = ret;
 			*y += ft_findchar(&(token[i]), '"') + 1;
+			if (token[i] == 0)
+				break ;
 		}
 		else
 		{
 			i++;
 			while (env)
 			{
-				if (!ft_strncmp(&(token[i]), env->var, ft_findchar(&(token[i]), '"')))
+				q = ft_findchar(&(token[i]), '"');
+				if (d == 0)
+					q = ft_strlen(env->var);
+				// if (!ft_strncmp(&(token[i]), env->var, ft_findchar(&(token[i]), '"')))
+				if (!ft_strncmp(&(token[i]), env->var, q))
 				{
 					ret = ft_strjoin(str, env->key);
 					free(str);
 					str = ret;
-					*y += ft_findchar(&(token[i]), '"') + 1;
-					i += ft_findchar(&(token[i]), '"') - 1;
+					*y += q + 1;
+					i += q - 1;
 					break ;
 				}
 				env = env->next;
 			}
 			if (!ret)
 			{
-				ret = ft_strjoin(str, "");
-				free(str);
-				str = ret;
-				*y += ft_findchar(&(token[i]), '"') + 1;
-				i += ft_findchar(&(token[i]), '"') - 1;
+				q = ft_findchar(&(token[i]), '"');
+				if (d == 0)
+					q = ft_strlen(&(token[i]));
+				*y += q + 1;
+				i += q - 1;
 			}
 		}
 		i++;
@@ -287,7 +294,7 @@ char	removequotes(t_token *token, t_envp *env)
 		if (token->t[i] == '"')
 		{
 			i++;
-			aux[0] = expanddoleta(&(token->t[i]), env, &i);
+			aux[0] = expanddoleta(&(token->t[i]), env, &i, 1);
 			n += ft_strlen(aux[0]) - 1;
 			aux[1] = ft_strjoin(new, aux[0]);
 			free(aux[0]);
@@ -296,7 +303,7 @@ char	removequotes(t_token *token, t_envp *env)
 		}
 		else if(token->t[i] == '$')
 		{
-			aux[0] = expanddoleta(&(token->t[i]), env, &i);
+			aux[0] = expanddoleta(&(token->t[i]), env, &i, 0);
 			n += ft_strlen(aux[0]) - 1;
 			aux[1] = ft_strjoin(new, aux[0]);
 			free(aux[0]);

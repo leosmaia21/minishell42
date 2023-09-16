@@ -6,11 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 15:16:47 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:23:07 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "envp.h"
+#include "libft/libft.h"
 #include "minishell.h"
 
 t_envp	*ft_create_node(char *var, char *key)
@@ -73,6 +74,10 @@ t_envp	*ft_new_var(t_envp *head, char *str)
 	if (ft_change_var(head, key, var))
 		return (head);
 	node = ft_create_node(var, key);
+	if (!ft_strchr(str, '='))
+		node->equal = 1;
+	else
+		node->equal = 0;
 	if (!node) 
 	{
 		free(var);
