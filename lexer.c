@@ -249,7 +249,7 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 				q = ft_findchar(&(token[i]), '"');
 				if (d == 0)
 					q = ft_strlen(&(token[i]));
-				*y += q + 1;
+				*y += q + 2;
 				i += q - 1;
 			}
 		}
