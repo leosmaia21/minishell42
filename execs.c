@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/13 20:01:42 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/18 22:24:02 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ char	*ft_findpath(t_envp *head, char **flags)
 	if (!access(flags[0], F_OK))
 		return (ft_strdup(flags[0]));
 	p = ft_find_value(head, "PATH");
+	if (!p)
+		return(NULL);
 	split = ft_split(p, ':');
 	aux_split = split;
 	while (split)
@@ -62,12 +64,14 @@ int	ft_count_command(t_token *tokens)
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
 	int		pid;
+	int 	fd_stdout;
 
+	fd_stdout = dup(1);
 	if(ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
 		pid = fork();
 	else
 		pid = 0;
-	if (ft_count_command(info->tokens) > 1)
+	if (ft_count_command(info->tokens) > 1 && info->fds[1] == STDOUT_FILENO)
 			info->fds[1] = fd_pipe[1];
 	if (pid == -1)
 		perror(strerror(errno));
@@ -79,14 +83,12 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if(ft_is_builtin(flags) != 0)
 			execve(path, flags, info->envp);
 		else
-		{
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
-			dup2(info->fds[1], 1);
-		}
 	}
-	if (ft_count_command(info->tokens) > 1)
-		close(fd_pipe[1]);
+	if (info->fds[1] != STDOUT_FILENO || ft_count_command(info->tokens) > 1)
+		close(info->fds[1]);
 	waitpid(pid, &info->exit_code, 0);
+	dup2(fd_stdout, 1);
 }
 
 void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
@@ -109,7 +111,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 			execve(path, flags, info->envp);
 		}
 		else
-			ft_exec_builtin(flags, info, 0);
+			ft_exec_builtin(flags, info, 1);
 	}
 	close(fd_pipe[0]);
 	waitpid(pid, &info->exit_code, 0);
@@ -160,12 +162,15 @@ void	ft_main_exec(t_info *info)
 		perror(strerror(errno));
 	while (++info->ordem < pipes)
 	{
+		printf("ahah\n");
 		flags = jointokens(info->tokens, info->ordem);
 		path = ft_findpath(info->tenv, flags);
 		if ((path != NULL) || ft_is_builtin(flags) == 0)
 		{
 			if (ft_process_fd(info))
 			{
+				printf("p%dfdin: %d\n",info->ordem,info->fds[0]);
+				printf("p%dfdout: %d\n",info->ordem,info->fds[1]);
 				if (info->ordem == 0)
 					first_process(fd, flags, info, path);
 				else if (info->ordem == pipes - 1)
@@ -176,9 +181,9 @@ void	ft_main_exec(t_info *info)
 			else
 			{
 				info->flag_stop = 0;
-				info->fds[0]=0;
-				info->fds[1]=1;
 			}
+			info->fds[0]=0;
+			info->fds[1]=1;
 		}
 		else
 			perror(flags[0]);
