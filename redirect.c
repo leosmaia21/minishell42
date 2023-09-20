@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:51:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/18 22:27:42 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:49:49 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int ft_process_heredoc(int i, t_info *info)
 
 int ft_process_input(int i, int fd_input, t_info *info, int fd_heredoc)
 {
-    if (fd_input != info->fds[0])
+    if (fd_input != info->fds[0] && fd_input != 0)
         close(fd_input);
     if (info->tokens[i].type == dredirectL)
     {
@@ -67,7 +67,7 @@ int ft_process_input(int i, int fd_input, t_info *info, int fd_heredoc)
 
 int ft_process_output(int i, int fd, t_info *info)
 {
-    if (fd != info->fds[1])
+    if (fd != info->fds[1] && fd != 1)
         close(fd);
     if (info->tokens[i].type == redirectR)
         fd = open(info->tokens[i + 1].t, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -104,6 +104,8 @@ int ft_process_fd(t_info *info)
         if ((info->tokens[i].type == redirectR) || (info->tokens[i].type == dredirectR))
         {
             info->fds[1] = ft_process_output(i, fd_output, info);
+            if (info->tokens[i + 2].type == pipo)
+                return(erro);
             i = i + 2;
         }
         if ((info->fds[0] == -1) || (info->fds[1] == -1))

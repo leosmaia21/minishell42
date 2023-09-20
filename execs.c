@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/18 22:24:02 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:50:13 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	else
 		pid = 0;
 	if (ft_count_command(info->tokens) > 1 && info->fds[1] == STDOUT_FILENO)
-			info->fds[1] = fd_pipe[1];
+		info->fds[1] = fd_pipe[1];
 	if (pid == -1)
 		perror(strerror(errno));
 	if (pid == 0)
@@ -114,6 +114,8 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 			ft_exec_builtin(flags, info, 1);
 	}
 	close(fd_pipe[0]);
+	if (info->fds[1] != STDOUT_FILENO)
+		close(info->fds[1]);
 	waitpid(pid, &info->exit_code, 0);
 }
 
@@ -162,15 +164,12 @@ void	ft_main_exec(t_info *info)
 		perror(strerror(errno));
 	while (++info->ordem < pipes)
 	{
-		printf("ahah\n");
 		flags = jointokens(info->tokens, info->ordem);
 		path = ft_findpath(info->tenv, flags);
 		if ((path != NULL) || ft_is_builtin(flags) == 0)
 		{
 			if (ft_process_fd(info))
 			{
-				printf("p%dfdin: %d\n",info->ordem,info->fds[0]);
-				printf("p%dfdout: %d\n",info->ordem,info->fds[1]);
 				if (info->ordem == 0)
 					first_process(fd, flags, info, path);
 				else if (info->ordem == pipes - 1)
@@ -180,6 +179,7 @@ void	ft_main_exec(t_info *info)
 			}
 			else
 			{
+				
 				info->flag_stop = 0;
 			}
 			info->fds[0]=0;
