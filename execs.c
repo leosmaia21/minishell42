@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/20 18:50:13 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/20 19:11:08 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,10 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	close(fd_pipe[1]);
 	if (pipe(temp_fd) == -1)
 		perror(strerror(errno));
-	info->fds[0] = fd_pipe[0];
-	info->fds[1] = temp_fd[1];
+	if (info->fds[0] == STDIN_FILENO)
+		info->fds[0] = fd_pipe[0];
+	if (info->fds[1] == STDOUT_FILENO)
+		info->fds[1] = temp_fd[1];
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
