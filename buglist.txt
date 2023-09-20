@@ -4,8 +4,9 @@ EXIT
 ECHO 
     > echo "$OLDPWD"/a esta a comer o ultimo caracter
     > "echo $PWD/a" nao faz nada
-    > echo $USER$PWD imprime um \n. tem que expandir os 2
-
+    > (fixed) echo $USER$PWD imprime um \n. tem que expandir os 2
+    > echo $USERA devia imprimir um \n e esta a expandir a variavel $USER e a concatenar com o a
+     
 EXPORT
     > "export c=" tem que adicionar c="" nas variaveis de ambiente
     > se a variavel do export comecar com um numero, tem que dar erro
@@ -19,10 +20,11 @@ LEXER / Parsing
     > >a echo >b >c ola > c susana --> devia fazer echo ola susana para o ficheiro c (putas, abilio)
     > "ls >" devia dar erro de Parsing
     > " | ls" devia dar erro de Parsing 
+    > "\ls" devia dar erro de Parsing 
 
 Redirects
-    > redirects nos pipes intermedios nao estao a 100%
-    > redirects sem comandos nao funcionam
+    > (fixed) redirects nos pipes intermedios nao estao a 100%
+    > (fixed) redirects sem comandos nao funcionam
     > redirects nos builtins estao com problemas
     > 
 

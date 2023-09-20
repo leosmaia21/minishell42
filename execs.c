@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/20 19:11:08 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/20 22:35:33 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ int	ft_count_command(t_token *tokens)
 	int	i;
 
 	i = -1;
-	count = 0;
+	count = 1;
 	while (++i < tokens[0].total)
 	{
-		if (tokens[i].type == command)
+		if (tokens[i].type == pipo)
 			count++;
 	}
 	return (count);
@@ -97,6 +97,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 
 	if (info->fds[0] == STDIN_FILENO)
 		info->fds[0] = fd_pipe[0];
+	
 	pid = fork();
 	if (pid == -1)
 		perror(strerror(errno));
@@ -167,30 +168,34 @@ void	ft_main_exec(t_info *info)
 	while (++info->ordem < pipes)
 	{
 		flags = jointokens(info->tokens, info->ordem);
-		path = ft_findpath(info->tenv, flags);
-		if ((path != NULL) || ft_is_builtin(flags) == 0)
+		if (flags)
 		{
-			if (ft_process_fd(info))
+			path = ft_findpath(info->tenv, flags);
+			if ((path != NULL) || ft_is_builtin(flags) == 0)
 			{
-				if (info->ordem == 0)
-					first_process(fd, flags, info, path);
-				else if (info->ordem == pipes - 1)
-					second_process(fd, flags, info, path);
-				else
-					midle_process(fd, flags, info, path);
+				if (ft_process_fd(info))
+				{
+					if (info->ordem == 0)
+						first_process(fd, flags, info, path);
+					else if (info->ordem == pipes - 1)
+						second_process(fd, flags, info, path);
+					else
+						midle_process(fd, flags, info, path);
+				}
 			}
 			else
 			{
-				
-				info->flag_stop = 0;
+				ft_process_fd(info);
+				if (ft_strcmp(flags[0],"end") != 0)
+						perror(flags[0]);
 			}
-			info->fds[0]=0;
-			info->fds[1]=1;
+			ft_freestr(path);
+			ft_freedoublepointer(flags);
 		}
 		else
-			perror(flags[0]);
-		if (path)
-			free(path);
-		ft_freedoublepointer(flags);
+			ft_process_fd(info);
+		info->flag_stop = 0;
+		info->fds[0]=0;
+		info->fds[1]=1;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:51:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/20 19:14:20 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/20 22:31:56 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int ft_get_id_pipe(t_token *tokens, int idx)
 {
     int i;
+    
     i = -1;
 	while (idx > 0)
 	{
@@ -106,7 +107,6 @@ int ft_process_fd(t_info *info)
             info->fds[1] = ft_process_output(i, fd_output, info);
             if (info->tokens[i + 2].type == pipo)
                 return(erro);
-            //i = i + 2;
             i++;
         }
         if ((info->fds[0] == -1) || (info->fds[1] == -1))

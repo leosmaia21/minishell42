@@ -22,21 +22,29 @@ char	**jointokens(t_token *tokens, int idx)
 	char	**ret;
 
 	i = -1;
-	while (idx >= 0)
+	while (idx > 0)
 	{
-		while (tokens[++i].type != command)
+		while (tokens[++i].type != pipo)
 			continue ;
-		if (tokens[i].type == command)
+		if (tokens[i].type == pipo)
 			idx--;
+	}
+	while (tokens[++i].type != command)
+	{
+		if((tokens[i].type == pipo) || (i == tokens[0].total))
+			return(NULL);
 	}
 	str[0] = ft_strdup(tokens[i].t);
 	i++;
-	while (tokens[i].type == flag)
+	while ((tokens[i].type != pipo) && (i < tokens[0].total))
 	{
-		str[1] = ft_strjoin(str[0], "]");
-		free(str[0]);
-		str[0] = ft_strjoin(str[1], tokens[i].t);
-		free(str[1]);
+		if (tokens[i].type == flag)
+		{	
+			str[1] = ft_strjoin(str[0], "]");
+			free(str[0]);
+			str[0] = ft_strjoin(str[1], tokens[i].t);
+			free(str[1]);
+		}
 		i++;
 	}
 	ret = ft_split(str[0], ']');
