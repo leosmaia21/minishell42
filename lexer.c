@@ -249,7 +249,7 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 				q = ft_findchar(&(token[i]), '"');
 				if (d == 0)
 					q = ft_strlen(&(token[i]));
-				*y += q + 2;
+				*y += q + 1;
 				i += q - 1;
 			}
 		}
@@ -322,6 +322,8 @@ char	removequotes(t_token *token, t_envp *env)
 			ft_strlcpy(aux[3], new, ft_strlen(new) + 1);
 			free(new);
 			new = aux[3];
+			if (n < 0)
+				n = 0;
 			new[n++] = token->t[i];
 		}
 	}
