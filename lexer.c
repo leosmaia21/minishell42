@@ -193,15 +193,20 @@ void	expandoletafree(t_token *token, char *ret, int i, char *str)
 	token->t = str;
 }
 
-int	ft_findchar(char *str, char c)
+int	ft_findchar(char *str, char *c)
 {
 	int	i;
+	int	k;
 
 	i = -1;
-	while (++i < ft_strlen(str))
-		if (str[i] == c)
-			return (i);
-	return (ft_strlen(str));
+	while (++i <= ft_strlen(str))
+	{
+		k = -1;
+		while (++k <= ft_strlen(c))
+			if (str[i] == c[k])
+				return (i);
+	}
+	return (0);
 }
 
 char	*expanddoleta(char *token, t_envp *env, int *y, int d)
@@ -211,35 +216,44 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 	int		i;
 	int 	n;
 	char	*ret;
+	t_envp	*cabeca;
 	int q;
 
 	str = ft_calloc(ft_strlen(token) + 1, 1);
 	ret = 0;
 	i = 0;
 	n = 0;
+	cabeca = env;
 	while (token[i] && token[i] != '"')
 	{
 		if (token[i] != '$')
 		{
 			aux = ft_calloc(ft_strlen(&token[i]) + 1, 1);
-			while (token[i] && token[i] != '$')
+			while (token[i] && token[i] != '"' && token[i] != '$')
+			{
 				aux[n++] = token[i++];
+				*y += 1;
+			}
 			ret = ft_strjoin(str, aux);
 			free(str);
 			free(aux);
 			str = ret;
-			*y += ft_findchar(&(token[i]), '"') + 1;
-			if (token[i] == 0)
+			// *y += ft_findchar(&(token[i]), '"') + 1;
+			if (token[i] == 0 || token[i] == '$' || token[i] == '"')
+			{
+				if (token[i] == '$')
+					*y -= 1;
 				break ;
+			}
 		}
 		else
 		{
 			i++;
 			while (env)
 			{
-				q = ft_findchar(&(token[i]), '"');
+				q = ft_findchar(&(token[i]), "\"$\0");
 				if (d == 0)
-					q = ft_strlen(env->var);
+					q = ft_findchar(&(token[i]), "$\0");
 				// if (!ft_strncmp(&(token[i]), env->var, ft_findchar(&(token[i]), '"')))
 				if (!ft_strncmp(&(token[i]), env->var, q))
 				{
@@ -252,11 +266,13 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 				}
 				env = env->next;
 			}
+			env = cabeca;
 			if (!ret)
 			{
-				q = ft_findchar(&(token[i]), '"');
+				q = ft_findchar(&(token[i]), "\"$\0"); 
 				if (d == 0)
-					q = ft_strlen(&(token[i]));
+					q = ft_findchar(&(token[i]), "$\0");
+					// q = ft_strlen(&(token[i]));
 				*y += q + 1;
 				i += q - 1;
 			}
@@ -303,7 +319,7 @@ char	removequotes(t_token *token, t_envp *env)
 		{
 			i++;
 			aux[0] = expanddoleta(&(token->t[i]), env, &i, 1);
-			n += ft_strlen(aux[0]) - 1;
+			n += ft_strlen(aux[0]);
 			aux[1] = ft_strjoin(new, aux[0]);
 			free(aux[0]);
 			free(new);
