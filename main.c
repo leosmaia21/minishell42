@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/15 18:57:55 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/22 21:51:49 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strlen(info.str) > 0)
 		{
 			info.tokens = dividetokens(info.str, info.tenv);
+			if (!info.tokens)
+				continue;
  			changetokentypes(info.tokens);
 			if (parser(info.tokens, &info) == 0)
 			{

@@ -375,6 +375,8 @@ t_token	*dividetokens(char *str, t_envp *env)
 	{
 		while (str[i] && str[i] == ' ')
 			i++;
+		if (str[i] == '\0')
+			return(NULL);
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
 		else if (str[i] == '"')

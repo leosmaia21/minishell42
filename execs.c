@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/20 22:35:33 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/22 21:20:01 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,18 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	if (pid == 0)
 	{
 		close(fd_pipe[0]);
-		dup2(info->fds[0], STDIN_FILENO);
 		dup2(info->fds[1], STDOUT_FILENO);
 		if(ft_is_builtin(flags) != 0)
+		{
+			dup2(info->fds[0], STDIN_FILENO);
 			execve(path, flags, info->envp);
+		}
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
 	}
 	if (info->fds[1] != STDOUT_FILENO || ft_count_command(info->tokens) > 1)
 		close(info->fds[1]);
-	waitpid(pid, &info->exit_code, 0);
+	//waitpid(pid, &info->exit_code, 0);
 	dup2(fd_stdout, 1);
 }
 
@@ -117,7 +119,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	close(fd_pipe[0]);
 	if (info->fds[1] != STDOUT_FILENO)
 		close(info->fds[1]);
-	waitpid(pid, &info->exit_code, 0);
+	//waitpid(pid, &info->exit_code, 0);
 }
 
 void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
@@ -148,7 +150,7 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
 	}
-	waitpid(pid, &info->exit_code, 0);
+	//waitpid(pid, &info->exit_code, 0);
 	if (info->fds[1] == temp_fd[1])
 		dup2(temp_fd[0], fd_pipe[0]);
 	close(temp_fd[1]);
@@ -175,6 +177,7 @@ void	ft_main_exec(t_info *info)
 			{
 				if (ft_process_fd(info))
 				{
+					
 					if (info->ordem == 0)
 						first_process(fd, flags, info, path);
 					else if (info->ordem == pipes - 1)
@@ -198,4 +201,6 @@ void	ft_main_exec(t_info *info)
 		info->fds[0]=0;
 		info->fds[1]=1;
 	}
+	while (waitpid(0, &info->exit_code, 0) > 0)
+		continue ;
 }
