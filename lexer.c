@@ -330,6 +330,8 @@ char	removequotes(t_token *token, t_envp *env)
 			ft_strlcpy(aux[3], new, ft_strlen(new) + 1);
 			free(new);
 			new = aux[3];
+			if (n < 0)
+				n = 0;
 			new[n++] = token->t[i];
 		}
 	}
