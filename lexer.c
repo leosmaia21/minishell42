@@ -359,14 +359,8 @@ char	removequotes(t_token *token, t_envp *env)
 void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 {
 	int		i;
-	int		c;
-	int		doublequotes;
-	int		singlequotes;
 
 	i = -1;
-	c = -1;
-	doublequotes = 0;
-	singlequotes = 0;
 	while (++i < t_index)
 	{
 		tokens[i].total = t_index;
