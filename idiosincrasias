@@ -1,0 +1,7 @@
+export a:
+	env -- nada	
+	export : a
+
+export b=:
+	env: b=
+	export	env: b=""

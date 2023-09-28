@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/14 15:53:46 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/22 21:51:49 by bde-sous         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 main.c												:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: bde-sous <bde-sous@student.42porto.com>	+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2023/07/14 15:53:46 by ledos-sa		   #+#	  #+#			  */
+/*	 Updated: 2023/09/28 22:59:19 by ledos-sa		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "builtins.h"
@@ -81,7 +81,7 @@ int	parser(t_token *tokens, t_info *info)
 
 int	main(int argc, char **argv, char **envp)
 {
-    t_info 	info;
+	t_info	info;
 	// char *path = NULL;
 	//char **flags;
 
@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **envp)
 			info.tokens = dividetokens(info.str, info.tenv);
 			if (!info.tokens)
 				continue;
- 			changetokentypes(info.tokens);
+			changetokentypes(info.tokens);
 			if (parser(info.tokens, &info) == 0)
 			{
 				printf("Muito bom input!\n");
@@ -110,17 +110,17 @@ int	main(int argc, char **argv, char **envp)
 			// t_token *tokens = info.tokens;
 			// for (int i = 0; i < tokens[0].total; i++) 
 			// {
-			// 	printf("char *: %s ", tokens[i].t);
-			// 	printf("total: %d ", tokens[i].total);
-			// 	printf("index: %d ", tokens[i].index);
-			// 	printf("type: %s \n", get_type(tokens[i].type));
+			//	printf("char *: %s ", tokens[i].t);
+			//	printf("total: %d ", tokens[i].total);
+			//	printf("index: %d ", tokens[i].index);
+			//	printf("type: %s \n", get_type(tokens[i].type));
 			// }
 			info.ordem = -1;
 			info.fds[0] = 0;
 			info.fds[1] = 1;
 			info.flag_stop = 0;
-            ft_main_exec(&info);
-            // ft_single_exec(flags, info.envp , path);
+			ft_main_exec(&info);
+			// ft_single_exec(flags, info.envp , path);
 			//printf("%s\n", ft_find_value(ev,"PWD"));
 			//free(path);
 			ft_freetokens(info.tokens);

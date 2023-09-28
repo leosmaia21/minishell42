@@ -6,13 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/23 16:13:25 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/28 23:05:45 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include <string.h>
 #include <unistd.h>
 
 static int	echoval(char *info)
@@ -147,6 +148,11 @@ void	exitsusana(char **flags, t_info *info)
 
 void	exportsusana(char **info, t_envp *env)
 {
+	if (ft_isdigit(info[1][0]) == 1)
+	{
+		printf("export: `%s': not a valid identifier\n", info[1]);
+		return ;
+	}
 	if (info[1])
 		ft_new_var(env, info[1]);
 	else
@@ -186,7 +192,7 @@ void	env(char **info, t_envp *envp)
 		{
 			if (ft_strlen(envp->key))
 				printf("%s=%s\n", envp->var, envp->key);
-			else if (envp->equal == 0)
+			else if (envp->equal == 1)
 				printf("%s=\n", envp->var);
 			envp = envp->next;
 		}

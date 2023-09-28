@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/16 18:23:07 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:57:16 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_add_node(t_envp **head, t_envp *node)
 	}
 }
 
-int	ft_change_var(t_envp *head, char *key, char *var)
+int	ft_change_var(t_envp *head, char *key, char *var, char *str)
 {
 	while (head != NULL)
 	{
@@ -56,7 +56,10 @@ int	ft_change_var(t_envp *head, char *key, char *var)
 			head->key = ft_strdup(key);
 			free(var);
 			free(key);
-			return (1);
+			head->equal = 1;
+			if (!ft_strchr(str, '='))
+				head->equal = 0;
+		return (1);
 		}
 		head = head->next;
 	}
@@ -71,12 +74,11 @@ t_envp	*ft_new_var(t_envp *head, char *str)
 
 	var = ft_substr(str, 0, ft_strchr(str, '=') - str);
 	key = ft_substr(str, (ft_strchr(str, '=') - str) + 1, ft_strlen(str));
-	if (ft_change_var(head, key, var))
+	if (ft_change_var(head, key, var, str))
 		return (head);
 	node = ft_create_node(var, key);
+	node->equal = 1;
 	if (!ft_strchr(str, '='))
-		node->equal = 1;
-	else
 		node->equal = 0;
 	if (!node) 
 	{

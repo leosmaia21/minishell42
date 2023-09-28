@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/16 18:21:45 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/28 22:51:51 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	signals(void);
 void	handle_sigint(int signum);
 t_envp	*ft_convert_envp(char **envp);
 void	ft_add_node(t_envp **head, t_envp *node);
-int		ft_change_var(t_envp *head, char *key, char *var);
+int		ft_change_var(t_envp *head, char *key, char *var, char *str);
 t_envp	*ft_create_node(char *var, char *key);
 void	printEnvpList(t_envp *head);
 t_envp	*ft_new_var(t_envp *head, char *str);
