@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 12:54:24 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/07/15 14:05:21 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 14:20:25 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	signals(void)
 
 void	handle_sigint(int signum)
 {
-    (void)signum;
+	(void) signum;
 	rl_replace_line("", 0);
 	printf("\n");
 	rl_on_new_line();

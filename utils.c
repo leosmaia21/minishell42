@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:41:20 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/08/10 14:43:08 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 14:19:44 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,3 @@ char	*readfromstdin(void)
 	}
 	return (str);
 }
-
