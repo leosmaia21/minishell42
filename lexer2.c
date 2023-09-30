@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:36:18 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:50:20 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 15:06:25 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 char	**jointokens(t_token *tokens, int idx)
 {
 	int		i;
-	char	*str[2];
+	char	*str[3];
 	char	**ret;
 
 	i = -1;
+    str[2] = ft_calloc(1, 10);
+    str[2][0] = 27;
 	while (idx > 0)
 	{
 		while (tokens[++i].type != pipo)
@@ -39,14 +41,14 @@ char	**jointokens(t_token *tokens, int idx)
 	{
 		if (tokens[i].type == flag)
 		{
-			str[1] = ft_strjoin(str[0], "]");
+			str[1] = ft_strjoin(str[0], str[2]);
 			free(str[0]);
 			str[0] = ft_strjoin(str[1], tokens[i].t);
 			free(str[1]);
 		}
 		i++;
 	}
-	ret = ft_split(str[0], ']');
+	ret = ft_split(str[0], str[2][0]);
 	free(str[0]);
 	return (ret);
 }
