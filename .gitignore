@@ -2,5 +2,5 @@
 libft/*.o
 **/*.o
 **/*.a
-./.vscode
+.vscode/
 minishell

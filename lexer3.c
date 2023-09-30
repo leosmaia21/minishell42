@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:36:16 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:37:32 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 14:50:34 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,55 +72,51 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 {
 	char	*str;
 	char	*aux;
-	int		i;
-	int 	n;
+	int		i[10];
 	char	*ret;
 	t_envp	*cabeca;
-	int q;
 
 	str = ft_calloc(ft_strlen(token) + 1, 1);
 	ret = 0;
-	i = 0;
-	n = 0;
+	i[0] = 0;
+	i[2] = 0;
 	cabeca = env;
-	while (token[i] && token[i] != '"')
+	while (token[i[0]] && token[i[0]] != '"')
 	{
-		if (token[i] != '$')
+		if (token[i[0]] != '$')
 		{
-			aux = ft_calloc(ft_strlen(&token[i]) + 1, 1);
-			while (token[i] && token[i] != '"' && token[i] != '$')
+			aux = ft_calloc(ft_strlen(&token[i[0]]) + 1, 1);
+			while (token[i[0]] && token[i[0]] != '"' && token[i[0]] != '$')
 			{
-				aux[n++] = token[i++];
+				aux[i[2]++] = token[i[0]++];
 				*y += 1;
 			}
 			ret = ft_strjoin(str, aux);
 			free(str);
 			free(aux);
 			str = ret;
-			// *y += ft_findchar(&(token[i]), '"') + 1;
-			if (token[i] == 0 || token[i] == '$' || token[i] == '"')
+			if (token[i[0]] == 0 || token[i[0]] == '$' || token[i[0]] == '"')
 			{
-				if (token[i] == '$')
+				if (token[i[0]] == '$')
 					*y -= 1;
 				break ;
 			}
 		}
 		else
 		{
-			i++;
+			i[0]++;
 			while (env)
 			{
-				q = ft_findchar(&(token[i]), "\"$\0");
+				i[1] = ft_findchar(&(token[i[0]]), "\"$\0");
 				if (d == 0)
-					q = ft_findchar(&(token[i]), "$\0");
-				// if (!ft_strncmp(&(token[i]), env->var, ft_findchar(&(token[i]), '"')))
-				if (!ft_strncmp(&(token[i]), env->var, q))
+					i[1] = ft_findchar(&(token[i[0]]), "$\0");
+				if (!ft_strncmp(&(token[i[0]]), env->var, i[1]))
 				{
 					ret = ft_strjoin(str, env->key);
 					free(str);
 					str = ret;
-					*y += q + 1;
-					i += q - 1;
+					*y += i[1] + 1;
+					i[0] += i[1] - 1;
 					break ;
 				}
 				env = env->next;
@@ -128,16 +124,14 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 			env = cabeca;
 			if (!ret)
 			{
-				q = ft_findchar(&(token[i]), "\"$\0"); 
+				i[1] = ft_findchar(&(token[i[0]]), "\"$\0"); 
 				if (d == 0)
-					q = ft_findchar(&(token[i]), "$\0");
-					// q = ft_strlen(&(token[i]));
-				*y += q + 1;
-				i += q - 1;
+					i[1] = ft_findchar(&(token[i[0]]), "$\0");
+				*y += i[1] + 1;
+				i[0] += i[1] - 1;
 			}
 		}
-		i++;
+		i[0]++;
 	}
 	return (str);
 }
-
