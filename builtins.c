@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 12:40:50 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 15:48:58 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	pwd(char **info)
 
 void	exportsusana(char **info, t_envp *env)
 {
-	if (ft_isdigit(info[1][0]) == 1)
+	if (info[1] != 0 && ft_isdigit(info[1][0]) == 1)
 	{
 		printf("export: `%s': not a valid identifier\n", info[1]);
 		return ;

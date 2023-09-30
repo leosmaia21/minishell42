@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:34:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:49:26 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 15:18:22 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ t_token	*dividetokens(char *str, t_envp *env)
 		while (str[i] && str[i] == ' ')
 			i++;
 		if (str[i] == '\0')
-			return (NULL);
+			break ;
 		if (str[i] == '<' || str[i] == '>')
 			tokens[t_index++].t = copywhileequal(&str[i], str[i]);
 		else if (str[i] == '"')
