@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/30 14:34:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 15:18:22 by ledos-sa         ###   ########.fr       */
+/*   Created: 2023/09/30 17:27:12 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/09/30 17:27:13 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,57 +33,61 @@ void	auxremovequotes(t_token *token, char *c, int *q)
 			(*q)++;
 }
 
+void	removea(t_token *token, t_envp *env, int *i, char **aux)
+{
+	if (token->t[i[0]] == '$')
+	{
+		aux[0] = expanddoleta(&(token->t[i[0]]), env, &i[0], 0);
+		i[1] += ft_strlen(aux[0]) - 1;
+		aux[1] = ft_strjoin(aux[9], aux[0]);
+		free(aux[0]);
+		free(aux[9]);
+		aux[9] = aux[1];
+	}
+	else if (token->t[i[0]] == '\'')
+	{
+		i[0]++;
+		while (token->t[i[0]] != '\'')
+			aux[9][i[1]++] = token->t[i[0]++];
+	}
+	else
+	{
+		aux[3] = ft_calloc(ft_strlen(aux[9]) + 100, 1);
+		ft_strlcpy(aux[3], aux[9], ft_strlen(aux[9]) + 1);
+		free(aux[9]);
+		aux[9] = aux[3];
+		if (i[1] < 0)
+			i[1] = 0;
+		aux[9][i[1]++] = token->t[i[0]];
+	}
+}
+
 char	removequotes(t_token *token, t_envp *env)
 {
-	int		i;
-	int		n;
-	char	*new;
+	int		i[10];
 	char	*aux[10];
 
-	i = -1;
-	n = 0;
-	new = ft_calloc(ft_strlen(token->t) + 1, 1);
-	i = -1;
-	while (++i < ft_strlen(token->t))
+	i[0] = -1;
+	i[1] = 0;
+	aux[9] = ft_calloc(ft_strlen(token->t) + 1, 1);
+	i[0] = -1;
+	while (++i[0] < ft_strlen(token->t))
 	{
-		if (token->t[i] == '"')
+		if (token->t[i[0]] == '"')
 		{
-			i++;
-			aux[0] = expanddoleta(&(token->t[i]), env, &i, 1);
-			n += ft_strlen(aux[0]);
-			aux[1] = ft_strjoin(new, aux[0]);
+			i[0]++;
+			aux[0] = expanddoleta(&(token->t[i[0]]), env, &i[0], 1);
+			i[1] += ft_strlen(aux[0]);
+			aux[1] = ft_strjoin(aux[9], aux[0]);
 			free(aux[0]);
-			free(new);
-			new = aux[1];
+			free(aux[9]);
+			aux[9] = aux[1];
 		}
-		else if (token->t[i] == '$')
-		{
-			aux[0] = expanddoleta(&(token->t[i]), env, &i, 0);
-			n += ft_strlen(aux[0]) - 1;
-			aux[1] = ft_strjoin(new, aux[0]);
-			free(aux[0]);
-			free(new);
-			new = aux[1];
-		}
-		else if (token->t[i] == '\'')
-		{
-			i++;
-			while (token->t[i] != '\'')
-				new[n++] = token->t[i++];
-		}
-		else
-		{
-			aux[3] = ft_calloc(ft_strlen(new) + 100, 1);
-			ft_strlcpy(aux[3], new, ft_strlen(new) + 1);
-			free(new);
-			new = aux[3];
-			if (n < 0)
-				n = 0;
-			new[n++] = token->t[i];
-		}
+		else 
+			removea(token, env, i, aux);
 	}
 	free(token->t);
-	token->t = new;
+	token->t = aux[9];
 	return (0);
 }
 
