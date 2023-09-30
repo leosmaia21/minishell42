@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:36:16 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 18:55:36 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/30 22:11:47 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 			{
 				i[1] = ft_findchar(&(token[i[0]]), "\"$\0"); 
 				if (d == 0)
-					i[1] = ft_findchar(&(token[i[0]]), "$\0");
+					i[1] = ft_findchar(&(token[i[0]]), "'$\0");
 				*y += i[1] + 1;
 				i[0] += i[1] - 1;
 			}
