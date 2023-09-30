@@ -6,37 +6,17 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 17:59:16 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 18:07:30 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/30 19:33:47 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include "structs.h"
 
-char	**jointokens(t_token *tokens, int idx)
+void jointokens_aux(int i, t_token *tokens, char **str)
 {
-	int		i;
-	char	*str[3];
-	char	**ret;
-
-	i = -1;
-	str[2] = ft_calloc(1, 10);
-	str[2][0] = 27;
-	while (idx > 0)
-	{
-		while (tokens[++i].type != pipo)
-			continue ;
-		if (tokens[i].type == pipo)
-			idx--;
-	}
-	while (tokens[++i].type != command)
-	{
-		if ((tokens[i].type == pipo) || (i == tokens[0].total))
-			return (NULL);
-	}
-	str[0] = ft_strdup(tokens[i].t);
-	i++;
 	while ((tokens[i].type != pipo) && (i < tokens[0].total))
 	{
 		if (tokens[i].type == flag)
@@ -48,7 +28,63 @@ char	**jointokens(t_token *tokens, int idx)
 		}
 		i++;
 	}
-	ret = ft_split(str[0], str[2][0]);
+}
+
+// char	**jointokens(t_token *tokens, int idx)
+// {
+// 	int		i;
+// 	char	*str[3];
+// 	char	**ret;
+//
+// 	i = -1;
+// 	// str[2] = ft_calloc(1, 10);
+// 	// str[2][0] = 27;
+// 	while (idx > 0)
+// 	{
+// 		while (tokens[++i].type != pipo)
+// 			continue ;
+// 		if (tokens[i].type == pipo)
+// 			idx--;
+// 	}
+// 	while (tokens[++i].type != command)
+// 	{
+// 		if ((tokens[i].type == pipo) || (i == tokens[0].total))
+// 			return (NULL);
+// 	}
+// 	str[0] = ft_strdup(tokens[i].t);
+// 	i++;
+// 	jointokens_aux(i, tokens, str);
+// 	ret = ft_split(str[0], '[');
+// 	free(str[0]);
+// 	return (ret);
+// }
+
+
+char	**jointokens(t_token *tokens, int idx)
+{
+	int		i;
+	char	*str[2];
+	char	**ret;
+
+	i = -1;
+	while (idx >= 0)
+	{
+		while (tokens[++i].type != command)
+			continue ;
+		if (tokens[i].type == command)
+			idx--;
+	}
+	str[0] = ft_strdup(tokens[i].t);
+	i++;
+	while (tokens[i].type == flag)
+	{
+		str[1] = ft_strjoin(str[0], "]");
+		free(str[0]);
+		str[0] = ft_strjoin(str[1], tokens[i].t);
+		free(str[1]);
+		i++;
+	}
+	ret = ft_split(str[0], ']');
 	free(str[0]);
 	return (ret);
 }

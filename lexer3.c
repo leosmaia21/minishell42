@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:36:16 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:50:34 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 18:55:36 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 	cabeca = env;
 	while (token[i[0]] && token[i[0]] != '"')
 	{
+		if (token[i[0]] == '\'')
+		{
+			(*y)--;
+			break ;
+		}
 		if (token[i[0]] != '$')
 		{
 			aux = ft_calloc(ft_strlen(&token[i[0]]) + 1, 1);
@@ -107,9 +112,9 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 			i[0]++;
 			while (env)
 			{
-				i[1] = ft_findchar(&(token[i[0]]), "\"$\0");
+				i[1] = ft_findchar(&(token[i[0]]), "\"$\0'");
 				if (d == 0)
-					i[1] = ft_findchar(&(token[i[0]]), "$\0");
+					i[1] = ft_findchar(&(token[i[0]]), "'$\0'");
 				if (!ft_strncmp(&(token[i[0]]), env->var, i[1]))
 				{
 					ret = ft_strjoin(str, env->key);

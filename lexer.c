@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 17:27:12 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 17:27:13 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/09/30 20:46:54 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	removea(t_token *token, t_envp *env, int *i, char **aux)
 	if (token->t[i[0]] == '$')
 	{
 		aux[0] = expanddoleta(&(token->t[i[0]]), env, &i[0], 0);
-		i[1] += ft_strlen(aux[0]) - 1;
+		i[1] += ft_strlen(aux[0]);
 		aux[1] = ft_strjoin(aux[9], aux[0]);
 		free(aux[0]);
 		free(aux[9]);
@@ -47,8 +47,14 @@ void	removea(t_token *token, t_envp *env, int *i, char **aux)
 	else if (token->t[i[0]] == '\'')
 	{
 		i[0]++;
+		aux[8] = ft_calloc(ft_strlen(aux[9]) + ft_strlen(token->t) + 100, 1);
+		ft_strlcpy(aux[8], aux[9], ft_strlen(aux[9]) + 1);
+		free(aux[9]);
+		aux[9] = aux[8];
 		while (token->t[i[0]] != '\'')
+		{
 			aux[9][i[1]++] = token->t[i[0]++];
+		}
 	}
 	else
 	{
