@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execs.h                                            :+:      :+:    :+:   */
+/*   execs3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/30 15:55:12 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 17:41:14 by bde-sous         ###   ########.fr       */
+/*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
+/*   Updated: 2023/09/30 17:30:28 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECS_H
-# define EXECS_H
+#include "execs.h"
+#include "lexer.h"
 
-# include "minishell.h"
+int	first_process_aux(char **flags, t_info *info, int fd_pipe[2])
+{
+	int	pid;
 
-int		ft_envlstsize(t_envp *lst);
-int		ft_count_command(t_token *tokens);
-void	ft_close_double_fd(int a, int b);
-void	ft_midle_aux(int fd_pipe[2], int temp_fd[2], t_info *info);
-int		first_process_aux(char **flags, t_info *info, int fd_pipe[2]);
-#endif
+	if (ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
+		pid = fork();
+	else
+		pid = 0;
+	if (ft_count_command(info->tokens) > 1 && info->fds[1] == STDOUT_FILENO)
+		info->fds[1] = fd_pipe[1];
+	return (pid);
+}

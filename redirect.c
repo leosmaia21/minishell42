@@ -6,26 +6,11 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:51:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:28:10 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 17:09:29 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "redirect.h"
-
-int	ft_get_id_pipe(t_token *tokens, int idx)
-{
-	int	i;
-
-	i = -1;
-	while (idx > 0)
-	{
-		while (tokens[++i].type != pipo)
-			continue ;
-		if (tokens[i].type == pipo)
-			idx--;
-	}
-	return (i);
-}
 
 int	ft_process_heredoc(int i, t_info *info)
 {
@@ -82,6 +67,35 @@ int	ft_process_output(int i, int fd, t_info *info)
 	return (fd);
 }
 
+int	ft_pre_preocess_fd(t_info *i, int fd_input, int fd_output, int fd_heredoc)
+{
+	int	j;
+	int	erro;
+
+	erro = 1;
+	j = ft_get_id_pipe(i->tokens, i->ordem);
+	while ((++j < i->tokens[0].total) && (i->tokens[j].type != pipo) && erro)
+	{
+		if ((i->tokens[j].type == redirectL) || \
+			(i->tokens[j].type == dredirectL))
+		{
+			i->fds[0] = ft_process_input(j, fd_input, i, fd_heredoc);
+			j++;
+		}
+		if ((i->tokens[j].type == redirectR) || \
+			(i->tokens[j].type == dredirectR))
+		{
+			i->fds[1] = ft_process_output(j, fd_output, i);
+			if (i->tokens[j + 2].type == pipo)
+				return (erro);
+			j++;
+		}
+		if ((i->fds[0] == -1) || (i->fds[1] == -1))
+			erro = 0;
+	}
+	return (erro);
+}
+
 int	ft_process_fd(t_info *info)
 {
 	int	fd_input;
@@ -95,22 +109,6 @@ int	ft_process_fd(t_info *info)
 	fd_input = info->fds[0];
 	fd_output = info->fds[1];
 	fd_heredoc = ft_process_heredoc(i, info);
-	while ((++i < info->tokens[0].total) && (info->tokens[i].type != pipo) && erro)
-	{
-		if ((info->tokens[i].type == redirectL) || (info->tokens[i].type == dredirectL))
-		{
-			info->fds[0] = ft_process_input(i, fd_input, info, fd_heredoc);
-			i++;
-		}
-		if ((info->tokens[i].type == redirectR) || (info->tokens[i].type == dredirectR))
-		{
-			info->fds[1] = ft_process_output(i, fd_output, info);
-			if (info->tokens[i + 2].type == pipo)
-				return (erro);
-			i++;
-		}
-		if ((info->fds[0] == -1) || (info->fds[1] == -1))
-			erro = 0;
-	}
+	erro = ft_pre_preocess_fd(info, fd_input, fd_output, fd_heredoc);
 	return (erro);
 }

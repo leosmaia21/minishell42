@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 14:17:55 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 17:28:33 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	int		fd_stdout;
 
 	fd_stdout = dup(1);
-	if (ft_is_builtin(flags) != 0 || ft_count_command(info->tokens) > 1)
-		pid = fork();
-	else
-		pid = 0;
-	if (ft_count_command(info->tokens) > 1 && info->fds[1] == STDOUT_FILENO)
-		info->fds[1] = fd_pipe[1];
+	pid = first_process_aux(flags, info, fd_pipe);
 	if (pid == -1)
 		perror(strerror(errno));
 	if (pid == 0)

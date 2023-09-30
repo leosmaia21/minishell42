@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 16:41:20 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 14:19:44 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 17:08:12 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,19 @@ char	*readfromstdin(void)
 		n++;
 	}
 	return (str);
+}
+
+int	ft_get_id_pipe(t_token *tokens, int idx)
+{
+	int	i;
+
+	i = -1;
+	while (idx > 0)
+	{
+		while (tokens[++i].type != pipo)
+			continue ;
+		if (tokens[i].type == pipo)
+			idx--;
+	}
+	return (i);
 }

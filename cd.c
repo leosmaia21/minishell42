@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 12:30:35 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 12:42:08 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 17:52:48 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ static char	*cdaux(char **info, t_envp *env, char *saux)
 	return (ret);
 }
 
+void	cd_process_node(t_envp *node, t_envp *env, char *var)
+{
+	if (node)
+	{
+		free(node->key);
+		node->key = getcwd(0, 0);
+	}
+	else
+		ft_add_node(&env, ft_create_node(var, getcwd(0, 0)));
+}
+
 void	cd(char **info, t_envp *env)
 {
 	char	*saux;
@@ -51,22 +62,10 @@ void	cd(char **info, t_envp *env)
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
 	path = cdaux(info, env, saux);
 	node = tnode(env, "OLDPWD");
-	if (node)
-	{
-		free(node->key);
-		node->key = getcwd(0, 0);
-	}
-	else
-		ft_add_node(&env, ft_create_node(ft_strdup("OLDPWD"), getcwd(0, 0)));
+	cd_process_node(node, env, ft_strdup("OLDPWD"));
 	node = tnode(env, "PWD");
 	if (chdir(path) != 0)
 		perror("cd");
 	free(path);
-	if (node)
-	{
-		free(node->key);
-		node->key = getcwd(0, 0);
-	}
-	else
-		ft_add_node(&env, ft_create_node("PWD", getcwd(0, 0)));
+	cd_process_node(node, env, "PWD");
 }

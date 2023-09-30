@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 12:46:08 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:02:35 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 17:40:50 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,22 @@ t_envp	*ft_new_var(t_envp *head, char *str)
 	return (head);
 }
 
+void	ft_convert_envp_aux(char *var, char *key, t_envp *head)
+{
+	t_envp	*node;
+
+	free(var);
+	free(key);
+	while (head != NULL) 
+	{
+		node = head;
+		head = head->next;
+		free(node->var);
+		free(node->key);
+		free(node);
+	}
+}
+
 t_envp	*ft_convert_envp(char **envp)
 {
 	t_envp	*head; 
@@ -58,16 +74,7 @@ t_envp	*ft_convert_envp(char **envp)
 			node = ft_create_node(var, key);
 			if (!node) 
 			{
-				free(var);
-				free(key);
-				while (head != NULL) 
-				{
-					node = head;
-					head = head->next;
-					free(node->var);
-					free(node->key);
-					free(node);
-				}
+				ft_convert_envp_aux(var, key, head);
 				return (0);
 			}
 			ft_add_node(&head, node);

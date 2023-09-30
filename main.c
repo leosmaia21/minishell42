@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:32:44 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/09/30 16:28:10 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,29 @@ int	parser(t_token *tokens, t_info *info)
 	return (1);
 }
 
+void	ft_reset_struct(t_info *info)
+{
+	info->ordem = -1;
+	info->exit_code = 0;
+	info->fds[0] = 0;
+	info->fds[1] = 1;
+	info->flag_stop = 0;
+}
+
+int	ft_lexer_parser(t_info *info)
+{
+	info->tokens = dividetokens(info->str, info->tenv);
+	if (!info->tokens)
+		return (1);
+	changetokentypes(info->tokens);
+	if (parser(info->tokens, info) == 0)
+	{
+		printf("Muito bom input!\n");
+		return (1);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_info	info;
@@ -73,22 +96,11 @@ int	main(int argc, char **argv, char **envp)
 		signals();
 		info.str = readline("\033[1;95msusanashell # \033[0m");
 		add_history(info.str);
-		info.exit_code = 0 ;
 		if (ft_strlen(info.str) > 0)
 		{
-			info.tokens = dividetokens(info.str, info.tenv);
-			if (!info.tokens)
+			if (ft_lexer_parser(&info))
 				continue ;
-			changetokentypes(info.tokens);
-			if (parser(info.tokens, &info) == 0)
-			{
-				printf("Muito bom input!\n");
-				continue ;
-			}
-			info.ordem = -1;
-			info.fds[0] = 0;
-			info.fds[1] = 1;
-			info.flag_stop = 0;
+			ft_reset_struct(&info);
 			ft_main_exec(&info);
 			ft_freetokens(info.tokens);
 		}
