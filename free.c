@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 22:04:23 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/12 15:44:21 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/03 19:09:16 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 void	ft_freestr(void *dptr)
 {
-	if (dptr)
-		free(dptr);
+	if (dptr == NULL)
+		return;
+	free(dptr);
 }
 
 void	ft_freedoublepointer(char **dptr)
 {
 	int	i;
-
+	if (dptr == NULL)
+		return ;
 	i = -1;
 	while (dptr[++i] != NULL)
 		ft_freestr(dptr[i]);
@@ -32,6 +34,8 @@ void	ft_freelistenv(t_envp *lst)
 {
 	t_envp	*head;
 
+	if (lst == NULL)
+		return ;
 	head = lst;
 	while (lst)
 	{
@@ -48,10 +52,10 @@ void	ft_freetokens(t_token *tokens)
 	int	i;
 	int	total;
 
-	total = tokens->total;
-	i = -1;
 	if (tokens == NULL)
 		return ;
+	total = tokens->total;
+	i = -1;
 	while (++i < total)
 	{
 		ft_freestr(tokens[i].t);

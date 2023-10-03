@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 16:06:21 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/03 21:08:31 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>

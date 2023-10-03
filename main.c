@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/03 18:28:57 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/03 19:12:48 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,15 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
+	info.tokens = NULL;
 	info.tenv = ft_convert_envp(envp);
 	while (1)
 	{
 		info.envp = list_to_doublepointer(info.tenv);
 		signals();
 		info.str = readline("\033[1;95msusanashell # \033[0m");
+		if (info.str == NULL)
+			exitsusana(NULL, &info);
 		if (ft_strlen(info.str) > 0)
 		{
 			add_history(info.str);
