@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 16:28:10 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/03 18:28:57 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,14 @@ int	main(int argc, char **argv, char **envp)
 		info.envp = list_to_doublepointer(info.tenv);
 		signals();
 		info.str = readline("\033[1;95msusanashell # \033[0m");
-		add_history(info.str);
 		if (ft_strlen(info.str) > 0)
 		{
+			add_history(info.str);
 			if (ft_lexer_parser(&info))
+			{
+				ft_freetokens(info.tokens);
 				continue ;
+			}
 			ft_reset_struct(&info);
 			ft_main_exec(&info);
 			ft_freetokens(info.tokens);
