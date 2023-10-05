@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 17:28:33 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/05 17:24:25 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		else
 			ft_exec_builtin(flags, info, 1);
 	}
-	close(fd_pipe[0]);
+	ft_close_double_fd(fd_pipe[0], fd_pipe[1]);
 	if (info->fds[1] != STDOUT_FILENO)
 		close(info->fds[1]);
 }
@@ -71,9 +71,6 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	int	pid;
 	int	temp_fd[2];
 
-	close(fd_pipe[1]);
-	if (pipe(temp_fd) == -1)
-		perror(strerror(errno));
 	ft_midle_aux(fd_pipe, temp_fd, info);
 	pid = fork();
 	if (pid == -1)
@@ -104,6 +101,7 @@ void	ft_exec_loop(t_info *info, char **flags, int *fd, int pipes)
 	{
 		if (ft_process_fd(info))
 		{
+			printf("loop %d -> fd_in %d fd_out %d\n",info->ordem,info->fds[0], info->fds[1]);
 			if (info->ordem == 0)
 				first_process(fd, flags, info, path);
 			else if (info->ordem == pipes - 1)

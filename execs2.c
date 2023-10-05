@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:04:20 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 14:18:52 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:52:05 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ void	ft_close_double_fd(int a, int b)
 
 void	ft_midle_aux(int fd_pipe[2], int temp_fd[2], t_info *info)
 {
+	close(fd_pipe[1]);
+	if (pipe(temp_fd) == -1)
+		perror(strerror(errno));
 	if (info->fds[0] == STDIN_FILENO)
 		info->fds[0] = fd_pipe[0];
 	if (info->fds[1] == STDOUT_FILENO)

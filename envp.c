@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 12:50:42 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/05 11:17:41 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,16 @@ void	removenode(t_envp **head, char *key)
 	t_envp	*temp;
 	t_envp	*current;
 
-	current = *head;
-	temp = *head;
+	temp = NULL;
 	while (*head && !ft_strcmp((*head)->var, key))
 	{
+		temp = *head;
 		*head = (*head)->next;
 		free(temp);
 	}
 	if (!*head) 
 		return ;
+	current = *head;
 	while (current->next) 
 	{
 		if (!ft_strcmp(current->next->var, key))

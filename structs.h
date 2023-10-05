@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 16:03:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 16:11:41 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/05 17:20:49 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_info{
 	int				ordem;
 	int				fds[2];
 	int				flag_stop;
+	int				pid;
 }	t_info;
 
 #endif
