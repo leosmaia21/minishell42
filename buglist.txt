@@ -4,6 +4,8 @@ EXIT
 INPUT
     > So com espacos estoura
 
+Leaks
+	> unset HOME; env | grep HOME  --> leaks
 
 ECHO 
     > echo "$OLDPWD"/a esta a comer o ultimo caracter
