@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/03 19:12:48 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:27:07 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	ft_reset_struct(t_info *info)
 
 int	ft_lexer_parser(t_info *info)
 {
-	info->tokens = dividetokens(info->str, info->tenv);
+	info->tokens = dividetokens(info->str, info);
 	if (!info->tokens)
 		return (1);
 	changetokentypes(info->tokens);

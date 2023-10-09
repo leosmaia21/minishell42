@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:36:16 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/03 18:36:47 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:27:06 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_findchar(char *str, char *c)
 	return (0);
 }
 
-char	*expanddoleta(char *token, t_envp *env, int *y, int d)
+char	*expanddoleta(char *token, t_info *info, int *y, int d)
 {
 	char	*str;
 	char	*aux;
@@ -80,7 +80,7 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 	ret = 0;
 	i[0] = 0;
 	i[2] = 0;
-	cabeca = env;
+	cabeca = info->tenv;
 	while (token[i[0]] && token[i[0]] != '"')
 	{
 		if (token[i[0]] == '\'')
@@ -111,23 +111,23 @@ char	*expanddoleta(char *token, t_envp *env, int *y, int d)
 		{
 			i[0]++;
 			ret = 0;
-			while (env)
+			while (info->tenv)
 			{
 				i[1] = ft_findchar(&(token[i[0]]), "'/\"\0/");
 				if (d == 0)
 					i[1] = ft_findchar(&(token[i[0]]), "\"/'$\0'");
-				if (!ft_strncmp(&(token[i[0]]), env->var, i[1]))
+				if (!ft_strncmp(&(token[i[0]]), info->tenv->var, i[1]))
 				{
-					ret = ft_strjoin(str, env->key);
+					ret = ft_strjoin(str, info->tenv->key);
 					free(str);
 					str = ret;
 					*y += i[1] + 1;
 					i[0] += i[1] - 1;
 					break ;
 				}
-				env = env->next;
+				info->tenv = info->tenv->next;
 			}
-			env = cabeca;
+			info->tenv = cabeca;
 			if (!ret)
 			{
 				i[1] = ft_findchar(&(token[i[0]]), "\"$\0"); 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 17:27:12 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/03 18:40:49 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:28:15 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	auxremovequotes(t_token *token, char *c, int *q)
 			(*q)++;
 }
 
-void	removea(t_token *token, t_envp *env, int *i, char **aux)
+void	removea(t_token *token, t_info *info, int *i, char **aux)
 {
 	if (token->t[i[0]] == '$')
 	{
@@ -43,7 +43,7 @@ void	removea(t_token *token, t_envp *env, int *i, char **aux)
 			i[0]++;
 			return ;
 		}
-		aux[0] = expanddoleta(&(token->t[i[0]]), env, &i[0], 0);
+		aux[0] = expanddoleta(&(token->t[i[0]]), info, &i[0], 0);
 		i[1] += ft_strlen(aux[0]);
 		aux[1] = ft_strjoin(aux[9], aux[0]);
 		free(aux[0]);
@@ -74,7 +74,7 @@ void	removea(t_token *token, t_envp *env, int *i, char **aux)
 	}
 }
 
-char	removequotes(t_token *token, t_envp *env)
+char	removequotes(t_token *token, t_info *info)
 {
 	int		i[10];
 	char	*aux[10];
@@ -88,7 +88,7 @@ char	removequotes(t_token *token, t_envp *env)
 		if (token->t[i[0]] == '"')
 		{
 			i[0]++;
-			aux[0] = expanddoleta(&(token->t[i[0]]), env, &i[0], 1);
+			aux[0] = expanddoleta(&(token->t[i[0]]), info, &i[0], 1);
 			i[1] += ft_strlen(aux[0]);
 			aux[1] = ft_strjoin(aux[9], aux[0]);
 			free(aux[0]);
@@ -96,14 +96,14 @@ char	removequotes(t_token *token, t_envp *env)
 			aux[9] = aux[1];
 		}
 		else 
-			removea(token, env, i, aux);
+			removea(token, info, i, aux);
 	}
 	free(token->t);
 	token->t = aux[9];
 	return (0);
 }
 
-void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
+void	dividetokensaux(t_token *tokens, int t_index, t_info *info)
 {
 	int		i;
 
@@ -113,13 +113,13 @@ void	dividetokensaux(t_token *tokens, int t_index, t_envp *env)
 		tokens[i].total = t_index;
 		tokens[i].index = i;
 		tokens[i].end = 0;
-		removequotes(&tokens[i], env);
+		removequotes(&tokens[i], info);
 	}
 	tokens[i].end = 1;
 	tokens[i].t = "end";
 }
 
-t_token	*dividetokens(char *str, t_envp *env)
+t_token	*dividetokens(char *str, t_info *info)
 {
 	int			i;
 	int			t_index;
@@ -144,6 +144,6 @@ t_token	*dividetokens(char *str, t_envp *env)
 			tokens[t_index++].t = copyuntil(&str[i], "|>< ");
 		i += ft_strlen(tokens[t_index - 1].t);
 	}
-	dividetokensaux(tokens, t_index, env);
+	dividetokensaux(tokens, t_index, info);
 	return (tokens);
 }
