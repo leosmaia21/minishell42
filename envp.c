@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/09 18:07:23 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:43:32 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	**ft_duplicate_envp(char **envp)
 
 char	**list_to_doublepointer(t_envp *head)
 {
-	t_envp	*current;
+	t_envp	*c;
 	char	**envp;
 	int		i;
 	char	*tmp;
@@ -104,20 +104,20 @@ char	**list_to_doublepointer(t_envp *head)
 	envp = (char **)ft_calloc(sizeof(char *), (ft_envlstsize(head) + 1));
 	if (!envp)
 		return (NULL);
-	current = head;
-	while (current != NULL)
+	c = head;
+	while (c != NULL)
 	{
-		envp[i] = (char *)malloc(ft_strlen(current->var) + ft_strlen(current->key) + 2);
+		envp[i] = (char *)malloc(ft_strlen(c->var) + ft_strlen(c->key) + 2);
 		if (!envp[i])
 		{
 			ft_freedoublepointer(envp);
 			return (NULL);
 		}
-		tmp = ft_strjoin(current->var, "=");
+		tmp = ft_strjoin(c->var, "=");
 		free(envp[i]);
-		envp[i++] = ft_strjoin(tmp, current->key);
+		envp[i++] = ft_strjoin(tmp, c->key);
 		free(tmp);
-		current = current->next;
+		c = c->next;
 	}
 	return (envp);
 }
