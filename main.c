@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/09 19:27:07 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/09 21:44:18 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ int	main(int argc, char **argv, char **envp)
 
 	(void) argc;
 	(void) argv;
-	info.tokens = NULL;
 	info.tenv = ft_convert_envp(envp);
 	while (1)
 	{
+		info.tokens = NULL;
 		info.envp = list_to_doublepointer(info.tenv);
 		signals();
 		info.str = readline("\033[1;95msusanashell # \033[0m");
@@ -111,6 +111,6 @@ int	main(int argc, char **argv, char **envp)
 			ft_freetokens(info.tokens);
 		}
 		ft_freedoublepointer(info.envp);
-		free(info.str);
+		ft_freestr(info.str);
 	}
 }

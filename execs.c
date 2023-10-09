@@ -6,12 +6,19 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/09 19:49:44 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/09 22:04:58 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execs.h"
 #include "lexer.h"
+
+void	ft_execve(char *path, char **flags, t_info *info)
+{
+	if (execve(path, flags, info->envp) == -1)
+		perror(flags[0]);
+	exit(1);
+}
 
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {
@@ -29,7 +36,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(info->fds[0], STDIN_FILENO);
-			execve(path, flags, info->envp);
+			ft_execve(path, flags, info);
 		}
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
@@ -59,7 +66,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(fd_pipe[0], STDIN_FILENO);
-			execve(path, flags, info->envp);
+			ft_execve(path, flags, info);
 		}
 		else
 			ft_exec_builtin(flags, info, 1);
@@ -85,7 +92,7 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(info->fds[0], STDIN_FILENO);
-			execve(path, flags, info->envp);
+			ft_execve(path, flags, info);
 		}
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
