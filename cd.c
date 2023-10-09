@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 12:30:35 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 17:52:48 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/05 15:01:32 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ static char	*cdaux(char **info, t_envp *env, char *saux)
 	}
 	else
 	{
-		ret = ft_strdup(ft_find_value(env, "HOME"));
+		if (ft_find_value(env, "HOME") == NULL)
+			ret = 0;
+		else
+			ret = ft_strdup(ft_find_value(env, "HOME"));
 	}
 	free(saux);
 	return (ret);
@@ -61,6 +64,11 @@ void	cd(char **info, t_envp *env)
 
 	saux = ft_strjoin(getcwd(aux, 2048), "/");
 	path = cdaux(info, env, saux);
+	if (path == NULL)
+	{
+		printf("cd: HOME not set\n");
+		return ;
+	}
 	node = tnode(env, "OLDPWD");
 	cd_process_node(node, env, ft_strdup("OLDPWD"));
 	node = tnode(env, "PWD");
