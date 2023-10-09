@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/05 17:24:25 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:08:30 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
 	}
 	if (info->fds[1] != STDOUT_FILENO || ft_count_command(info->tokens) > 1)
-		close(info->fds[1]);
+	{	
+		if (info->fds[1] != fd_pipe[1])
+			close(info->fds[1]);
+	}
 	dup2(fd_stdout, 1);
 }
 
