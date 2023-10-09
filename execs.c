@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/09 19:08:30 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:13:20 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void	ft_exec_loop(t_info *info, char **flags, int *fd, int pipes)
 	{
 		if (ft_process_fd(info))
 		{
-			printf("loop %d -> fd_in %d fd_out %d\n",info->ordem,info->fds[0], info->fds[1]);
 			if (info->ordem == 0)
 				first_process(fd, flags, info, path);
 			else if (info->ordem == pipes - 1)

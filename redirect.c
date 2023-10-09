@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:51:31 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/09 18:37:27 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:12:18 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	ft_pre_preocess_fd(t_info *i, int fd_input, int fd_output, int fd_heredoc)
 			(i->tokens[j].type == dredirectR))
 		{
 			i->fds[1] = ft_process_output(j, fd_output, i);
-			if (i->tokens[j + 1].type == pipo)
+			if (i->tokens[j + 2].type == pipo)
 				return (erro);
 			j++;
 		}
