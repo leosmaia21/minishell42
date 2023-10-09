@@ -6,13 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:36:16 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/09 19:27:06 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/09 19:56:58 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include <assert.h>
 
 void	changetokentypes(t_token *tokens)
 {
@@ -81,6 +82,8 @@ char	*expanddoleta(char *token, t_info *info, int *y, int d)
 	i[0] = 0;
 	i[2] = 0;
 	cabeca = info->tenv;
+
+	ft_new_var(info->tenv, ft_strjoin("?=", ft_itoa(info->exit_code)));
 	while (token[i[0]] && token[i[0]] != '"')
 	{
 		if (token[i[0]] == '\'')
@@ -139,5 +142,6 @@ char	*expanddoleta(char *token, t_info *info, int *y, int d)
 		}
 		i[0]++;
 	}
+	removenode(&(info->tenv), "?");
 	return (str);
 }
