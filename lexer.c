@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 17:27:12 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/09 19:28:15 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 11:48:46 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,24 +33,9 @@ void	auxremovequotes(t_token *token, char *c, int *q)
 			(*q)++;
 }
 
-void	removea(t_token *token, t_info *info, int *i, char **aux)
+void	removeaux(t_token *token, int *i, char **aux)
 {
-	if (token->t[i[0]] == '$')
-	{
-		if (ft_strlen(token->t) == 1)
-		{
-			printf("$ ");
-			i[0]++;
-			return ;
-		}
-		aux[0] = expanddoleta(&(token->t[i[0]]), info, &i[0], 0);
-		i[1] += ft_strlen(aux[0]);
-		aux[1] = ft_strjoin(aux[9], aux[0]);
-		free(aux[0]);
-		free(aux[9]);
-		aux[9] = aux[1];
-	}
-	else if (token->t[i[0]] == '\'')
+	if (token->t[i[0]] == '\'')
 	{
 		i[0]++;
 		aux[8] = ft_calloc(ft_strlen(aux[9]) + ft_strlen(token->t) + 100, 1);
@@ -72,6 +57,27 @@ void	removea(t_token *token, t_info *info, int *i, char **aux)
 			i[1] = 0;
 		aux[9][i[1]++] = token->t[i[0]];
 	}
+}
+
+void	removea(t_token *token, t_info *info, int *i, char **aux)
+{
+	if (token->t[i[0]] == '$')
+	{
+		if (ft_strlen(token->t) == 1)
+		{
+			printf("$ ");
+			i[0]++;
+			return ;
+		}
+		aux[0] = expanddoleta(&(token->t[i[0]]), info, &i[0], 0);
+		i[1] += ft_strlen(aux[0]);
+		aux[1] = ft_strjoin(aux[9], aux[0]);
+		free(aux[0]);
+		free(aux[9]);
+		aux[9] = aux[1];
+	}
+	else
+		removeaux(token, i, aux);
 }
 
 char	removequotes(t_token *token, t_info *info)
@@ -101,22 +107,6 @@ char	removequotes(t_token *token, t_info *info)
 	free(token->t);
 	token->t = aux[9];
 	return (0);
-}
-
-void	dividetokensaux(t_token *tokens, int t_index, t_info *info)
-{
-	int		i;
-
-	i = -1;
-	while (++i < t_index)
-	{
-		tokens[i].total = t_index;
-		tokens[i].index = i;
-		tokens[i].end = 0;
-		removequotes(&tokens[i], info);
-	}
-	tokens[i].end = 1;
-	tokens[i].t = "end";
 }
 
 t_token	*dividetokens(char *str, t_info *info)

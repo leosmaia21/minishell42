@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtins2.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/03 21:27:24 by bde-sous         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 builtins2.c										:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: bde-sous <bde-sous@student.42porto.com>	+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2023/08/05 00:04:18 by ledos-sa		   #+#	  #+#			  */
+/*	 Updated: 2023/10/03 21:27:24 by bde-sous		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "builtins.h"
@@ -27,18 +27,18 @@ void	free_and_exit(char **flags, t_info *info, int exit_code)
 void	exitsusana(char **flags, t_info *info)
 {
 	printf("exit\n");
-	if(!flags)
-		free_and_exit(flags,info, info->exit_code);
-	if(!flags[1])
-		free_and_exit(flags,info, info->exit_code);
-	if(!ft_isint(flags[1]))
+	if (!flags)
+		free_and_exit(flags, info, info->exit_code);
+	if (!flags[1])
+		free_and_exit(flags, info, info->exit_code);
+	if (!ft_isint(flags[1]))
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(flags[1], STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		free_and_exit(flags,info, 2);
+		free_and_exit(flags, info, 2);
 	}
-	if(ft_isint(flags[1]) && flags[2] == NULL)
+	if (ft_isint(flags[1]) && flags[2] == NULL)
 		exit((unsigned char)ft_atoi(flags[1]));
 	printf("minishell: exit: too many arguments\n");
 }
