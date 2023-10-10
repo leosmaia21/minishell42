@@ -3,6 +3,7 @@ libft/*.o
 **/*.o
 **/*.a
 .nfs*
+.swp
 .DS_Store
 *.gch
 .cache/

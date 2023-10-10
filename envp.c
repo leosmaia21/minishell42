@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 22:27:00 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/09 19:43:32 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 15:33:08 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	removenode(t_envp **head, char *key)
 		{
 			temp = current->next;
 			current->next = temp->next;
+			free(temp->key);
+			free(temp->var);
 			free(temp);
 		}
 		else 
