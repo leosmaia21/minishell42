@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 17:27:12 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/10 15:33:29 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 22:03:26 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	removea(t_token *token, t_info *info, int *i, char **aux)
 		removeaux(token, i, aux);
 }
 
-char	removequotes(t_token *token, t_info *info)
+void	removequotes(t_token *token, t_info *info)
 {
 	int		i[10];
 	char	*aux[10];
@@ -88,13 +88,11 @@ char	removequotes(t_token *token, t_info *info)
 	i[0] = -1;
 	i[1] = 0;
 	aux[9] = ft_calloc(ft_strlen(token->t) + 1, 1);
-	i[0] = -1;
-	while (++i[0] < ft_strlen(token->t))
+	while (++i[0] < ft_strlen(token->t) && ft_strcmp(token->t, "$"))
 	{
 		if (token->t[i[0]] == '"')
 		{
-			i[0]++;
-			aux[0] = expanddoleta(&(token->t[i[0]]), info, &i[0], 1);
+			aux[0] = expanddoleta(&(token->t[++i[0]]), info, &i[0], 1);
 			i[1] += ft_strlen(aux[0]);
 			aux[1] = ft_strjoin(aux[9], aux[0]);
 			free(aux[0]);
@@ -104,9 +102,11 @@ char	removequotes(t_token *token, t_info *info)
 		else 
 			removea(token, info, i, aux);
 	}
-	free(token->t);
-	token->t = aux[9];
-	return (0);
+	if (aux[9][0])
+	{
+		free(token->t);
+		token->t = aux[9];
+	}
 }
 
 t_token	*dividetokens(char *str, t_info *info)
