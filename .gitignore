@@ -2,5 +2,8 @@
 libft/*.o
 **/*.o
 **/*.a
+.nfs*
+.DS_Store
+*.gch
 .vscode/
 minishell

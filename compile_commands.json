@@ -1,0 +1,107 @@
+[
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o main.o ",
+		"file": "main.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o main2.o ",
+		"file": "main2.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o lexer.o ",
+		"file": "lexer.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o lexer2.o ",
+		"file": "lexer2.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o lexer3.o ",
+		"file": "lexer3.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o lexer4.o ",
+		"file": "lexer4.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o utils.o ",
+		"file": "utils.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o signals.o ",
+		"file": "signals.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o envp.o ",
+		"file": "envp.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o envp2.o ",
+		"file": "envp2.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o envp3.o ",
+		"file": "envp3.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o execs.o ",
+		"file": "execs.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o execs2.o ",
+		"file": "execs2.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o execs3.o ",
+		"file": "execs3.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o builtins.o ",
+		"file": "builtins.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o builtins2.o ",
+		"file": "builtins2.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o cd.o ",
+		"file": "cd.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o free.o ",
+		"file": "free.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o redirect.o ",
+		"file": "redirect.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address   -c -o heredoc.o ",
+		"file": "heredoc.c"
+	},
+	{
+		"directory": "/home/leonardo/fun/minishell42",
+		"command": "clang -Wall -Werror -Wextra -g -fsanitize=address -lreadline -o  minishell main.o main2.o lexer.o lexer2.o lexer3.o lexer4.o utils.o signals.o envp.o envp2.o envp3.o execs.o execs2.o execs3.o builtins.o builtins2.o cd.o free.o redirect.o heredoc.o ",
+		"file": "libft/libft.a"
+	},
+]
