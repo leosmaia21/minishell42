@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 15:55:12 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/09/30 17:41:14 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 12:29:03 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,5 @@ int		ft_count_command(t_token *tokens);
 void	ft_close_double_fd(int a, int b);
 void	ft_midle_aux(int fd_pipe[2], int temp_fd[2], t_info *info);
 int		first_process_aux(char **flags, t_info *info, int fd_pipe[2]);
+void	ft_execve(char *path, char **flags, t_info *info);
 #endif

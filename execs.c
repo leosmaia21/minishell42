@@ -6,19 +6,12 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/09 22:04:58 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 12:29:09 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execs.h"
 #include "lexer.h"
-
-void	ft_execve(char *path, char **flags, t_info *info)
-{
-	if (execve(path, flags, info->envp) == -1)
-		perror(flags[0]);
-	exit(1);
-}
 
 void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 {

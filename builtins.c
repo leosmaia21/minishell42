@@ -6,13 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 00:04:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/09/30 15:48:58 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 12:46:30 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include "structs.h"
 #include <string.h>
 #include <unistd.h>
 
@@ -39,36 +40,32 @@ static int	echoval(char *info)
 	return (n);
 }
 
-void	echo(char **info)
+void	echo(char **info, t_info *tinfo)
 {
-	int		x;
-	int		i;
-	int		n;
+	int		i[100];
 
-	i = 0;
-	x = 0;
-	n = 0;
-	assert(ft_strcmp(info[0], "echo") == 0);
-	while (info[++i])
+	ft_memset(i, 0, sizeof(i));
+	while (info[++i[0]])
 	{
-		x = echoval(info[i]);
-		if (x == 1)
-			n = 1;
+		i[1] = echoval(info[i[0]]);
+		if (i[1] == 1)
+			i[2] = 1;
 		else
 			break ;
 	}
-	while (info[i])
+	while (info[i[0]])
 	{
-		printf("%s", info[i]);
-		if (info[i + 1])
+		printf("%s", info[i[0]]);
+		if (info[i[0] + 1])
 			printf(" ");
-		i++;
+		i[0]++;
 	}
-	if (n == 0)
+	if (i[2] == 0)
 		printf("\n");
+	tinfo->exit_code = 0;
 }
 
-void	pwd(char **info)
+void	pwd(char **info, t_info *tinfo)
 {
 	char	*ret;
 
@@ -76,17 +73,24 @@ void	pwd(char **info)
 	assert(ft_strcmp(info[0], "pwd") == 0);
 	ret = getcwd(0, 0);
 	if (!ret)
+	{
 		perror("pwd");
+		tinfo->exit_code = 1;
+	}
 	else
+	{
 		printf("%s\n", ret);
+		tinfo->exit_code = 0;
+	}
 	free(ret);
 }
 
-void	exportsusana(char **info, t_envp *env)
+void	exportsusana(char **info, t_envp *env, t_info *tinfo)
 {
 	if (info[1] != 0 && ft_isdigit(info[1][0]) == 1)
 	{
 		printf("export: `%s': not a valid identifier\n", info[1]);
+		tinfo->exit_code = 1;
 		return ;
 	}
 	if (info[1])
@@ -104,9 +108,10 @@ void	exportsusana(char **info, t_envp *env)
 			env = env->next;
 		}
 	}
+	tinfo->exit_code = 0;
 }
 
-void	unset(char **info, t_envp *env)
+void	unset(char **info, t_envp *env, t_info *tinfo)
 {
 	int		i;
 
@@ -119,4 +124,5 @@ void	unset(char **info, t_envp *env)
 			removenode(&env, info[i]);
 		}
 	}
+	tinfo->exit_code = 0;
 }

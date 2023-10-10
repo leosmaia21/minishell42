@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 12:25:23 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/10 12:25:27 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 12:52:51 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	exitsusana(char **flags, t_info *info)
 	printf("minishell: exit: too many arguments\n");
 }
 
-void	env(char **info, t_envp *envp)
+void	env(char **info, t_envp *envp, t_info *tinfo)
 {
 	assert(ft_strcmp(info[0], "env") == 0);
 	if (envp != NULL)
@@ -57,22 +57,23 @@ void	env(char **info, t_envp *envp)
 			envp = envp->next;
 		}
 	}
+	tinfo->exit_code = 0;
 }
 
 void	ft_exec_builtin(char **flags, t_info *info, int exit_flag)
 {
 	if (ft_strcmp(flags[0], "echo") == 0)
-		echo(flags);
+		echo(flags, info);
 	else if (ft_strcmp(flags[0], "cd") == 0)
-		cd(flags, info->tenv);
+		cd(flags, info->tenv, info);
 	else if (ft_strcmp(flags[0], "pwd") == 0)
-		pwd(flags);
+		pwd(flags, info);
 	else if (ft_strcmp(flags[0], "export") == 0)
-		exportsusana(flags, info->tenv);
+		exportsusana(flags, info->tenv, info);
 	else if (ft_strcmp(flags[0], "unset") == 0)
-		unset(flags, info->tenv);
+		unset(flags, info->tenv, info);
 	else if (ft_strcmp(flags[0], "env") == 0)
-		env(flags, info->tenv);
+		env(flags, info->tenv, info);
 	else if (ft_strcmp(flags[0], "exit") == 0)
 		exitsusana(flags, info);
 	if (exit_flag)

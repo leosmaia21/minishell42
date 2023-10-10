@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 12:30:35 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/05 15:01:32 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 12:47:06 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	cd_process_node(t_envp *node, t_envp *env, char *var)
 		ft_add_node(&env, ft_create_node(var, getcwd(0, 0)));
 }
 
-void	cd(char **info, t_envp *env)
+void	cd(char **info, t_envp *env, t_info *tinfo)
 {
 	char	*saux;
 	t_envp	*node;
@@ -73,7 +73,11 @@ void	cd(char **info, t_envp *env)
 	cd_process_node(node, env, ft_strdup("OLDPWD"));
 	node = tnode(env, "PWD");
 	if (chdir(path) != 0)
+	{
 		perror("cd");
+		tinfo->exit_code = 1;
+	}
 	free(path);
 	cd_process_node(node, env, "PWD");
+	tinfo->exit_code = 0;
 }
