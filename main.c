@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/10 12:34:05 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 17:59:05 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,14 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strlen(info.str) > 0)
 		{
 			add_history(info.str);
+			ft_reset_struct(&info);
 			if (ft_lexer_parser(&info))
 			{
 				ft_freetokens(info.tokens);
+				ft_freedoublepointer(info.envp);
+				ft_freestr(info.str);	
 				continue ;
 			}
-			ft_reset_struct(&info);
 			ft_main_exec(&info);
 			ft_freetokens(info.tokens);
 		}
