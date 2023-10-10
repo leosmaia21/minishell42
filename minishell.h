@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/29 17:16:47 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/03 21:08:31 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 18:52:23 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <assert.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <termios.h>
 # include "envp.h"
 # include "execs.h"
 # include "builtins.h"
@@ -34,6 +35,7 @@
 # include "libft/libft.h"
 
 void	signals(void);
+void	handle_heredoc(int signum);
 void	handle_sigint(int signum);
 t_envp	*ft_convert_envp(char **envp);
 void	ft_add_node(t_envp **head, t_envp *node);

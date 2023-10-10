@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:31:01 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/10 17:59:05 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 19:00:03 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	main(int argc, char **argv, char **envp)
 			{
 				ft_freetokens(info.tokens);
 				ft_freedoublepointer(info.envp);
-				ft_freestr(info.str);	
+				ft_freestr(info.str);
 				continue ;
 			}
 			ft_main_exec(&info);

@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:26:48 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/09 20:04:52 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 18:40:03 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 int	ft_heredoc_aux(char *str, char *escape, int fd[2])
 {
 	str = readline("> ");
+	if (str == NULL)
+	{
+		free(str);
+		return (0);
+	}
 	if (ft_strcmp(str, escape) == 0) 
 	{
 		free(str);
@@ -33,6 +38,7 @@ int	ft_heredoc_aux2(char *str, char *escape, int fd[2], int pid)
 	if (pid == 0) 
 	{
 		close(fd[0]);
+		signal(SIGINT, handle_heredoc);
 		while (ft_heredoc_aux(str, escape, fd)) 
 			;
 		close(fd[1]);
