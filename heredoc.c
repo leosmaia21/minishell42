@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 14:26:48 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/10 18:40:03 by bde-sous         ###   ########.fr       */
+/*   Updated: 2023/10/10 19:21:00 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	ft_heredoc_aux2(char *str, char *escape, int fd[2], int pid)
 	}
 	else 
 	{
+		signal(SIGINT, SIG_IGN);
 		close(fd[1]);
 		waitpid(pid, NULL, 0);
 		fd_return = dup(fd[0]);
