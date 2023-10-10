@@ -6,7 +6,7 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/30 12:30:35 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/10 12:47:06 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 14:47:36 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void	cd(char **info, t_envp *env, t_info *tinfo)
 		perror("cd");
 		tinfo->exit_code = 1;
 	}
+	else
+		tinfo->exit_code = 0;
 	free(path);
 	cd_process_node(node, env, "PWD");
-	tinfo->exit_code = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 12:29:28 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/10 12:29:29 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/10 14:53:15 by ledos-sa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	initexpandoleta(t_exp *exp, char *token, t_info *info, int *y)
 	exp->cabeca = info->tenv;
 	exp->y = y;
 	aux = ft_itoa(info->exit_code);
-	aux2 = ft_strjoin("?", aux);
+	aux2 = ft_strjoin("?=", aux);
 	ft_new_var(info->tenv, aux2);
 	free(aux);
 	free(aux2);
