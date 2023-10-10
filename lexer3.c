@@ -1,143 +1,117 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer3.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/30 14:36:16 by bde-sous          #+#    #+#             */
-/*   Updated: 2023/10/09 19:27:06 by bde-sous         ###   ########.fr       */
-/*                                                                            */
+/*																			  */
+/*														  :::	   ::::::::   */
+/*	 lexer3.c											:+:		 :+:	:+:   */
+/*													  +:+ +:+		  +:+	  */
+/*	 By: bde-sous <bde-sous@student.42porto.com>	+#+  +:+	   +#+		  */
+/*												  +#+#+#+#+#+	+#+			  */
+/*	 Created: 2023/09/30 14:36:16 by bde-sous		   #+#	  #+#			  */
+/*	 Updated: 2023/10/10 11:35:49 by ledos-sa		  ###	########.fr		  */
+/*																			  */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft/libft.h"
 #include "minishell.h"
+#include <assert.h>
 
-void	changetokentypes(t_token *tokens)
+int	expaux1(t_exp *exp, char *token)
 {
-	int		i;
-
-	i = -1;
-	while (++i < tokens[0].total)
+	exp->aux = ft_calloc(ft_strlen(&token[exp->i[0]]) + 1, 1);
+	while (token[exp->i[0]] && token[exp->i[0]] != '"' && \
+		token[exp->i[0]] != '$')
 	{
-		if (ft_strcmp(tokens[i].t, "|") == 0)
-			tokens[i].type = pipo;
-		else if (changetokentypesaux(tokens, &i))
-			continue ;
-		else if (ft_strcmp(tokens[i].t, "<<") == 0)
-		{
-			if (i < tokens[0].total - 1)
-				tokens[i + 1].type = file;
-			tokens[i].type = dredirectL;
-			i++;
-		}
-		else if (tokens[i].t[0] == '-' || (i > 0 && (tokens[i - 1].type == flag \
-			|| tokens[i - 1].type == command)))
-			tokens[i].type = flag;
-		else if (tokens[i].t[0] == '"')
-			tokens[i].type = text;
-		else
-			tokens[i].type = command;
+		exp->aux[exp->i[2]++] = token[exp->i[0]++];
+		*exp->y += 1;
 	}
-}
-
-void	expandoletafree(t_token *token, char *ret, int i, char *str)
-{
-	str = ft_strjoin(ret, &(token->t[i]));
-	if (!str)
-		str = ft_calloc(1, 1);
-	free(ret);
-	free(token->t);
-	token->t = str;
-}
-
-int	ft_findchar(char *str, char *c)
-{
-	int	i;
-	int	k;
-
-	i = -1;
-	while (++i <= ft_strlen(str))
+	exp->ret = ft_strjoin(exp->str, exp->aux);
+	free(exp->str);
+	free(exp->aux);
+	exp->str = exp->ret;
+	if (token[exp->i[0]] == 0 || token[exp->i[0]] == '$')
 	{
-		k = -1;
-		while (++k <= ft_strlen(c))
-			if (str[i] == c[k])
-				return (i);
+		if (token[exp->i[0]] == '$')
+			*exp->y -= 1;
+		return (1);
 	}
 	return (0);
 }
 
-char	*expanddoleta(char *token, t_info *info, int *y, int d)
+void	initexpandoleta(t_exp *exp, char *token, t_info *info, int *y)
 {
-	char	*str;
 	char	*aux;
-	int		i[10];
-	char	*ret;
-	t_envp	*cabeca;
+	char	*aux2;
 
-	str = ft_calloc(ft_strlen(token) + 1, 1);
-	ret = 0;
-	i[0] = 0;
-	i[2] = 0;
-	cabeca = info->tenv;
-	while (token[i[0]] && token[i[0]] != '"')
+	exp->str = ft_calloc(ft_strlen(token) + 1, 1);
+	exp->ret = 0;
+	ft_memset(exp->i, 0, sizeof(int) * 10);
+	exp->cabeca = info->tenv;
+	exp->y = y;
+	aux = ft_itoa(info->exit_code);
+	aux2 = ft_strjoin("?", aux);
+	ft_new_var(info->tenv, aux2);
+	free(aux);
+	free(aux2);
+}
+
+void	expaux3(t_exp *exp, t_info *info)
+{
+	exp->ret = ft_strjoin(exp->str, info->tenv->key);
+	free(exp->str);
+	exp->str = exp->ret;
+	*exp->y += exp->i[1] + 1;
+	exp->i[0] += exp->i[1] - 1;
+}
+
+void	expaux2(t_exp *exp, char *token, t_info *info)
+{
+	exp->i[0]++;
+	exp->ret = 0;
+	while (info->tenv)
 	{
-		if (token[i[0]] == '\'')
+		exp->i[1] = ft_findchar(&(token[exp->i[0]]), "'/\"\0/");
+		if (exp->d == 0)
+			exp->i[1] = ft_findchar(&(token[exp->i[0]]), "\"/'$\0'");
+		if (!ft_strncmp(&(token[exp->i[0]]), info->tenv->var, exp->i[1]))
 		{
-			(*y)--;
+			expaux3(exp, info);
 			break ;
 		}
-		if (token[i[0]] != '$')
+		info->tenv = info->tenv->next;
+	}
+	info->tenv = exp->cabeca;
+	if (!exp->ret)
+	{
+		exp->i[1] = ft_findchar(&(token[exp->i[0]]), "'/\"\0/");
+		if (exp->d == 0)
+			exp->i[1] = ft_findchar(&(token[exp->i[0]]), "\"/'$\0'");
+		*exp->y += exp->i[1] + 1;
+		exp->i[0] += exp->i[1] - 1;
+	}
+}
+
+char	*expanddoleta(char *token, t_info *info, int *y, int d)
+{
+	t_exp	exp;	
+
+	initexpandoleta(&exp, token, info, y);
+	exp.d = d;
+	while (token[exp.i[0]] && token[exp.i[0]] != '"')
+	{
+		if (token[exp.i[0]] == '\'')
 		{
-			aux = ft_calloc(ft_strlen(&token[i[0]]) + 1, 1);
-			while (token[i[0]] && token[i[0]] != '"' && token[i[0]] != '$')
-			{
-				aux[i[2]++] = token[i[0]++];
-				*y += 1;
-			}
-			ret = ft_strjoin(str, aux);
-			free(str);
-			free(aux);
-			str = ret;
-			if (token[i[0]] == 0 || token[i[0]] == '$')
-			{
-				if (token[i[0]] == '$')
-					*y -= 1;
+			(*exp.y)--;
+			break ;
+		}
+		if (token[exp.i[0]] != '$')
+		{
+			if (expaux1(&exp, token))
 				break ;
-			}
 		}
 		else
-		{
-			i[0]++;
-			ret = 0;
-			while (info->tenv)
-			{
-				i[1] = ft_findchar(&(token[i[0]]), "'/\"\0/");
-				if (d == 0)
-					i[1] = ft_findchar(&(token[i[0]]), "\"/'$\0'");
-				if (!ft_strncmp(&(token[i[0]]), info->tenv->var, i[1]))
-				{
-					ret = ft_strjoin(str, info->tenv->key);
-					free(str);
-					str = ret;
-					*y += i[1] + 1;
-					i[0] += i[1] - 1;
-					break ;
-				}
-				info->tenv = info->tenv->next;
-			}
-			info->tenv = cabeca;
-			if (!ret)
-			{
-				i[1] = ft_findchar(&(token[i[0]]), "\"$\0"); 
-				if (d == 0)
-					i[1] = ft_findchar(&(token[i[0]]), "'$\0");
-				*y += i[1] + 1;
-				i[0] += i[1] - 1;
-			}
-		}
-		i[0]++;
+			expaux2(&exp, token, info);
+		exp.i[0]++;
 	}
-	return (str);
+	removenode(&(info->tenv), "?");
+	return (exp.str);
 }
