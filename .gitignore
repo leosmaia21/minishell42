@@ -4,6 +4,7 @@ libft/*.o
 **/*.a
 .nfs*
 .swp
+compile_commands.json
 .DS_Store
 *.gch
 .cache/
