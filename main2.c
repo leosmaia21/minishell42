@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ledos-sa <ledos-sa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 12:32:18 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/10 18:05:44 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/11 19:23:39 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ void	funcao(t_info *info)
 	info->envp = list_to_doublepointer(info->tenv);
 	signals();
 	info->str = readline("\033[1;95msusanashell # \033[0m");
-	// if (info->str == NULL)
-	// 	exitsusana(NULL, info);
+	if (info->str == NULL)
+		exitsusana(NULL, info);
 }

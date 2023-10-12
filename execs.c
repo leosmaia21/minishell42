@@ -6,14 +6,14 @@
 /*   By: bde-sous <bde-sous@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:24:24 by ledos-sa          #+#    #+#             */
-/*   Updated: 2023/10/10 12:29:09 by ledos-sa         ###   ########.fr       */
+/*   Updated: 2023/10/12 21:31:40 by bde-sous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execs.h"
 #include "lexer.h"
 
-void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
+void	first_process(int fd_pipe[2], char **flags, t_info *info)
 {
 	int		pid;
 	int		fd_stdout;
@@ -29,7 +29,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(info->fds[0], STDIN_FILENO);
-			ft_execve(path, flags, info);
+			ft_execve(flags, info);
 		}
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
@@ -42,7 +42,7 @@ void	first_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 	dup2(fd_stdout, 1);
 }
 
-void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
+void	second_process(int fd_pipe[2], char **flags, t_info *info)
 {
 	int		pid;
 
@@ -59,7 +59,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(fd_pipe[0], STDIN_FILENO);
-			ft_execve(path, flags, info);
+			ft_execve(flags, info);
 		}
 		else
 			ft_exec_builtin(flags, info, 1);
@@ -69,7 +69,7 @@ void	second_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		close(info->fds[1]);
 }
 
-void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
+void	midle_process(int fd_pipe[2], char **flags, t_info *info)
 {
 	int	pid;
 	int	temp_fd[2];
@@ -85,7 +85,7 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 		if (ft_is_builtin(flags) != 0)
 		{
 			dup2(info->fds[0], STDIN_FILENO);
-			ft_execve(path, flags, info);
+			ft_execve(flags, info);
 		}
 		else
 			ft_exec_builtin(flags, info, ft_count_command(info->tokens) > 1);
@@ -97,29 +97,16 @@ void	midle_process(int fd_pipe[2], char **flags, t_info *info, char *path)
 
 void	ft_exec_loop(t_info *info, char **flags, int *fd, int pipes)
 {
-	char	*path;
-
-	path = ft_findpath(info->tenv, flags);
-	if ((path != NULL) || ft_is_builtin(flags) == 0)
+	if (ft_process_fd(info))
 	{
-		if (ft_process_fd(info))
-		{
-			if (info->ordem == 0)
-				first_process(fd, flags, info, path);
-			else if (info->ordem == pipes - 1)
-				second_process(fd, flags, info, path);
-			else
-				midle_process(fd, flags, info, path);
-		}
+		if (info->ordem == 0)
+			first_process(fd, flags, info);
+		else if (info->ordem == pipes - 1)
+			second_process(fd, flags, info);
+		else
+			midle_process(fd, flags, info);
 	}
-	else
-	{
-		ft_process_fd(info);
-		if (ft_strcmp(flags[0], "end") != 0)
-			perror(flags[0]);
-	}
-	ft_freestr(path);
-	ft_freedoublepointer(flags);
+	signal(SIGINT, SIG_IGN);
 }
 
 void	ft_main_exec(t_info *info)
@@ -138,9 +125,9 @@ void	ft_main_exec(t_info *info)
 			ft_exec_loop(info, flags, fd, pipes);
 		else
 			ft_process_fd(info);
-		info->flag_stop = 0;
 		info->fds[0] = 0;
 		info->fds[1] = 1;
+		ft_freedoublepointer(flags);
 	}
 	while (waitpid(0, &info->exit_code, 0) > 0)
 		continue ;
