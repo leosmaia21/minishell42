@@ -1,1 +1,0 @@
-echo -nnnnnnnn "boas"$PWD/a
